@@ -181,8 +181,10 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
   const [isExportModalVisible, setIsExportModalVisible] = useState(false);
   const [isAccessibilityModalVisible, setIsAccessibilityModalVisible] = useState(false);
   const [isComponentPreviewModalVisible, setIsComponentPreviewModalVisible] = useState(false);
+  const [isHistoryModalVisible, setIsHistoryModalVisible] = useState(false);
   const [isHelpModalVisible, setIsHelpModalVisible] = useState(false);
   const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
+
 
   
   const [activeColorMenu, setActiveColorMenu] = useState(null); // <-- ¡NUEVO! Mover el estado aquí
