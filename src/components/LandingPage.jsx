@@ -42,43 +42,44 @@ const LandingPage = ({ onNavigate }) => {
             <ParallaxShape className="from-yellow-300 to-orange-500 w-[30rem] h-[30rem] top-[80rem] left-[-20rem]" speed={0.1} />
             <ParallaxShape className="from-green-400 to-cyan-400 w-96 h-96 top-[130rem] right-[-15rem]" speed={0.25} />
             <ParallaxShape className="from-red-400 to-rose-500 w-80 h-80 top-[180rem] left-[-10rem]" speed={0.18} />
-
+            {/* Banner de Verificación de Versión */}
+            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-center py-2 px-4 text-xs font-bold tracking-wider z-30">
+                🚀 VERSIÓN v2.5 — CONEXIÓN DIRECTA A SUPABASE (supabasedayam.nocodepy.com)
+            </div>
 
             {/* Header */}
             <header className="sticky top-0 bg-slate-950/80 backdrop-blur-xl z-20 border-b border-slate-800/80">
                 <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-3.5">
                     <div 
-                        className="flex items-center gap-3 cursor-pointer group" 
-                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                        className="flex items-center gap-3 cursor-pointer group"
+                        onClick={() => onNavigate('landing')}
                     >
-                         <div className="flex items-center justify-center h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-pink-500 p-0.5 shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
-                             <div className="h-full w-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                                 <Palette className="h-5 w-5 text-indigo-400" />
-                             </div>
-                         </div>
-                         <div className="flex flex-col">
-                             <span className="font-extrabold text-base sm:text-lg text-slate-100 font-heading tracking-tight leading-none">
-                                 COLORES DAYAM
-                             </span>
-                             <span className="text-[10px] font-medium text-slate-400">Color Studio</span>
-                         </div>
+                        <div className="h-10 w-10 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center p-2 group-hover:scale-105 transition-transform">
+                            <Palette size={22} className="text-indigo-400" />
+                        </div>
+                        <div>
+                            <span className="font-heading font-extrabold text-lg tracking-tight text-white block">
+                                COLORES DAYAM
+                            </span>
+                            <span className="text-[10px] text-slate-400 tracking-wider uppercase block">Color Studio</span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <button 
+                    
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <button
                             type="button"
-                            onClick={() => onNavigate('auth')} 
-                            className="touch-target text-xs sm:text-sm font-semibold text-indigo-400 hover:text-indigo-300 px-4 py-2 rounded-xl hover:bg-slate-800/60 transition-all focus-ring flex items-center gap-2"
+                            onClick={() => onNavigate('auth')}
+                            className="text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors"
                         >
-                            <LogIn size={18} />
-                            <span>Iniciar Sesión</span>
+                            Iniciar Sesión
                         </button>
-                        <button 
+                        <button
                             type="button"
-                            onClick={() => onNavigate('auth')} 
-                            className="touch-target text-xs sm:text-sm font-semibold text-white bg-indigo-600 px-4 py-2 rounded-xl hover:bg-indigo-500 transition-all focus-ring flex items-center gap-2 shadow-lg shadow-indigo-600/25"
+                            onClick={() => onNavigate('auth')}
+                            className="touch-target text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all transform hover:scale-[1.02] focus-ring flex items-center gap-1.5"
                         >
-                            <UserPlus size={18} />
-                            <span>Registrarse</span>
+                            <User size={16} />
+                            <span>Crear Cuenta</span>
                         </button>
                     </div>
                 </nav>
