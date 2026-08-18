@@ -1024,7 +1024,57 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
                 handleSharePalette={handleSharePalette}
             />
         }
+        {/* --- DOCK FLOTANTE ERGONÓMICO EN MÓVIL (SUPERANDO A COOLORS.CO) --- */}
+        <div className="md:hidden fixed bottom-3 left-3 right-3 z-40 bg-slate-950/95 backdrop-blur-2xl border border-slate-800/90 rounded-2xl p-2 shadow-2xl shadow-purple-950/50 flex items-center justify-around gap-1 animate-in slide-in-from-bottom duration-300">
+            <button
+                type="button"
+                onClick={() => setIsMethodMenuVisible(p => !p)}
+                className="flex flex-col items-center justify-center p-2 text-slate-300 hover:text-white rounded-xl active:scale-95 transition-all text-[10px] font-semibold gap-0.5"
+            >
+                <Wand2 size={18} className="text-indigo-400" />
+                <span>Método</span>
+            </button>
+
+            <button
+                type="button"
+                onClick={() => setIsAIModalVisible(true)}
+                className="flex flex-col items-center justify-center p-2 text-slate-300 hover:text-white rounded-xl active:scale-95 transition-all text-[10px] font-semibold gap-0.5"
+            >
+                <Sparkles size={18} className="text-amber-400" />
+                <span>IA</span>
+            </button>
+
+            {/* BOTÓN PRINCIPAL GENERAR (FAB CON GLOW) */}
+            <button
+                type="button"
+                onClick={handleRandomTheme}
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-500/40 active:scale-95 transition-all ring-1 ring-white/20"
+            >
+                <RefreshCcw size={15} />
+                <span>Generar</span>
+            </button>
+
+            <button
+                type="button"
+                onClick={() => setIsImageModalVisible(true)}
+                className="flex flex-col items-center justify-center p-2 text-slate-300 hover:text-white rounded-xl active:scale-95 transition-all text-[10px] font-semibold gap-0.5"
+            >
+                <ImageIcon size={18} className="text-emerald-400" />
+                <span>Imagen</span>
+            </button>
+
+            <button
+                type="button"
+                onClick={() => setIsToolsMenuVisible(p => !p)}
+                className="flex flex-col items-center justify-center p-2 text-slate-300 hover:text-white rounded-xl active:scale-95 transition-all text-[10px] font-semibold gap-0.5"
+            >
+                <MoreHorizontal size={18} className="text-pink-400" />
+                <span>Más</span>
+            </button>
+        </div>
+
         {isAccessibilityModalVisible && <AccessibilityModal onClose={() => setIsAccessibilityModalVisible(false)} accessibility={themeData.accessibility} colors={themeData.accessibilityColors} onCopy={showNotification} />}
+
         {isComponentPreviewModalVisible && <ComponentPreviewModal onClose={() => setIsComponentPreviewModalVisible(false)} primaryButtonTextColor={themeData.primaryButtonTextColor} />}
         {isHistoryModalVisible && <HistoryModal history={history} onSelect={goToHistoryState} onClose={() => setIsHistoryModalVisible(false)} />}
         {isHelpModalVisible && <HelpModal onClose={() => setIsHelpModalVisible(false)} />}

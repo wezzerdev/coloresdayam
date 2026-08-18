@@ -533,78 +533,110 @@ const Explorer = (props) => {
                                                                     minHeight: paletteLayout === 'horizontal' ? '50px' : '100%',
                                                                 }}
                                                                 title={displayShade.toUpperCase()}
-                                                                onClick={(e) => handleColorBarClick(e, index)} // <-- ¡MODIFICACIÓN! Añadido OnClick
+                                                                onClick={(e) => handleColorBarClick(e, index)}
                                                             >
                                                                 
-                                                                {/* --- ¡INICIO DE MODIFICACIÓN DE LAYOUT! --- */}
-                                                                
-                                                                {/* Contenedor de Información Estática (Texto, Lock, Star) */}
-                                                                <div 
-                                                                    className={`absolute z-10 flex items-center transition-all duration-200 ${
-                                                                        paletteLayout === 'vertical' 
-                                                                        ? 'top-6 left-1/2 -translate-x-1/2 w-full px-2 flex-col gap-1' 
-                                                                        : 'top-1/2 left-4 -translate-y-1/2 flex-row gap-4'
-                                                                    }`}
-                                                                >
-                                                                    {/* --- ¡MODIFICADO! --- */}
-                                                                    {/* Llama a 'onOpenColorPickerSidebar' */}
-                                                                    <button 
-                                                                        className={`font-mono text-xl font-bold p-1 rounded-lg transition-colors ${hoverBg}`} 
-                                                                        style={{ color: textColor, textShadow: textShadow, pointerEvents: 'auto' }} 
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            // ¡Llama a la prop de App.jsx!
-                                                                            onOpenColorPickerSidebar(index, originalColor); 
-                                                                        }} 
-                                                                        title="Editar Color"
-                                                                    >
-                                                                        {hexValue}
-                                                                    </button>
-                                                                    <button 
-                                                                        className={`text-sm capitalize transition-colors hover:underline px-1 truncate w-full max-w-full ${
-                                                                            paletteLayout === 'horizontal' ? 'max-w-xs' : '' // Limitar ancho en horizontal
-                                                                        }`} 
-                                                                        style={{ color: textColor, textShadow: textShadow, pointerEvents: 'auto' }} 
-                                                                        onClick={(e) => { e.stopPropagation(); setIsDisplayModeModalVisible(true); }} 
-                                                                        title="Cambiar formato de color"
-                                                                    >
-                                                                        {displayValue}
-                                                                    </button>
+                                                                 {/* --- ¡INICIO DE MODIFICACIÓN DE LAYOUT & MOBILE UX! --- */}
+                                                                 
+                                                                 {/* Contenedor de Información Estática (Texto, Lock, Star, Contrast Badge) */}
+                                                                 <div 
+                                                                     className={`absolute z-10 flex items-center transition-all duration-200 ${
+                                                                         paletteLayout === 'vertical' 
+                                                                         ? 'top-6 left-1/2 -translate-x-1/2 w-full px-2 flex-col gap-1' 
+                                                                         : 'top-1/2 left-4 -translate-y-1/2 flex-row gap-3'
+                                                                     }`}
+                                                                 >
+                                                                     {/* HEX Code */}
+                                                                     <button 
+                                                                         className={`font-mono text-lg sm:text-xl font-bold p-1 rounded-lg transition-colors hover:scale-105 active:scale-95 ${hoverBg}`} 
+                                                                         style={{ color: textColor, textShadow: textShadow, pointerEvents: 'auto' }} 
+                                                                         onClick={(e) => {
+                                                                             e.stopPropagation();
+                                                                             navigator.clipboard.writeText(hexValue);
+                                                                             showNotification(`¡HEX #${hexValue} copiado al portapapeles!`);
+                                                                         }} 
+                                                                         title="Copiar HEX"
+                                                                     >
+                                                                         #{hexValue}
+                                                                     </button>
 
-                                                                    {/* Iconos estáticos */}
-                                                                    {displayShade === brandColor && (
-                                                                        <div className={`p-1.5 bg-black/30 rounded-full z-10 ${iconColor} opacity-100 transition-opacity duration-200`} title="Color de Marca Actual">
-                                                                            <Star size={12} className="fill-current" strokeWidth={1.5} />
-                                                                        </div>
-                                                                    )}
-                                                                    {isLocked && (
-                                                                        <div className={`p-1.5 bg-black/30 rounded-full z-10 ${iconColor} opacity-100 transition-opacity duration-200`} title="Color Bloqueado">
-                                                                            <Lock size={12} strokeWidth={1.5} />
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                                
-                                                                {/* Botones de hover */}
-                                                                <div 
-                                                                    className={`absolute z-20 flex items-center gap-2 opacity-0 group-hover/item:opacity-100 transition-opacity duration-200 ${
-                                                                        'hidden md:flex' // <-- ¡MODIFICACIÓN! Ocultar en móvil
-                                                                    } ${
-                                                                        paletteLayout === 'vertical'
-                                                                        ? 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col'
-                                                                        : 'top-1/2 right-4 -translate-y-1/2 flex-row'
-                                                                    }`}
-                                                                >
-                                                                    <div title="Arrastrar para mover" className={`p-2 rounded-lg cursor-grab ${iconColor} ${hoverBg}`} {...provided.dragHandleProps} onClick={(e) => e.stopPropagation()}>
-                                                                        <ArrowLeftRight size={18} strokeWidth={1.5} />
-                                                                    </div>
-                                                                    <ActionButtonHover title="Usar como Marca" onClick={() => handleExplorerColorPick(displayShade)} iconColor={iconColor} hoverBg={hoverBg}><Star size={18} strokeWidth={1.5} /></ActionButtonHover>
-                                                                    <ActionButtonHover title="Ver Tonalidades" onClick={() => toggleShades(index)} iconColor={iconColor} hoverBg={hoverBg}><Palette size={18} strokeWidth={1.5} /></ActionButtonHover>
-                                                                    <ActionButtonHover title="Copiar H E X" onClick={() => { navigator.clipboard.writeText(hexValue); showNotification(`H E X ${hexValue} copiado!`); }} iconColor={iconColor} hoverBg={hoverBg}><Copy size={18} strokeWidth={1.5} /></ActionButtonHover>
-                                                                    <ActionButtonHover title={isLocked ? "Desbloquear" : "Bloquear"} onClick={() => toggleLockColor(originalColor)} iconColor={iconColor} hoverBg={hoverBg}>{isLocked ? <Lock size={18} strokeWidth={1.5} /> : <Unlock size={18} strokeWidth={1.5} />}</ActionButtonHover>
-                                                                    <ActionButtonHover title="Eliminar Color" onClick={() => removeColorFromPalette(index)} iconColor={iconColor} hoverBg={hoverBg}><Trash2 size={18} strokeWidth={1.5} /></ActionButtonHover>
-                                                                </div>
+                                                                     {/* Color Name */}
+                                                                     <button 
+                                                                         className={`text-xs sm:text-sm font-semibold capitalize transition-colors hover:underline px-1 truncate max-w-[120px] sm:max-w-xs`} 
+                                                                         style={{ color: textColor, textShadow: textShadow, pointerEvents: 'auto' }} 
+                                                                         onClick={(e) => { e.stopPropagation(); setIsDisplayModeModalVisible(true); }} 
+                                                                         title="Cambiar formato de color"
+                                                                     >
+                                                                         {displayValue}
+                                                                     </button>
 
-                                                                {/* --- ¡FIN DE MODIFICACIÓN DE LAYOUT! --- */}
+                                                                     {/* WCAG Contrast Score Badge */}
+                                                                     <div 
+                                                                         className="hidden sm:inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-black/25 text-white/90 backdrop-blur-sm border border-white/10"
+                                                                         title="Relación de contraste WCAG"
+                                                                     >
+                                                                         {tinycolor.readability(displayShade, isLight ? '#000000' : '#ffffff').toFixed(1)}:1
+                                                                     </div>
+
+                                                                     {/* Iconos estáticos */}
+                                                                     {displayShade === brandColor && (
+                                                                         <div className={`p-1.5 bg-black/30 rounded-full z-10 ${iconColor}`} title="Color de Marca Actual">
+                                                                             <Star size={12} className="fill-current" strokeWidth={1.5} />
+                                                                         </div>
+                                                                     )}
+                                                                     {isLocked && (
+                                                                         <div className={`p-1.5 bg-black/30 rounded-full z-10 ${iconColor}`} title="Color Bloqueado">
+                                                                             <Lock size={12} strokeWidth={1.5} />
+                                                                         </div>
+                                                                     )}
+                                                                 </div>
+
+                                                                 {/* Barra de Acciones Táctiles en Móvil (Visible siempre en móvil) */}
+                                                                 <div 
+                                                                     className={`absolute z-20 flex items-center gap-1 sm:gap-2 ${
+                                                                         paletteLayout === 'vertical'
+                                                                         ? 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex-col opacity-0 group-hover/item:opacity-100 transition-opacity'
+                                                                         : 'top-1/2 right-3 -translate-y-1/2 flex-row md:opacity-0 md:group-hover/item:opacity-100 transition-opacity'
+                                                                     }`}
+                                                                 >
+                                                                     <button
+                                                                         type="button"
+                                                                         onClick={(e) => { e.stopPropagation(); toggleLockColor(originalColor); }}
+                                                                         className={`p-2 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm transition-all active:scale-90 ${isLocked ? 'bg-indigo-600 text-white' : `${iconColor} ${hoverBg}`}`}
+                                                                         title={isLocked ? "Desbloquear Color" : "Bloquear Color"}
+                                                                     >
+                                                                         {isLocked ? <Lock size={16} strokeWidth={2} /> : <Unlock size={16} strokeWidth={2} />}
+                                                                     </button>
+
+                                                                     <button
+                                                                         type="button"
+                                                                         onClick={(e) => { e.stopPropagation(); toggleShades(index); }}
+                                                                         className={`p-2 rounded-xl ${iconColor} ${hoverBg} transition-all active:scale-90`}
+                                                                         title="Ver Tonalidades"
+                                                                     >
+                                                                         <Palette size={16} strokeWidth={2} />
+                                                                     </button>
+
+                                                                     <button
+                                                                         type="button"
+                                                                         onClick={(e) => { e.stopPropagation(); onOpenColorPickerSidebar(index, originalColor); }}
+                                                                         className={`p-2 rounded-xl ${iconColor} ${hoverBg} transition-all active:scale-90`}
+                                                                         title="Editar Color"
+                                                                     >
+                                                                         <Pipette size={16} strokeWidth={2} />
+                                                                     </button>
+
+                                                                     <button
+                                                                         type="button"
+                                                                         onClick={(e) => { e.stopPropagation(); removeColorFromPalette(index); }}
+                                                                         className={`p-2 rounded-xl hover:bg-rose-500/20 hover:text-rose-400 ${iconColor} transition-all active:scale-90`}
+                                                                         title="Eliminar Color"
+                                                                     >
+                                                                         <Trash2 size={16} strokeWidth={2} />
+                                                                     </button>
+                                                                 </div>
+
+                                                                 {/* --- ¡FIN DE MODIFICACIÓN DE LAYOUT! --- */}
                                                             </div>
                                                             
                                                             {/* Botón de Añadir (con posición modificada) */}
