@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Palette, Feather, Zap, LogIn, UserPlus, ArrowRight, Mouse, Code, CheckCircle, Image as ImageIcon, TestTube2, ShieldCheck } from 'lucide-react';
+import { Palette, Feather, Zap, LogIn, User, UserPlus, ArrowRight, Mouse, Code, CheckCircle, Image as ImageIcon, TestTube2, ShieldCheck } from 'lucide-react';
+
 
 // Componente para las formas abstractas del fondo con efecto parallax
 const ParallaxShape = ({ className, speed = 0.1 }) => {
