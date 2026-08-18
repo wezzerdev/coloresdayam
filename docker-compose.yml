@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  colores-dayam:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: colores-dayam-app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - JWT_SECRET=colores-dayam-dokploy-secret-2026-key
+      - DATA_DIR=/app/data
+    volumes:
+      - colores_dayam_data:/app/data
+
+volumes:
+  colores_dayam_data:
+    driver: local

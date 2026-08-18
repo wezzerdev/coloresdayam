@@ -1,0 +1,49 @@
+/* --- MODIFICACIÓN CLAVE ---
+  Hemos eliminado el 'max-width', 'margin' y 'padding' del #root.
+  Esto permite que tu aplicación ocupe el 100% del ancho del dispositivo,
+  lo cual es esencial para una experiencia móvil.
+  El padding ahora será controlado por los componentes internos (como App.jsx
+  que ya usa `p-4 md:p-8`).
+*/
+#root {
+  width: 100%;
+  min-height: 100vh;
+  /* Eliminamos text-align: center para dar más control a los componentes */
+}
+
+/* El resto de tus estilos (si los tuvieras) se mantienen */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
