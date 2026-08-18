@@ -6,10 +6,7 @@ import { fileURLToPath } from 'url';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import db, { initDB } from './db.js';
-
-const uuidv4 = () => crypto.randomUUID();
-
+import db, { initDB, userDB } from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,37 +39,45 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-// --- RUTAS DE AUTENTICACIÓN ---
+// Generador de código aleatorio de 6 dígitos
+const generate6DigitCode = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-// Registro de usuario
+// --- RUTAS DE AUTENTICACIÓN PROFESIONAL ---
+
+// 1. Registro de usuario con generación de código de confirmación de 6 dígitos
 app.post('/api/auth/register', (req, res) => {
   try {
     const { email, password, name } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Correo y contraseña requeridos' });
+    if (!email || !password || !name) {
+      return res.status(400).json({ error: 'Nombre completo, correo electrónico y contraseña son requeridos.' });
     }
 
-    const existingUser = db.prepare('SELECT * FROM users WHERE email = ?').get(email.toLowerCase());
+    if (password.length < 6) {
+      return res.status(400).json({ error: 'La contraseña debe tener al menos 6 caracteres.' });
+    }
+
+    const existingUser = userDB.findByEmail(email);
     if (existingUser) {
-      return res.status(400).json({ error: 'El usuario ya se encuentra registrado.' });
+      return res.status(400).json({ error: 'El correo electrónico ya se encuentra registrado.' });
     }
 
     const userId = 'usr_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
     const passwordHash = bcrypt.hashSync(password, 10);
-    const userName = name || email.split('@')[0];
+    const verificationCode = generate6DigitCode();
 
-    db.prepare(`
-      INSERT INTO users (id, email, password_hash, name)
-      VALUES (?, ?, ?, ?)
-    `).run(userId, email.toLowerCase(), passwordHash, userName);
-
-    const userPayload = { id: userId, email: email.toLowerCase(), name: userName };
-    const token = jwt.sign(userPayload, JWT_SECRET, { expiresIn: '30d' });
+    userDB.create({
+      id: userId,
+      email: email.toLowerCase(),
+      password_hash: passwordHash,
+      name: name.trim(),
+      is_verified: 0,
+      verification_code: verificationCode
+    });
 
     res.json({
-      user: userPayload,
-      token: token,
-      message: 'Usuario registrado exitosamente'
+      message: `Código de confirmación generado para ${email}.`,
+      email: email.toLowerCase(),
+      code: verificationCode // Para facilitar pruebas y confirmación sin servidor SMTP externo
     });
   } catch (error) {
     console.error('Error en registro:', error);
@@ -80,15 +85,52 @@ app.post('/api/auth/register', (req, res) => {
   }
 });
 
-// Inicio de sesión
+// 2. Verificación de código de confirmación de 6 dígitos
+app.post('/api/auth/verify-code', (req, res) => {
+  try {
+    const { email, code } = req.body;
+    if (!email || !code) {
+      return res.status(400).json({ error: 'Correo y código de 6 dígitos requeridos.' });
+    }
+
+    const user = userDB.findByEmail(email);
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado.' });
+    }
+
+    if (user.verification_code !== code.trim()) {
+      return res.status(400).json({ error: 'El código de confirmación de 6 dígitos es incorrecto.' });
+    }
+
+    // Activar usuario
+    userDB.update(user.id, {
+      is_verified: 1,
+      verification_code: null
+    });
+
+    const userPayload = { id: user.id, email: user.email, name: user.name };
+    const token = jwt.sign(userPayload, JWT_SECRET, { expiresIn: '30d' });
+
+    res.json({
+      user: userPayload,
+      token: token,
+      message: '¡Cuenta confirmada y activada con éxito!'
+    });
+  } catch (error) {
+    console.error('Error en verificación:', error);
+    res.status(500).json({ error: error.message || 'Error interno del servidor' });
+  }
+});
+
+// 3. Inicio de sesión
 app.post('/api/auth/login', (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ error: 'Correo y contraseña requeridos' });
+      return res.status(400).json({ error: 'Correo y contraseña requeridos.' });
     }
 
-    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email.toLowerCase());
+    const user = userDB.findByEmail(email);
     if (!user || !bcrypt.compareSync(password, user.password_hash)) {
       return res.status(400).json({ error: 'Credenciales inválidas. Revisa tu correo y contraseña.' });
     }
@@ -107,18 +149,139 @@ app.post('/api/auth/login', (req, res) => {
   }
 });
 
-// Obtener usuario actual
-app.get('/api/auth/me', authenticateToken, (req, res) => {
-  const user = db.prepare('SELECT id, email, name, created_at FROM users WHERE id = ?').get(req.user.id);
-  if (!user) {
-    return res.status(444).json({ error: 'Usuario no encontrado' });
+// 4. Solicitar recuperación de contraseña (Forgot Password)
+app.post('/api/auth/forgot-password', (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ error: 'Correo electrónico requerido.' });
+    }
+
+    const user = userDB.findByEmail(email);
+    if (!user) {
+      return res.status(404).json({ error: 'No existe ninguna cuenta asociada a este correo electrónico.' });
+    }
+
+    const resetCode = generate6DigitCode();
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString(); // Expira en 15 minutos
+
+    userDB.update(user.id, {
+      reset_code: resetCode,
+      reset_expires: expiresAt
+    });
+
+    res.json({
+      message: `Código de recuperación generado para ${email}.`,
+      email: email.toLowerCase(),
+      code: resetCode // Para pruebas locales
+    });
+  } catch (error) {
+    console.error('Error en forgot-password:', error);
+    res.status(500).json({ error: error.message });
   }
-  res.json({ user });
+});
+
+// 5. Restablecer contraseña con código (Reset Password)
+app.post('/api/auth/reset-password', (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+    if (!email || !code || !newPassword) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 6 caracteres.' });
+    }
+
+    const user = userDB.findByEmail(email);
+    if (!user || user.reset_code !== code.trim()) {
+      return res.status(400).json({ error: 'El código de restablecimiento es incorrecto.' });
+    }
+
+    if (user.reset_expires && new Date() > new Date(user.reset_expires)) {
+      return res.status(400).json({ error: 'El código de restablecimiento ha expirado. Solicita uno nuevo.' });
+    }
+
+    const passwordHash = bcrypt.hashSync(newPassword, 10);
+    userDB.update(user.id, {
+      password_hash: passwordHash,
+      reset_code: null,
+      reset_expires: null
+    });
+
+    res.json({ message: '¡Contraseña actualizada con éxito! Ya puedes iniciar sesión.' });
+  } catch (error) {
+    console.error('Error en reset-password:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 6. Obtener usuario actual
+app.get('/api/auth/me', authenticateToken, (req, res) => {
+  const user = userDB.findById(req.user.id);
+  if (!user) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+  res.json({
+    user: {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      created_at: user.created_at
+    }
+  });
+});
+
+// 7. Actualizar nombre de perfil
+app.put('/api/auth/profile', authenticateToken, (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name || !name.trim()) {
+      return res.status(400).json({ error: 'El nombre completo es requerido.' });
+    }
+
+    const updated = userDB.update(req.user.id, { name: name.trim() });
+    res.json({
+      user: {
+        id: updated.id,
+        email: updated.email,
+        name: updated.name,
+        created_at: updated.created_at
+      },
+      message: '¡Perfil actualizado correctamente!'
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 8. Cambiar contraseña desde sesión activa
+app.put('/api/auth/change-password', authenticateToken, (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ error: 'La contraseña actual y la nueva contraseña son requeridas.' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 6 caracteres.' });
+    }
+
+    const user = userDB.findById(req.user.id);
+    if (!user || !bcrypt.compareSync(currentPassword, user.password_hash)) {
+      return res.status(400).json({ error: 'La contraseña actual es incorrecta.' });
+    }
+
+    const passwordHash = bcrypt.hashSync(newPassword, 10);
+    userDB.update(req.user.id, { password_hash: passwordHash });
+
+    res.json({ message: '¡Contraseña modificada con éxito!' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // --- RUTAS DE PALETAS DE COLOR ---
-
-// Obtener paletas del usuario
 app.get('/api/palettes', authenticateToken, (req, res) => {
   try {
     const rows = db.prepare('SELECT * FROM user_palettes WHERE user_id = ? ORDER BY created_at DESC').all(req.user.id);
@@ -148,7 +311,6 @@ app.get('/api/palettes', authenticateToken, (req, res) => {
   }
 });
 
-// Guardar nueva paleta
 app.post('/api/palettes', authenticateToken, (req, res) => {
   try {
     const {
@@ -159,15 +321,13 @@ app.post('/api/palettes', authenticateToken, (req, res) => {
 
     const paletteId = 'pal_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
 
-    const stmt = db.prepare(`
+    db.prepare(`
       INSERT INTO user_palettes (
         id, user_id, name, description, project_id, collection_id,
         colors, brand_color, gray_color, is_gray_auto,
         locked_colors, main_colors, style_tags, is_public, created_at, updated_at
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
-    `);
-
-    stmt.run(
+    `).run(
       paletteId,
       req.user.id,
       name || 'Paleta sin título',
@@ -209,7 +369,6 @@ app.post('/api/palettes', authenticateToken, (req, res) => {
   }
 });
 
-// Actualizar paleta
 app.put('/api/palettes/:id', authenticateToken, (req, res) => {
   try {
     const paletteId = req.params.id;
@@ -225,19 +384,6 @@ app.put('/api/palettes/:id', authenticateToken, (req, res) => {
       locked_colors, main_colors, style_tags, is_public
     } = req.body;
 
-    const newName = name !== undefined ? name : existing.name;
-    const newDesc = description !== undefined ? description : existing.description;
-    const newProject = project_id !== undefined ? project_id : existing.project_id;
-    const newCollection = collection_id !== undefined ? collection_id : existing.collection_id;
-    const newColors = colors ? JSON.stringify(colors) : existing.colors;
-    const newBrand = brand_color !== undefined ? brand_color : existing.brand_color;
-    const newGray = gray_color !== undefined ? gray_color : existing.gray_color;
-    const newIsGrayAuto = is_gray_auto !== undefined ? (is_gray_auto ? 1 : 0) : existing.is_gray_auto;
-    const newLocked = locked_colors ? JSON.stringify(locked_colors) : existing.locked_colors;
-    const newMain = main_colors ? JSON.stringify(main_colors) : existing.main_colors;
-    const newStyle = style_tags ? JSON.stringify(style_tags) : existing.style_tags;
-    const newPublic = is_public !== undefined ? (is_public ? 1 : 0) : existing.is_public;
-
     db.prepare(`
       UPDATE user_palettes
       SET name = ?, description = ?, project_id = ?, collection_id = ?,
@@ -246,9 +392,18 @@ app.put('/api/palettes/:id', authenticateToken, (req, res) => {
           updated_at = datetime('now')
       WHERE id = ? AND user_id = ?
     `).run(
-      newName, newDesc, newProject, newCollection,
-      newColors, newBrand, newGray, newIsGrayAuto,
-      newLocked, newMain, newStyle, newPublic,
+      name !== undefined ? name : existing.name,
+      description !== undefined ? description : existing.description,
+      project_id !== undefined ? project_id : existing.project_id,
+      collection_id !== undefined ? collection_id : existing.collection_id,
+      colors ? JSON.stringify(colors) : existing.colors,
+      brand_color !== undefined ? brand_color : existing.brand_color,
+      gray_color !== undefined ? gray_color : existing.gray_color,
+      is_gray_auto !== undefined ? (is_gray_auto ? 1 : 0) : existing.is_gray_auto,
+      locked_colors ? JSON.stringify(locked_colors) : existing.locked_colors,
+      main_colors ? JSON.stringify(main_colors) : existing.main_colors,
+      style_tags ? JSON.stringify(style_tags) : existing.style_tags,
+      is_public !== undefined ? (is_public ? 1 : 0) : existing.is_public,
       paletteId, req.user.id
     );
 
@@ -277,7 +432,6 @@ app.put('/api/palettes/:id', authenticateToken, (req, res) => {
   }
 });
 
-// Borrar paleta
 app.delete('/api/palettes/:id', authenticateToken, (req, res) => {
   try {
     const result = db.prepare('DELETE FROM user_palettes WHERE id = ? AND user_id = ?').run(req.params.id, req.user.id);
@@ -328,7 +482,7 @@ app.delete('/api/collections/:id', authenticateToken, (req, res) => {
   res.json({ success: true });
 });
 
-// --- SERVICIO DE ARCHIVOS ESTÁTICOS Y FALLBACK SPA ---
+// --- SERVICIO ESTÁTICO DE FRONTEND ---
 const distPath = path.join(__dirname, '../dist');
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));
@@ -337,7 +491,7 @@ if (fs.existsSync(distPath)) {
   });
 } else {
   app.get('/', (req, res) => {
-    res.send('Servidor Colores Dayam ejecutándose. Ejecuta "npm run build" para servir el frontend estático.');
+    res.send('Servidor Colores Dayam listo.');
   });
 }
 

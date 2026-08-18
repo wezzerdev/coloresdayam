@@ -3,7 +3,7 @@ import { RefreshCcw, Upload, Download, HelpCircle, Type, User, LogOut, Palette, 
 import { HelpModal } from './modals';
 import { availableFonts } from '../utils/colorUtils';
 
-const Header = ({ onImport, onExport, onReset, themeData, font, setFont, user, onLogout }) => {
+const Header = ({ onImport, onExport, onReset, themeData, font, setFont, user, onLogout, onOpenProfile }) => {
     const importFileRef = useRef(null);
     const fontMenuRef = useRef(null);
     const [isHelpVisible, setIsHelpVisible] = useState(false);
@@ -64,13 +64,16 @@ const Header = ({ onImport, onExport, onReset, themeData, font, setFont, user, o
                 {/* Acciones de usuario y herramientas */}
                 {user ? (
                     <div className="flex items-center gap-2 self-end sm:self-center">
-                        <div 
-                            className="flex items-center gap-2 text-xs sm:text-sm font-medium px-3 py-2 rounded-xl border border-slate-700/60 shadow-sm"
+                        <button 
+                            type="button"
+                            onClick={onOpenProfile}
+                            title="Editar Mi Perfil"
+                            className="flex items-center gap-2 text-xs sm:text-sm font-medium px-3 py-2 rounded-xl border border-slate-700/60 shadow-sm hover:border-indigo-500/50 hover:bg-slate-800/60 transition-all focus-ring"
                             style={controlsThemeStyle}
                         >
                             <User size={18} className="text-indigo-400" />
-                            <span className="font-semibold hidden sm:inline">{user.name || user.email}</span>
-                        </div>
+                            <span className="font-semibold">{user.name || user.email}</span>
+                        </button>
                         <button
                             type="button"
                             title="Cerrar Sesión"
@@ -83,6 +86,7 @@ const Header = ({ onImport, onExport, onReset, themeData, font, setFont, user, o
                             <span className="sr-only sm:not-sr-only sm:ml-1.5">Salir</span>
                         </button>
                     </div>
+
                 ) : (
                     <div className="flex items-center gap-2 self-stretch sm:self-center flex-wrap justify-end">
                         <input type="file" ref={importFileRef} onChange={onImport} accept=".json" className="hidden" aria-hidden="true" />

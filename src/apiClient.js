@@ -1,7 +1,5 @@
-// Cliente de API autónomo para reemplazar Supabase sin depender de servicios externos.
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
-// Token JWT almacenado en localStorage
 const TOKEN_KEY = 'colores_dayam_token';
 const USER_KEY = 'colores_dayam_user';
 
@@ -66,14 +64,28 @@ async function apiFetch(endpoint, options = {}) {
   return data;
 }
 
-// Adaptador con interfaz idéntica a Supabase
 export const supabase = {
   auth: {
+    // 1. Registro con Nombre Completo
     async signUp({ email, password, name }) {
       try {
         const result = await apiFetch('/api/auth/register', {
           method: 'POST',
           body: JSON.stringify({ email, password, name }),
+        });
+
+        return { data: result, error: null };
+      } catch (error) {
+        return { data: null, error };
+      }
+    },
+
+    // 2. Verificación de Código de 6 dígitos
+    async verifyCode({ email, code }) {
+      try {
+        const result = await apiFetch('/api/auth/verify-code', {
+          method: 'POST',
+          body: JSON.stringify({ email, code }),
         });
 
         if (result.token) {
@@ -88,6 +100,7 @@ export const supabase = {
       }
     },
 
+    // 3. Inicio de Sesión
     async signInWithPassword({ email, password }) {
       try {
         const result = await apiFetch('/api/auth/login', {
@@ -107,9 +120,65 @@ export const supabase = {
       }
     },
 
+    // 4. Solicitar Código de Recuperación de Contraseña
+    async forgotPassword({ email }) {
+      try {
+        const result = await apiFetch('/api/auth/forgot-password', {
+          method: 'POST',
+          body: JSON.stringify({ email }),
+        });
+        return { data: result, error: null };
+      } catch (error) {
+        return { data: null, error };
+      }
+    },
+
+    // 5. Restablecer Contraseña con Código
+    async resetPassword({ email, code, newPassword }) {
+      try {
+        const result = await apiFetch('/api/auth/reset-password', {
+          method: 'POST',
+          body: JSON.stringify({ email, code, newPassword }),
+        });
+        return { data: result, error: null };
+      } catch (error) {
+        return { data: null, error };
+      }
+    },
+
+    // 6. Actualizar Nombre de Perfil
+    async updateProfile({ name }) {
+      try {
+        const result = await apiFetch('/api/auth/profile', {
+          method: 'PUT',
+          body: JSON.stringify({ name }),
+        });
+        if (result.user) {
+          setStoredUser(result.user);
+          notifyAuthChange('USER_UPDATED', { user: result.user });
+        }
+        return { data: result.user, error: null };
+      } catch (error) {
+        return { data: null, error };
+      }
+    },
+
+    // 7. Cambiar Contraseña desde Sesión Activa
+    async changePassword({ currentPassword, newPassword }) {
+      try {
+        const result = await apiFetch('/api/auth/change-password', {
+          method: 'PUT',
+          body: JSON.stringify({ currentPassword, newPassword }),
+        });
+        return { data: result, error: null };
+      } catch (error) {
+        return { data: null, error };
+      }
+    },
+
     async signInWithOAuth() {
-      alert("Autenticación OAuth no está configurada en modo servidor autónomo local.");
-      return { data: null, error: new Error("OAuth no soportado localmente") };
+      alert("Autenticación OAuth no disponible en modo servidor local autónomo.");
+      return { data: null, error: new Error("OAuth no disponible localmente") };
     },
 
     async signOut() {

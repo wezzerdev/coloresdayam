@@ -11,9 +11,8 @@ if (!fs.existsSync(dataDir)) {
 }
 
 const dbFilePath = process.env.DATABASE_PATH || path.join(dataDir, 'db.json');
-console.log(`[DB] Usando base de datos persistente en: ${dbFilePath}`);
+console.log(`[DB] Usando base de datos en: ${dbFilePath}`);
 
-// Estructura por defecto de la base de datos
 const defaultData = {
   users: [],
   user_palettes: [],
@@ -34,13 +33,13 @@ function loadStore() {
       saveStore();
     }
   } catch (e) {
-    console.error('[DB] Error cargando db.json, usando almacenamiento nuevo:', e);
+    console.error('[DB] Error cargando db.json:', e);
     store = { ...defaultData };
     saveStore();
   }
 }
 
-function saveStore() {
+export function saveStore() {
   try {
     fs.writeFileSync(dbFilePath, JSON.stringify(store, null, 2), 'utf8');
   } catch (e) {
@@ -53,7 +52,51 @@ export function initDB() {
   console.log('[DB] Base de datos local inicializada con éxito.');
 }
 
-// Adaptador ligero de consultas SQL simuladas para compatibilidad transparente
+// Métodos directos para gestión de usuarios
+export const userDB = {
+  findByEmail(email) {
+    loadStore();
+    if (!email) return null;
+    return store.users.find(u => u.email.toLowerCase() === email.toLowerCase()) || null;
+  },
+
+  findById(id) {
+    loadStore();
+    if (!id) return null;
+    return store.users.find(u => u.id === id) || null;
+  },
+
+  create(userObj) {
+    loadStore();
+    const newUser = {
+      id: userObj.id,
+      email: userObj.email.toLowerCase(),
+      password_hash: userObj.password_hash,
+      name: userObj.name || userObj.email.split('@')[0],
+      is_verified: userObj.is_verified || 0,
+      verification_code: userObj.verification_code || null,
+      reset_code: null,
+      reset_expires: null,
+      created_at: new Date().toISOString()
+    };
+    store.users.push(newUser);
+    saveStore();
+    return newUser;
+  },
+
+  update(id, updates) {
+    loadStore();
+    const index = store.users.findIndex(u => u.id === id);
+    if (index !== -1) {
+      store.users[index] = { ...store.users[index], ...updates };
+      saveStore();
+      return store.users[index];
+    }
+    return null;
+  }
+};
+
+// Adaptador de compatibilidad SQL simulado
 class PreparedQuery {
   constructor(sql) {
     this.sql = sql;
@@ -63,33 +106,28 @@ class PreparedQuery {
     loadStore();
     const sql = this.sql.trim();
 
-    // SELECT user BY email
     if (sql.includes('FROM users WHERE email =')) {
       const email = params[0];
-      return store.users.find(u => u.email === email) || null;
+      return userDB.findByEmail(email);
     }
 
-    // SELECT user BY id
     if (sql.includes('FROM users WHERE id =')) {
       const id = params[0];
-      return store.users.find(u => u.id === id) || null;
+      return userDB.findById(id);
     }
 
-    // SELECT palette BY id
     if (sql.includes('FROM user_palettes WHERE id =')) {
       const id = params[0];
       const p = store.user_palettes.find(item => item.id === id);
       return p ? { ...p } : null;
     }
 
-    // SELECT project BY id
     if (sql.includes('FROM projects WHERE id =')) {
       const id = params[0];
       const p = store.projects.find(item => item.id === id);
       return p ? { ...p } : null;
     }
 
-    // SELECT collection BY id
     if (sql.includes('FROM collections WHERE id =')) {
       const id = params[0];
       const c = store.collections.find(item => item.id === id);
@@ -103,7 +141,6 @@ class PreparedQuery {
     loadStore();
     const sql = this.sql.trim();
 
-    // SELECT user_palettes BY user_id
     if (sql.includes('FROM user_palettes WHERE user_id =')) {
       const userId = params[0];
       return store.user_palettes
@@ -111,7 +148,6 @@ class PreparedQuery {
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     }
 
-    // SELECT projects BY user_id
     if (sql.includes('FROM projects WHERE user_id =')) {
       const userId = params[0];
       return store.projects
@@ -119,7 +155,6 @@ class PreparedQuery {
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     }
 
-    // SELECT collections BY user_id
     if (sql.includes('FROM collections WHERE user_id =')) {
       const userId = params[0];
       return store.collections
@@ -135,21 +170,12 @@ class PreparedQuery {
     const sql = this.sql.trim();
     let changes = 0;
 
-    // INSERT INTO users
     if (sql.includes('INSERT INTO users')) {
       const [id, email, password_hash, name] = params;
-      const newUser = {
-        id,
-        email,
-        password_hash,
-        name,
-        created_at: new Date().toISOString()
-      };
-      store.users.push(newUser);
+      userDB.create({ id, email, password_hash, name, is_verified: 1 });
       changes = 1;
     }
 
-    // INSERT INTO user_palettes
     else if (sql.includes('INSERT INTO user_palettes')) {
       const [
         id, user_id, name, description, project_id, collection_id,
@@ -167,9 +193,9 @@ class PreparedQuery {
 
       store.user_palettes.push(newPalette);
       changes = 1;
+      saveStore();
     }
 
-    // UPDATE user_palettes
     else if (sql.includes('UPDATE user_palettes')) {
       if (sql.includes('SET is_public = true') || sql.includes('is_public = 1')) {
         const id = params[0];
@@ -178,6 +204,7 @@ class PreparedQuery {
           p.is_public = 1;
           p.updated_at = new Date().toISOString();
           changes = 1;
+          saveStore();
         }
       } else {
         const [
@@ -197,50 +224,47 @@ class PreparedQuery {
             updated_at: new Date().toISOString()
           };
           changes = 1;
+          saveStore();
         }
       }
     }
 
-    // DELETE FROM user_palettes
     else if (sql.includes('DELETE FROM user_palettes')) {
       const [id, user_id] = params;
       const initialCount = store.user_palettes.length;
       store.user_palettes = store.user_palettes.filter(item => !(item.id === id && item.user_id === user_id));
       changes = initialCount - store.user_palettes.length;
+      if (changes > 0) saveStore();
     }
 
-    // INSERT INTO projects
     else if (sql.includes('INSERT INTO projects')) {
       const [id, user_id, name] = params;
       store.projects.push({ id, user_id, name, created_at: new Date().toISOString() });
       changes = 1;
+      saveStore();
     }
 
-    // DELETE FROM projects
     else if (sql.includes('DELETE FROM projects')) {
       const [id, user_id] = params;
       const initialCount = store.projects.length;
       store.projects = store.projects.filter(item => !(item.id === id && item.user_id === user_id));
       changes = initialCount - store.projects.length;
+      if (changes > 0) saveStore();
     }
 
-    // INSERT INTO collections
     else if (sql.includes('INSERT INTO collections')) {
       const [id, user_id, name] = params;
       store.collections.push({ id, user_id, name, created_at: new Date().toISOString() });
       changes = 1;
+      saveStore();
     }
 
-    // DELETE FROM collections
     else if (sql.includes('DELETE FROM collections')) {
       const [id, user_id] = params;
       const initialCount = store.collections.length;
       store.collections = store.collections.filter(item => !(item.id === id && item.user_id === user_id));
       changes = initialCount - store.collections.length;
-    }
-
-    if (changes > 0) {
-      saveStore();
+      if (changes > 0) saveStore();
     }
 
     return { changes };

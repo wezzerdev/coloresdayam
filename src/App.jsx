@@ -9,6 +9,8 @@ import {
     HistoryModal, HelpModal, ConfirmDeleteModal,
     AIPaletteModal, ImagePaletteModal, VariationsModal, PaletteContrastChecker
 } from './components/modals/index.jsx';
+import ProfileModal from './components/modals/ProfileModal.jsx';
+
 import { 
     Settings, Type, Upload, Download, RefreshCcw, HelpCircle, 
     User, LogOut, LogIn, Save, FolderOpen,
@@ -179,8 +181,9 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
   const [isExportModalVisible, setIsExportModalVisible] = useState(false);
   const [isAccessibilityModalVisible, setIsAccessibilityModalVisible] = useState(false);
   const [isComponentPreviewModalVisible, setIsComponentPreviewModalVisible] = useState(false);
-  const [isHistoryModalVisible, setIsHistoryModalVisible] = useState(false);
   const [isHelpModalVisible, setIsHelpModalVisible] = useState(false);
+  const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
+
   
   const [activeColorMenu, setActiveColorMenu] = useState(null); // <-- ¡NUEVO! Mover el estado aquí
 
@@ -697,15 +700,16 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
                     <User size={16} strokeWidth={1.75}/>
                 </button>
                 {isUserMenuVisible && (
-                    // --- ¡MODIFICADO! --- Se elimina direction="up"
                     <PopoverMenu onClose={() => setIsUserMenuVisible(false)}>
                         <div className="px-3 py-2">
-                            <p className="text-sm font-semibold text-gray-900 truncate">{user.user_metadata?.name || user.email}</p>
-                            <p className="text-xs text-gray-500">Usuario Registrado</p>
+                            <p className="text-sm font-semibold text-slate-100 truncate">{user.name || user.email}</p>
+                            <p className="text-xs text-indigo-400 font-medium">Cuenta Activa</p>
                         </div>
-                        <div className="h-px bg-gray-200 my-1"></div>
+                        <div className="h-px bg-slate-800 my-1"></div>
+                        <MenuButton icon={<User size={16} strokeWidth={1.75}/>} label="Mi Perfil" onClick={() => { setIsProfileModalVisible(true); setIsUserMenuVisible(false); }} />
                         <MenuButton icon={<LogOut size={16} strokeWidth={1.75}/>} label="Cerrar Sesión" onClick={handleLogoutClick} />
                     </PopoverMenu>
+
                 )}
               </div>
             </>
@@ -1022,6 +1026,19 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
         {isComponentPreviewModalVisible && <ComponentPreviewModal onClose={() => setIsComponentPreviewModalVisible(false)} primaryButtonTextColor={themeData.primaryButtonTextColor} />}
         {isHistoryModalVisible && <HistoryModal history={history} onSelect={goToHistoryState} onClose={() => setIsHistoryModalVisible(false)} />}
         {isHelpModalVisible && <HelpModal onClose={() => setIsHelpModalVisible(false)} />}
+        {isProfileModalVisible && (
+            <ProfileModal 
+                user={user} 
+                onClose={() => setIsProfileModalVisible(false)} 
+                onUserUpdated={(updatedUser) => {
+                    if (user && updatedUser?.name) {
+                        user.name = updatedUser.name;
+                    }
+                    showNotification('Perfil actualizado correctamente.');
+                }} 
+            />
+        )}
+
         
         {confirmModalState.isOpen && (
             <ConfirmDeleteModal
