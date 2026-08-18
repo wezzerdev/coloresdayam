@@ -1,294 +1,61 @@
-const API_BASE = import.meta.env.VITE_API_URL || '';
+import { createClient } from '@supabase/supabase-js';
 
-const TOKEN_KEY = 'colores_dayam_token';
-const USER_KEY = 'colores_dayam_user';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://supabasedayam.nocodepy.com';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODcwODUzNTksImV4cCI6MTg5MzQ1NjAwMCwicm9sZSI6ImFub24iLCJpc3MiOiJzdXBhYmFzZSJ9.yCjM7gqjQnZRv577dAW8vvMDK9e8H2-eWvSHisg2lfM';
 
-export const getToken = () => localStorage.getItem(TOKEN_KEY);
-export const setToken = (token) => localStorage.setItem(TOKEN_KEY, token);
-export const removeToken = () => {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(USER_KEY);
-};
-
-export const getStoredUser = () => {
-  try {
-    const raw = localStorage.getItem(USER_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch (e) {
-    return null;
-  }
-};
-
-export const setStoredUser = (user) => {
-  if (user) {
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
-  } else {
-    localStorage.removeItem(USER_KEY);
-  }
-};
-
-const authListeners = new Set();
-
-const notifyAuthChange = (event, session) => {
-  authListeners.forEach((callback) => {
-    try {
-      callback(event, session);
-    } catch (e) {
-      console.error('[API Client] Error en callback de autenticación:', e);
-    }
-  });
-};
-
-async function apiFetch(endpoint, options = {}) {
-  const token = getToken();
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(options.headers || {}),
-  };
-
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
-  const response = await fetch(`${API_BASE}${endpoint}`, {
-    ...options,
-    headers,
-  });
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.error || `Error ${response.status}: ${response.statusText}`);
-  }
-
-  return data;
-}
-
-export const supabase = {
+// Cliente oficial de Supabase
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
-    // 1. Registro con Nombre Completo
-    async signUp({ email, password, name }) {
-      try {
-        const result = await apiFetch('/api/auth/register', {
-          method: 'POST',
-          body: JSON.stringify({ email, password, name }),
-        });
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true
+  }
+});
 
-        return { data: result, error: null };
-      } catch (error) {
-        return { data: null, error };
-      }
-    },
+// Extensiones de compatibilidad para nuestro flujo de UI profesional
+supabase.auth.verifyCode = async function({ email, code }) {
+  // En Supabase oficial GoTrue, el código de verificación se convalida vía verifyOtp
+  return await supabase.auth.verifyOtp({
+    email,
+    token: code,
+    type: 'signup'
+  });
+};
 
-    // 2. Verificación de Código de 6 dígitos
-    async verifyCode({ email, code }) {
-      try {
-        const result = await apiFetch('/api/auth/verify-code', {
-          method: 'POST',
-          body: JSON.stringify({ email, code }),
-        });
+supabase.auth.forgotPassword = async function({ email }) {
+  return await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${window.location.origin}/auth?reset=true`
+  });
+};
 
-        if (result.token) {
-          setToken(result.token);
-          setStoredUser(result.user);
-          notifyAuthChange('SIGNED_IN', { user: result.user });
-        }
+supabase.auth.resetPassword = async function({ newPassword }) {
+  return await supabase.auth.updateUser({
+    password: newPassword
+  });
+};
 
-        return { data: { user: result.user }, error: null };
-      } catch (error) {
-        return { data: null, error };
-      }
-    },
+supabase.auth.updateProfile = async function({ name }) {
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  if (userError || !user) return { data: null, error: userError };
 
-    // 3. Inicio de Sesión
-    async signInWithPassword({ email, password }) {
-      try {
-        const result = await apiFetch('/api/auth/login', {
-          method: 'POST',
-          body: JSON.stringify({ email, password }),
-        });
+  // Actualizar metadatos del usuario y la tabla profiles
+  const { error: updateError } = await supabase.auth.updateUser({
+    data: { name }
+  });
 
-        if (result.token) {
-          setToken(result.token);
-          setStoredUser(result.user);
-          notifyAuthChange('SIGNED_IN', { user: result.user });
-        }
+  if (updateError) return { data: null, error: updateError };
 
-        return { data: { user: result.user }, error: null };
-      } catch (error) {
-        return { data: null, error };
-      }
-    },
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .upsert({ id: user.id, name, email: user.email, updated_at: new Date().toISOString() })
+    .select()
+    .single();
 
-    // 4. Solicitar Código de Recuperación de Contraseña
-    async forgotPassword({ email }) {
-      try {
-        const result = await apiFetch('/api/auth/forgot-password', {
-          method: 'POST',
-          body: JSON.stringify({ email }),
-        });
-        return { data: result, error: null };
-      } catch (error) {
-        return { data: null, error };
-      }
-    },
+  return { data: profile || { ...user, name }, error: profileError };
+};
 
-    // 5. Restablecer Contraseña con Código
-    async resetPassword({ email, code, newPassword }) {
-      try {
-        const result = await apiFetch('/api/auth/reset-password', {
-          method: 'POST',
-          body: JSON.stringify({ email, code, newPassword }),
-        });
-        return { data: result, error: null };
-      } catch (error) {
-        return { data: null, error };
-      }
-    },
-
-    // 6. Actualizar Nombre de Perfil
-    async updateProfile({ name }) {
-      try {
-        const result = await apiFetch('/api/auth/profile', {
-          method: 'PUT',
-          body: JSON.stringify({ name }),
-        });
-        if (result.user) {
-          setStoredUser(result.user);
-          notifyAuthChange('USER_UPDATED', { user: result.user });
-        }
-        return { data: result.user, error: null };
-      } catch (error) {
-        return { data: null, error };
-      }
-    },
-
-    // 7. Cambiar Contraseña desde Sesión Activa
-    async changePassword({ currentPassword, newPassword }) {
-      try {
-        const result = await apiFetch('/api/auth/change-password', {
-          method: 'PUT',
-          body: JSON.stringify({ currentPassword, newPassword }),
-        });
-        return { data: result, error: null };
-      } catch (error) {
-        return { data: null, error };
-      }
-    },
-
-    async signInWithOAuth() {
-      alert("Autenticación OAuth no disponible en modo servidor local autónomo.");
-      return { data: null, error: new Error("OAuth no disponible localmente") };
-    },
-
-    async signOut() {
-      removeToken();
-      notifyAuthChange('SIGNED_OUT', null);
-      return { error: null };
-    },
-
-    async getUser() {
-      const user = getStoredUser();
-      if (!user) return { data: { user: null }, error: null };
-      
-      try {
-        const res = await apiFetch('/api/auth/me');
-        if (res.user) {
-          setStoredUser(res.user);
-          return { data: { user: res.user }, error: null };
-        }
-      } catch (e) {
-        removeToken();
-      }
-      return { data: { user: null }, error: null };
-    },
-
-    async getSession() {
-      const user = getStoredUser();
-      const token = getToken();
-      if (user && token) {
-        return { data: { session: { user, access_token: token } }, error: null };
-      }
-      return { data: { session: null }, error: null };
-    },
-
-    onAuthStateChange(callback) {
-      authListeners.add(callback);
-      const user = getStoredUser();
-      if (user) {
-        callback('SIGNED_IN', { user });
-      } else {
-        callback('SIGNED_OUT', null);
-      }
-
-      return {
-        data: {
-          subscription: {
-            unsubscribe: () => {
-              authListeners.delete(callback);
-            },
-          },
-        },
-      };
-    },
-  },
-
-  from(table) {
-    let targetEndpoint = `/api/${table === 'user_palettes' ? 'palettes' : table}`;
-    let filterId = null;
-    let payload = null;
-    let method = 'GET';
-
-    const builder = {
-      select() {
-        method = 'GET';
-        return builder;
-      },
-      insert(data) {
-        method = 'POST';
-        payload = Array.isArray(data) ? data[0] : data;
-        return builder;
-      },
-      update(data) {
-        method = 'PUT';
-        payload = data;
-        return builder;
-      },
-      delete() {
-        method = 'DELETE';
-        return builder;
-      },
-      eq(column, value) {
-        if (column === 'id') {
-          filterId = value;
-        }
-        return builder;
-      },
-      order() {
-        return builder;
-      },
-      single() {
-        return builder;
-      },
-      async then(resolve, reject) {
-        try {
-          let url = targetEndpoint;
-          if (filterId && (method === 'PUT' || method === 'DELETE')) {
-            url = `${targetEndpoint}/${filterId}`;
-          }
-
-          const res = await apiFetch(url, {
-            method,
-            ...(payload ? { body: JSON.stringify(payload) } : {}),
-          });
-
-          resolve({ data: res.data || res, error: null });
-        } catch (error) {
-          resolve({ data: null, error });
-        }
-      },
-    };
-
-    return builder;
-  },
+supabase.auth.changePassword = async function({ newPassword }) {
+  return await supabase.auth.updateUser({
+    password: newPassword
+  });
 };
