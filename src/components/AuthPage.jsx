@@ -181,11 +181,16 @@ const AuthPage = ({ onNavigate }) => {
                 
                 {/* Logo & Marca */}
                 <div className="text-center mb-8">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold mb-3">
+                        <Sparkles size={13} />
+                        <span>Conectado a Supabase</span>
+                    </div>
                     <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-xl shadow-indigo-500/25 mb-4 group cursor-pointer" onClick={() => onNavigate('landing')}>
                         <div className="h-full w-full bg-slate-950 rounded-[14px] flex items-center justify-center">
                             <Palette className="h-8 w-8 text-indigo-400" />
                         </div>
                     </div>
+
                     <h1 className="text-2xl font-extrabold font-heading tracking-tight text-slate-100">
                         {mode === 'LOGIN' && 'Bienvenido de Nuevo'}
                         {mode === 'SIGNUP' && 'Crea tu Cuenta Profesional'}
