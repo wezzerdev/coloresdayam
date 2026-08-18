@@ -21,6 +21,15 @@ const JWT_SECRET = process.env.JWT_SECRET || 'colores-dayam-secret-key-change-in
 app.use(cors());
 app.use(express.json());
 
+// Desactivar almacenamiento en caché para index.html y assets
+app.use((req, res, next) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
+
 // Middleware de autenticación JWT
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
