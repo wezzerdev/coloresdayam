@@ -156,18 +156,20 @@ const useThemeGenerator = (user) => {
 
     
     const toggleLockColor = (colorToToggle) => {
+        if (!colorToToggle) return;
+        const normToToggle = typeof colorToToggle === 'string' ? colorToToggle.replace('#', '').toUpperCase() : '';
+        const exists = lockedColors.some(c => typeof c === 'string' && c.replace('#', '').toUpperCase() === normToToggle);
+        
         let newLockedColors;
-        if (lockedColors.includes(colorToToggle)) {
-            newLockedColors = lockedColors.filter(c => c !== colorToToggle);
+        if (exists) {
+            newLockedColors = lockedColors.filter(c => typeof c === 'string' && c.replace('#', '').toUpperCase() !== normToToggle);
         } else {
-            newLockedColors = [...lockedColors, colorToToggle];
-            // Registrar aprendizaje gustativo del usuario
-            recordColorPreference(colorToToggle);
+            const formatted = colorToToggle.startsWith('#') ? colorToToggle : `#${colorToToggle}`;
+            newLockedColors = [...lockedColors, formatted];
+            recordColorPreference(formatted);
         }
         setLockedColors(newLockedColors);
 
-
-        // Actualiza el estado actual en el historial sin añadir un nuevo paso
         const currentState = history[historyIndex];
         if (currentState) {
             const newState = { ...currentState, lockedColors: newLockedColors };

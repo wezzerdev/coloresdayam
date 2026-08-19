@@ -509,10 +509,10 @@ const Explorer = (props) => {
 
                                         {explorerPalette.map((shade, index) => {
                                             const originalColor = (originalExplorerPalette && originalExplorerPalette[index]) ? originalExplorerPalette[index] : shade;
-                                            const isLocked = lockedColors.includes(originalColor);
+                                            const normOriginal = typeof originalColor === 'string' ? originalColor.replace('#', '').toUpperCase() : '';
+                                            const isLocked = lockedColors.some(lc => typeof lc === 'string' && lc.replace('#', '').toUpperCase() === normOriginal);
+                                            const isBrandColor = typeof brandColor === 'string' && typeof displayShade === 'string' && brandColor.replace('#', '').toUpperCase() === displayShade.replace('#', '').toUpperCase();
                                             
-                                            // ¡MODIFICADO! 'displayShade' es el color en tiempo real
-                                            // 'isLocked' usa el color original
                                             const displayShade = shade; 
                                             
                                             const isLight = tinycolor(displayShade).isLight();
@@ -619,10 +619,23 @@ const Explorer = (props) => {
                                                                       <button
                                                                           type="button"
                                                                           onClick={(e) => { e.stopPropagation(); toggleLockColor(originalColor); }}
-                                                                          className={`p-2 rounded-md text-xs font-bold flex items-center gap-1 shadow-sm transition-all active:scale-90 ${isLocked ? 'bg-indigo-600 text-white' : `${iconColor} ${hoverBg}`}`}
+                                                                          className={`p-2 rounded-md text-xs font-bold flex items-center gap-1 shadow-sm transition-all active:scale-90 ${isLocked ? 'bg-[#0BA5C7] text-white' : `${iconColor} ${hoverBg}`}`}
                                                                           title={isLocked ? "Desbloquear Color" : "Bloquear Color"}
                                                                       >
                                                                           {isLocked ? <Lock size={16} strokeWidth={2} /> : <Unlock size={16} strokeWidth={2} />}
+                                                                      </button>
+
+                                                                      <button
+                                                                          type="button"
+                                                                          onClick={(e) => { 
+                                                                              e.stopPropagation(); 
+                                                                              updateBrandColor(originalColor); 
+                                                                              showNotification(`¡HEX ${hexValue} fijado como color principal!`);
+                                                                          }}
+                                                                          className={`p-2 rounded-md transition-all active:scale-90 ${isBrandColor ? 'bg-amber-400 text-zinc-900 shadow-md' : `${iconColor} ${hoverBg}`}`}
+                                                                          title={isBrandColor ? "Color de marca principal activo" : "Establecer como color principal (Actualiza Modo Claro, Oscuro y Semántico)"}
+                                                                      >
+                                                                          <Star size={16} strokeWidth={2} className={isBrandColor ? "fill-current" : ""} />
                                                                       </button>
 
                                                                       <button

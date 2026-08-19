@@ -685,6 +685,15 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             </button>
 
             <button 
+              onClick={() => { setExportingPaletteData(themeData); setIsExportModalVisible(true); }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-extrabold text-xs border border-zinc-200 dark:border-zinc-800 shadow-xs transition-all active:scale-95"
+              title="Exportar Paleta Rápidamente (CSS, PNG, SVG, PDF, Tailwind, Power Fx, JSON)"
+            >
+              <Download size={15} className="text-[#0BA5C7]" />
+              <span className="hidden sm:inline">Exportar</span>
+            </button>
+
+            <button 
               onClick={handleOpenSaveSidebar}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl supabase-gradient supabase-gradient-hover text-white font-extrabold text-xs shadow-sm transition-all active:scale-95"
               title="Guardar Paleta Actual"

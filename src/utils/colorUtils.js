@@ -377,16 +377,19 @@ export const generateAdvancedRandomPalette = (
 
     // --- PASO 1: Seleccionar Color Base Inteligente (Afinidad Gustativa) ---
     let baseHue;
+    const normLocked = lockedColors.map(c => typeof c === 'string' ? (c.startsWith('#') ? c : `#${c}`) : null).filter(Boolean);
+    
     if (baseColorHex) {
         baseHue = tinycolor(baseColorHex).toHsv().h;
+    } else if (normLocked.length > 0) {
+        baseHue = tinycolor(normLocked[0]).toHsv().h;
     } else {
-        // Obtenemos un tono ajustado inteligentemente según los gustos del usuario
         baseHue = getTunedBaseHue();
     }
 
     const baseColor = baseColorHex 
         ? tinycolor(baseColorHex) 
-        : tinycolor({ h: baseHue, s: rand(50, 95) / 100, v: rand(65, 95) / 100 });
+        : (normLocked.length > 0 ? tinycolor(normLocked[0]) : tinycolor({ h: baseHue, s: rand(50, 95) / 100, v: rand(65, 95) / 100 }));
         
     const baseHsb = baseColor.toHsv();
 
@@ -1389,12 +1392,16 @@ export const generateAdvancedRandomPalette = (
     let finalHsbPalette = [...generatedHsbPalette]; 
     let generatedColorsUsed = 0; 
 
-    if (lockedColors.length > 0 && originalPalette.length === effectiveCount) {
+    const cleanHex = (h) => (typeof h === 'string' ? h.replace('#', '').toUpperCase() : '');
+    const lockedNormSet = new Set(lockedColors.map(cleanHex));
+
+    if (lockedNormSet.size > 0 && originalPalette.length === effectiveCount) {
         
         finalHsbPalette = originalPalette.map((oldHex) => {
+            const normOld = cleanHex(oldHex);
             // Si el color estaba bloqueado, lo mantenemos.
-            if (lockedColors.includes(oldHex)) {
-                return hexToHsb(oldHex);
+            if (lockedNormSet.has(normOld)) {
+                return hexToHsb(oldHex.startsWith('#') ? oldHex : `#${oldHex}`);
             }
 
             // Si no está bloqueado, tomamos el siguiente color generado
