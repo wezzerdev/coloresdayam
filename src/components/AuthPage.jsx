@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Lock, Mail, User, ShieldCheck, KeyRound, Loader2, AlertTriangle, CheckCircle2, ArrowLeft, Palette, Sparkles, Sun, Moon } from 'lucide-react';
+import { Lock, Mail, User, ShieldCheck, KeyRound, Loader2, AlertTriangle, CheckCircle2, ArrowLeft, Palette, Sparkles, Sun, Moon, Home } from 'lucide-react';
 import { supabase } from '../apiClient.js';
 
-const AuthPage = ({ onNavigate, onToggleTheme, theme }) => {
+const AuthPage = ({ onNavigate, onToggleTheme, theme, initialMode = 'LOGIN' }) => {
     const isDarkMode = theme === 'dark';
     // Vistas: 'LOGIN' | 'SIGNUP' | 'VERIFY_CODE' | 'FORGOT_PASSWORD' | 'RESET_PASSWORD'
-    const [mode, setMode] = useState('LOGIN');
+    const [mode, setMode] = useState(initialMode);
 
 
     const [name, setName] = useState('');

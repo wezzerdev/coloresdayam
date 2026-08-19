@@ -526,7 +526,7 @@ const Explorer = (props) => {
                                                 <Draggable key={"main-" + originalColor + index} draggableId={"main-" + originalColor + index} index={index}>
                                                     {(provided) => (
                                                         // --- ¡MODIFICADO! ---
-                                                        <div ref={provided.innerRef} {...provided.draggableProps} className={`relative flex-1 flex items-center justify-center group/color-wrapper ${paletteLayout === 'vertical' ? 'h-full' : 'w-full'}`} style={{...provided.draggableProps.style}}>
+                                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={`relative flex-1 flex items-center justify-center group/color-wrapper cursor-grab active:cursor-grabbing ${paletteLayout === 'vertical' ? 'h-full' : 'w-full'}`} style={{...provided.draggableProps.style}}>
                                                             <div 
                                                                 // --- ¡MODIFICADO! ---
                                                                 className={`relative group/item w-full h-full flex items-center justify-center transition-colors duration-100 ease-in-out ${paletteLayout === 'vertical' ? 'min-w-[50px]' : 'min-h-[50px]'}`} 

@@ -36,7 +36,7 @@ const FeatureCard = ({ icon, title, children }) => (
 
 
 
-const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
+const LandingPage = ({ onNavigate, onToggleTheme, theme, user }) => {
     const isDarkMode = theme === 'dark';
 
     return (
@@ -45,7 +45,7 @@ const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
             style={{ backgroundColor: isDarkMode ? '#09090b' : '#ffffff', color: isDarkMode ? '#f4f4f5' : '#09090b' }}
         >
 
-            {/* Fondos Neutros con destellos estilo Supabase (Verde Esmeralda + Cian + Azul) */}
+            {/* Fondos Neutros */}
             <ParallaxShape className="from-emerald-500/20 via-teal-500/15 to-blue-600/20 w-96 h-96 top-10 left-[-10rem]" speed={0.2} />
             <ParallaxShape className="from-blue-600/15 via-cyan-500/15 to-emerald-500/20 w-[30rem] h-[30rem] top-[35rem] right-[-15rem]" speed={0.15} />
 
@@ -84,21 +84,34 @@ const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
                             {isDarkMode ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} className="text-zinc-700" />}
                         </button>
 
-                        <button
-                            type="button"
-                            onClick={() => onNavigate('auth')}
-                            className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-                        >
-                            Iniciar Sesión
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => onNavigate('auth')}
-                            className="touch-target text-xs sm:text-sm font-extrabold px-4 py-2 rounded-xl text-white supabase-gradient supabase-gradient-hover shadow-md shadow-[#0BA5C7]/20 transition-all transform hover:scale-[1.02] focus-ring flex items-center gap-1.5"
-                        >
-                            <User size={16} />
-                            <span>Crear Cuenta</span>
-                        </button>
+                        {user ? (
+                            <button
+                                type="button"
+                                onClick={() => onNavigate('generator')}
+                                className="touch-target text-xs sm:text-sm font-extrabold px-4 py-2 rounded-xl text-white supabase-gradient supabase-gradient-hover shadow-md shadow-[#0BA5C7]/20 transition-all transform hover:scale-[1.02] focus-ring flex items-center gap-1.5"
+                            >
+                                <Palette size={16} />
+                                <span>Ir al Estudio</span>
+                            </button>
+                        ) : (
+                            <>
+                                <button
+                                    type="button"
+                                    onClick={() => onNavigate('auth', 'LOGIN')}
+                                    className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                                >
+                                    Iniciar Sesión
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => onNavigate('auth', 'SIGNUP')}
+                                    className="touch-target text-xs sm:text-sm font-extrabold px-4 py-2 rounded-xl text-white supabase-gradient supabase-gradient-hover shadow-md shadow-[#0BA5C7]/20 transition-all transform hover:scale-[1.02] focus-ring flex items-center gap-1.5"
+                                >
+                                    <UserPlus size={16} />
+                                    <span>Crear Cuenta</span>
+                                </button>
+                            </>
+                        )}
                     </div>
                 </nav>
             </header>

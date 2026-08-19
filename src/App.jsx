@@ -1196,6 +1196,8 @@ function App() {
   const hasSharedLink = urlParams.has('colors') || urlParams.has('palette');
   const [route, setRoute] = useState(hasSharedLink ? 'generator' : 'landing'); 
 
+  const [authInitialMode, setAuthInitialMode] = useState('LOGIN');
+
   useEffect(() => {
     setLoadingAuth(true);
     
@@ -1203,20 +1205,6 @@ function App() {
       setSession(session);
       setUser(session?.user ?? null);
       setLoadingAuth(false);
-      
-      if (session) {
-        if (route !== 'generator') {
-           setRoute('generator');
-        }
-      } else {
-         const currentParams = new URLSearchParams(window.location.search);
-         const isShared = currentParams.has('colors') || currentParams.has('palette');
-         if (isShared) {
-           setRoute('generator');
-         } else if (route !== 'landing' && route !== 'auth' && route !== 'privacy' && route !== 'terms') {
-           setRoute('landing');
-         }
-      }
     });
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
@@ -1224,16 +1212,6 @@ function App() {
         setSession(session);
         setUser(session?.user ?? null);
         setLoadingAuth(false);
-        
-        if (session) {
-            setRoute('generator');
-        } else {
-            const currentParams = new URLSearchParams(window.location.search);
-            const isShared = currentParams.has('colors') || currentParams.has('palette');
-            if (!isShared && route === 'generator') {
-                setRoute('landing');
-            }
-        }
       }
     );
 
@@ -1251,7 +1229,10 @@ function App() {
     }
   }, [hook.theme]);
   
-  const handleNavigate = useCallback((newRoute) => {
+  const handleNavigate = useCallback((newRoute, authMode = 'LOGIN') => {
+      if (newRoute === 'auth' && authMode) {
+          setAuthInitialMode(authMode);
+      }
       setRoute(newRoute);
   }, []);
 
@@ -1284,9 +1265,9 @@ function App() {
       {(() => {
         switch (route) {
           case 'landing':
-            return <LandingPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.theme} />;
+            return <LandingPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.theme} user={user} />;
           case 'auth':
-            return <AuthPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.theme} />;
+            return <AuthPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.theme} initialMode={authInitialMode} />;
           case 'generator':
             return <MainApp hook={hook} theme={hook.theme} isNative={isNative} user={user} onLogout={handleLogout} onNavigate={handleNavigate}/>;
           
@@ -1296,7 +1277,7 @@ function App() {
             return <TermsOfServicePage onNavigate={handleNavigate} />;
           
           default:
-            return <LandingPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.theme} />;
+            return <LandingPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.theme} user={user} />;
         }
       })()}
 
