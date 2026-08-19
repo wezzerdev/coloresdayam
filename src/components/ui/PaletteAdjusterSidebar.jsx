@@ -1,8 +1,7 @@
 import React, { memo, useRef, useCallback, useState, useEffect } from 'react';
-import { X, Check } from 'lucide-react';
+import { X, Check, SlidersHorizontal } from 'lucide-react';
 import tinycolor from 'tinycolor2';
 
-// --- Estilos para los sliders (traídos de ColorPickerSidebar) ---
 const sliderStyles = `
   .custom-slider {
     -webkit-appearance: none;
@@ -25,8 +24,8 @@ const sliderStyles = `
     border-radius: 50%;
     background: #ffffff;
     cursor: pointer;
-    border: 2px solid #E5E7EB; /* Borde gris claro */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    border: 2px solid #0BA5C7;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
     margin-top: -4px;
   }
   .custom-slider::-moz-range-thumb {
@@ -35,12 +34,11 @@ const sliderStyles = `
     border-radius: 50%;
     background: #ffffff;
     cursor: pointer;
-    border: 2px solid #E5E7EB;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    border: 2px solid #0BA5C7;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
   }
 `;
 
-// Hook para detectar clics fuera (solo para móvil)
 function useOnClickOutside(ref, handler) {
   useEffect(() => {
     const listener = (event) => {
@@ -57,7 +55,6 @@ function useOnClickOutside(ref, handler) {
   }, [ref, handler]);
 }
 
-// Componente de Slider Personalizado (Actualizado)
 const CustomSlider = ({ min, max, value, onChange, gradient }) => {
   const trackRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -68,8 +65,7 @@ const CustomSlider = ({ min, max, value, onChange, gradient }) => {
     
     const rect = track.getBoundingClientRect();
     const percent = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    const newValue = Math.round(min + percent * (max - min));
-    return newValue;
+    return Math.round(min + percent * (max - min));
   }, [min, max, value]); 
 
   const handleMove = useCallback((clientX) => {
@@ -123,12 +119,8 @@ const CustomSlider = ({ min, max, value, onChange, gradient }) => {
     handleMove(e.touches[0].clientX);
     setIsDragging(true);
   };
-  const handleThumbMouseDown = () => {
-    setIsDragging(true);
-  };
-  const handleThumbTouchStart = () => {
-    setIsDragging(true);
-  };
+  const handleThumbMouseDown = () => setIsDragging(true);
+  const handleThumbTouchStart = () => setIsDragging(true);
 
   const percent = ((value - min) / (max - min)) * 100;
 
@@ -147,12 +139,11 @@ const CustomSlider = ({ min, max, value, onChange, gradient }) => {
         onTouchStart={handleTrackTouchStart}
       >
         <div
-          className="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full shadow-md border-2"
+          className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full shadow-md border-2 border-[#0BA5C7]"
           style={{ 
             left: `${percent}%`, 
             transform: `translate(-50%, -50%)`,
-            touchAction: 'none',
-            borderColor: '#E5E7EB' // Borde gris claro
+            touchAction: 'none'
           }}
           onMouseDown={handleThumbMouseDown}
           onTouchStart={handleThumbTouchStart}
@@ -162,15 +153,14 @@ const CustomSlider = ({ min, max, value, onChange, gradient }) => {
   );
 };
 
-// Componente SliderControl (Actualizado)
 const SliderControl = ({ label, value, min, max, onChange, gradient, onInputChange }) => (
     <div 
-      className="space-y-3" 
+      className="space-y-2" 
       onMouseDown={(e) => { e.stopPropagation(); }}
       onTouchStart={(e) => { e.stopPropagation(); }}
     >
         <div className="flex justify-between items-center">
-            <label className="text-sm font-medium text-gray-800">{label}</label>
+            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300">{label}</label>
             <input
                 type="number"
                 value={value}
@@ -184,10 +174,10 @@ const SliderControl = ({ label, value, min, max, onChange, gradient, onInputChan
                 }}
                 onMouseDown={(e) => { e.stopPropagation(); }}
                 onTouchStart={(e) => { e.stopPropagation(); }}
-                className="w-20 px-2 py-1 rounded-md border text-sm text-center bg-gray-100 border-gray-200 text-gray-900"
+                className="w-16 px-2 py-0.5 rounded-lg border text-xs text-center font-mono font-bold bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[#0BA5C7]"
             />
         </div>
-        <div className="col-span-2">
+        <div>
             <CustomSlider
               min={Number(min)}
               max={Number(max)}
@@ -199,7 +189,6 @@ const SliderControl = ({ label, value, min, max, onChange, gradient, onInputChan
     </div>
 );
 
-// --- Componente Principal (MODIFICADO) ---
 const PaletteAdjusterSidebar = ({
   paletteAdjustments,
   setPaletteAdjustments,
@@ -211,7 +200,7 @@ const PaletteAdjusterSidebar = ({
   lockedColors,
 }) => {
   const sidebarRef = useRef();
-  useOnClickOutside(sidebarRef, cancelPaletteAdjustments); // Llama a cancelar al hacer clic fuera
+  useOnClickOutside(sidebarRef, cancelPaletteAdjustments);
 
   const baseForGradient = (originalExplorerPalette || []).find(c => !(lockedColors || []).includes(c)) || (originalExplorerPalette || [])[0] || '#808080';
   const originalIndex = (originalExplorerPalette || []).indexOf(baseForGradient);
@@ -247,72 +236,60 @@ const PaletteAdjusterSidebar = ({
       [key]: clampedValue,
     }));
   };
-  
 
   return (
     <>
-      {/* --- ¡NUEVO! --- Añadir los estilos del slider --- */}
       <style>{sliderStyles}</style>
       
-      {/* --- Backdrop para móvil --- */}
-       <div 
-        className="fixed inset-0 bg-black/30 z-40 md:hidden"
+      <div 
+        className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 md:hidden"
         onClick={closeHandler}
       />
       
-      {/* Panel del Sidebar */}
       <aside
         ref={sidebarRef}
-        className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-2xl shadow-2xl transition-transform transform
-                   md:transform-none md:relative md:w-64 lg:w-72 md:flex-shrink-0 md:sticky md:top-0 md:rounded-xl md:shadow-lg md:border md:max-h-[calc(100vh-8rem)] md:z-10 border-t md:border"
-        // --- ¡MODIFICADO! --- Fondo blanco y borde
-        style={{
-          backgroundColor: '#FFFFFF',
-          borderColor: '#E5E7EB',
-        }}
+        className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-transform transform
+                   md:transform-none md:relative md:w-80 lg:w-96 md:flex-shrink-0 md:sticky md:top-0 md:max-h-full md:z-10 border-t md:border-t-0 md:border-l
+                   bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
       >
         <div 
-          className="h-full px-4 py-4 overflow-y-auto flex flex-col" // <-- Padding actualizado
-          // Detiene la propagación del clic en el contenido del sidebar
+          className="h-full px-5 py-4 overflow-y-auto flex flex-col"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
         >
-          {/* Handle visual (solo móvil) */}
-          <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-4 md:hidden" />
+          <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
           
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-base font-extrabold font-heading flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
+              <SlidersHorizontal size={18} className="text-[#0BA5C7]" />
               Ajustar Paleta
             </h2>
             <button 
               onClick={closeHandler} 
-              className="text-gray-500 hover:text-gray-800"
+              className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
             >
-              <X size={24} />
+              <X size={20} />
             </button>
           </div>
 
-          {/* Vista previa de UN SOLO color (como en Coolors) */}
+          {/* Vista previa de UN SOLO color */}
           <div 
-            className="flex items-center justify-center h-24 rounded-lg mb-6 border"
-            style={{ 
-              backgroundColor: previewColor,
-              borderColor: '#E5E7EB' // Borde gris claro
-            }}
+            className="flex items-center justify-center h-20 rounded-2xl mb-5 border border-zinc-200 dark:border-zinc-700/60 shadow-inner"
+            style={{ backgroundColor: previewColor }}
           >
             <span 
-              className="font-mono font-bold text-lg px-2 py-1 rounded-md bg-black/20 backdrop-blur-sm"
+              className="font-mono font-bold text-sm px-2.5 py-1 rounded-lg bg-black/30 text-white backdrop-blur-sm shadow-sm"
               style={{ 
                 color: tinycolor(previewColor).isLight() ? '#000' : '#FFF',
               }}
             >
-              {tinycolor(previewColor).toHexString().toUpperCase()}
+              {tinycolor(previewColor).toHexString().substring(1).toUpperCase()}
             </span>
           </div>
 
           {/* Sliders */}
-          <div className="space-y-6">
+          <div className="space-y-4 flex-grow">
             <SliderControl
               label="Matiz"
               value={paletteAdjustments.hue}
@@ -352,23 +329,18 @@ const PaletteAdjusterSidebar = ({
           </div>
 
           {/* Botones de Acción */}
-          <div 
-            className="flex gap-3 pt-4 border-t mt-auto" // <-- 'mt-auto' empuja esto al fondo
-            style={{ borderColor: '#E5E7EB' }}
-          >
+          <div className="flex gap-2.5 pt-4 border-t border-zinc-200 dark:border-zinc-800 mt-4 flex-shrink-0">
             <button
               onClick={closeHandler}
-              className="flex-1 font-bold py-2 px-4 rounded-lg transition-colors border bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
+              className="flex-1 font-extrabold py-2.5 px-4 rounded-xl text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/60 transition-all active:scale-95"
             >
               Cancelar
             </button>
-            {/* --- ¡BOTÓN CON GRADIENTE! --- */}
             <button
               onClick={handleApply}
-              className="flex-1 font-bold py-2 px-4 rounded-lg transition-all text-white flex items-center justify-center gap-2 hover:opacity-90 active:scale-95"
-              style={{ background: 'linear-gradient(to right, #E0405A, #F59A44, #56B470, #4A90E2, #6F42C1)' }}
+              className="flex-1 font-extrabold py-2.5 px-4 rounded-xl text-xs text-white bg-[#0BA5C7] hover:bg-[#0993B3] shadow-md shadow-[#0BA5C7]/20 flex items-center justify-center gap-1.5 active:scale-95 transition-all"
             >
-              <Check size={16} strokeWidth={1.75} />
+              <Check size={16} strokeWidth={2.5} />
               Aplicar
             </button>
           </div>

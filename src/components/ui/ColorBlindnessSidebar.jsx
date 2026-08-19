@@ -1,6 +1,5 @@
 import React, { memo, useRef, useEffect } from 'react';
 import { X, Check, Eye } from 'lucide-react';
-import { colorblindnessMatrices } from '../../utils/colorUtils.js';
 
 // Hook para detectar clics fuera del panel (solo para móvil)
 function useOnClickOutside(ref, handler) {
@@ -19,7 +18,6 @@ function useOnClickOutside(ref, handler) {
   }, [ref, handler]);
 }
 
-// --- ¡NUEVO! --- Lista de opciones de simulación
 const simulationOptions = [
     { value: "none", label: "Normal" },
     { value: "protanopia", label: "Protanopia" },
@@ -32,21 +30,19 @@ const simulationOptions = [
     { value: "achromatomaly", label: "Acromatomalía" }
 ];
 
-// Componente para una fila de opción
 const SimulationOption = ({ label, value, isActive, onClick }) => (
     <button
         onClick={() => onClick(value)}
-        className={`w-full text-left flex justify-between items-center p-3 rounded-lg text-sm font-medium transition-colors
+        className={`w-full text-left flex justify-between items-center px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all
             ${isActive 
-                ? 'bg-purple-600 text-white' 
-                : 'text-gray-800 hover:bg-gray-100'
+                ? 'bg-[#0BA5C7] text-white shadow-sm shadow-[#0BA5C7]/20 font-bold' 
+                : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
             }`}
     >
         <span>{label}</span>
-        {isActive && <Check size={16} strokeWidth={3} />}
+        {isActive && <Check size={16} strokeWidth={2.5} />}
     </button>
 );
-
 
 const ColorBlindnessSidebar = ({
   simulationMode,
@@ -61,53 +57,45 @@ const ColorBlindnessSidebar = ({
     <>
       {/* Backdrop para móvil */}
       <div 
-        className="fixed inset-0 bg-black/30 z-40 md:hidden"
+        className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 md:hidden"
         onClick={onCancel}
       />
       
       {/* Panel del Sidebar */}
-      {/* --- ¡MODIFICACIÓN CLAVE! ---
-          Se cambió 'md:w-80 lg:w-96' por 'md:w-64 lg:w-72'
-          para hacerlo más delgado.
-      */}
       <aside
         ref={sidebarRef}
-        className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-2xl shadow-2xl transition-transform transform
-                   md:transform-none md:relative md:w-64 lg:w-72 md:flex-shrink-0 md:sticky md:top-0 md:rounded-xl md:shadow-lg md:border md:max-h-[calc(100vh-8rem)] md:z-10 border-t md:border"
-        // --- ¡MODIFICADO! --- Fondo blanco
-        style={{
-          backgroundColor: '#FFFFFF',
-          borderColor: '#E5E7EB', // Borde gris claro
-        }}
+        className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-transform transform
+                   md:transform-none md:relative md:w-80 lg:w-96 md:flex-shrink-0 md:sticky md:top-0 md:max-h-full md:z-10 border-t md:border-t-0 md:border-l
+                   bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
       >
         <div 
-          className="h-full px-6 py-4 overflow-y-auto flex flex-col"
+          className="h-full px-5 py-4 overflow-y-auto flex flex-col"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
         >
           {/* Handle visual (solo móvil) */}
-          <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-4 md:hidden" />
+          <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
           
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold flex items-center gap-2 text-gray-900">
-              <Eye size={20} strokeWidth={1.75} />
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-base font-extrabold font-heading flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
+              <Eye size={18} className="text-[#0BA5C7]" />
               Daltonismo
             </h2>
             <button 
               onClick={onCancel} 
-              className="text-gray-500 hover:text-gray-800"
+              className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
             >
-              <X size={24} />
+              <X size={20} />
             </button>
           </div>
 
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4 font-medium">
             Selecciona un tipo de simulación para previsualizar cómo se vería tu paleta.
           </p>
           
           {/* Lista de Opciones */}
-          <div className="space-y-2 flex-grow">
+          <div className="space-y-1.5 flex-grow overflow-y-auto">
             {simulationOptions.map(opt => (
                 <SimulationOption 
                     key={opt.value}
@@ -120,24 +108,19 @@ const ColorBlindnessSidebar = ({
           </div>
 
           {/* Botones de Acción */}
-          <div 
-            className="flex gap-3 pt-4 border-t mt-4" 
-            style={{ borderColor: '#E5E7EB' }}
-          >
+          <div className="flex gap-2.5 pt-4 border-t border-zinc-200 dark:border-zinc-800 mt-4 flex-shrink-0">
             <button
               onClick={onCancel}
-              className="flex-1 font-bold py-2 px-4 rounded-lg transition-colors border bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
+              className="flex-1 font-extrabold py-2.5 px-4 rounded-xl text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/60 transition-all active:scale-95"
             >
               Cancelar
             </button>
-            {/* --- ¡BOTÓN CON GRADIENTE! --- */}
             <button
               onClick={onApply}
               disabled={simulationMode === 'none'}
-              className="flex-1 font-bold py-2 px-4 rounded-lg transition-all text-white flex items-center justify-center gap-2 disabled:opacity-50 hover:opacity-90 active:scale-95"
-              style={{ background: 'linear-gradient(to right, #E0405A, #F59A44, #56B470, #4A90E2, #6F42C1)' }}
+              className="flex-1 font-extrabold py-2.5 px-4 rounded-xl text-xs text-white bg-[#0BA5C7] hover:bg-[#0993B3] shadow-md shadow-[#0BA5C7]/20 flex items-center justify-center gap-1.5 disabled:opacity-50 active:scale-95 transition-all"
             >
-              <Check size={16} strokeWidth={1.75} />
+              <Check size={16} strokeWidth={2.5} />
               Aplicar
             </button>
           </div>

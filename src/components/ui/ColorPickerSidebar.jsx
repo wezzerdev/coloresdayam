@@ -1,11 +1,9 @@
-import React, { memo, useRef, useEffect, useState, useCallback } from 'react';
-import { X, Check, Pipette } from 'lucide-react'; // <-- ¡MODIFICADO!
-import { HexColorPicker } from 'react-colorful'; // <-- ¡MODIFICADO! Vuelve a HexColorPicker simple
+import React, { memo, useRef, useEffect, useState } from 'react';
+import { X, Check, Pipette, Palette } from 'lucide-react';
+import { HexColorPicker } from 'react-colorful';
 import tinycolor from 'tinycolor2';
 import { findClosestColorName } from '../../utils/colorUtils.js';
 
-// --- Estilos para los sliders (copiados de Explorer.jsx) ---
-// ... (sin cambios) ...
 const sliderStyles = `
   .custom-slider {
     -webkit-appearance: none;
@@ -28,8 +26,8 @@ const sliderStyles = `
     border-radius: 50%;
     background: #ffffff;
     cursor: pointer;
-    border: 2px solid #E5E7EB; /* Borde gris claro */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    border: 2px solid #0BA5C7;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     margin-top: -4px;
   }
   .custom-slider::-moz-range-thumb {
@@ -38,12 +36,11 @@ const sliderStyles = `
     border-radius: 50%;
     background: #ffffff;
     cursor: pointer;
-    border: 2px solid #E5E7EB;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    border: 2px solid #0BA5C7;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   }
 `;
 
-// --- Hook para clic fuera (solo móvil) ---
 function useOnClickOutside(ref, handler) {
   useEffect(() => {
     const listener = (event) => {
@@ -60,7 +57,6 @@ function useOnClickOutside(ref, handler) {
   }, [ref, handler]);
 }
 
-// --- Componente de Slider (copiado de Explorer.jsx) ---
 const ColorSlider = ({ label, value, min, max, onChange, gradientStyle }) => {
     const handleSliderChange = (e) => {
         onChange(parseFloat(e.target.value));
@@ -75,7 +71,7 @@ const ColorSlider = ({ label, value, min, max, onChange, gradientStyle }) => {
 
     return (
         <div className="flex items-center gap-2">
-            <label className="text-xs font-medium text-gray-500 w-8 flex-shrink-0" title={label}>
+            <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 w-8 flex-shrink-0" title={label}>
                 {label}
             </label>
             <div className="relative h-4 flex-1 flex items-center">
@@ -95,39 +91,33 @@ const ColorSlider = ({ label, value, min, max, onChange, gradientStyle }) => {
                 onChange={handleInputChange}
                 min={min}
                 max={max}
-                className="w-12 text-center text-sm py-0.5 px-1 rounded border bg-gray-100 border-gray-200 text-gray-900"
+                className="w-14 text-center font-mono text-xs font-bold py-1 px-1 rounded-lg border bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[#0BA5C7]"
             />
         </div>
     );
 };
 
-
-// --- Componente Principal del Sidebar de Selector de Color ---
 const ColorPickerSidebar = ({
-  initialColor, // El color que se está editando
-  onClose, // Función para cerrar el sidebar
-  onConfirm, // Función para confirmar el cambio (botón Aceptar)
-  onRealtimeChange, // Función para actualizar el color en tiempo real
+  initialColor,
+  onClose,
+  onConfirm,
+  onRealtimeChange,
 }) => {
   const sidebarRef = useRef();
   
   const [localColor, setLocalColor] = useState(initialColor);
-  // --- ¡MODIFICADO! --- 'picker' es el modo por defecto
   const [inputMode, setInputMode] = useState('picker'); 
   const [isPicking, setIsPicking] = useState(false);
 
-  // --- ¡MODIFICADO! ---
-  // Los tabs ahora coinciden con la imagen de referencia (simplificado)
   const tabs = [
     { id: 'picker', label: 'Picker' },
     { id: 'hex', label: 'HEX' },
-    { id: 'hsb', label: 'HSB' }, // HSB es lo mismo que HSV
+    { id: 'hsb', label: 'HSB' },
     { id: 'hsl', label: 'HSL' },
     { id: 'rgb', label: 'RGB' },
     { id: 'name', label: 'Nombre' },
   ];
 
-  // Sincronizar el color local si el color inicial cambia (al seleccionar otro color)
   useEffect(() => {
     setLocalColor(initialColor);
   }, [initialColor]);
@@ -148,38 +138,35 @@ const ColorPickerSidebar = ({
   };
   const handleTextBlur = (e) => {
     if (!tinycolor(e.target.value).isValid()) {
-      setLocalColor(initialColor); // Revertir si es inválido
+      setLocalColor(initialColor);
       if (onRealtimeChange) onRealtimeChange(initialColor);
     }
   };
   const handleTextKeyDown = (e) => {
     if (e.key === 'Enter') {
       if (tinycolor(e.target.value).isValid()) {
-        onConfirm(e.target.value); // Confirmar con Enter
+        onConfirm(e.target.value);
       } else {
-        setLocalColor(initialColor); // Revertir
+        setLocalColor(initialColor);
         if (onRealtimeChange) onRealtimeChange(initialColor);
       }
     }
   };
   
-  // --- ¡MODIFICADO! ---
-  // Función para obtener el valor del input de texto (para HEX)
   const getFormattedColor = (mode) => {
     const c = tinycolor(localColor);
     if (!c.isValid()) return localColor;
     if (mode === 'hex') {
-      return c.toHexString().toUpperCase();
+      return c.toHexString().substring(1).toUpperCase();
     }
     if (mode === 'name') {
       return findClosestColorName(localColor);
     }
-    // Para otros modos (RGB, HSL, HSB)
     if (mode === 'rgb') return c.toRgbString();
     if (mode === 'hsl') return c.toHslString();
-    if (mode === 'hsv') return c.toHsvString(); // hsv es hsb
+    if (mode === 'hsv') return c.toHsvString();
     
-    return c.toHexString().toUpperCase();
+    return c.toHexString().substring(1).toUpperCase();
   };
 
   const colorTiny = tinycolor(localColor);
@@ -202,7 +189,7 @@ const ColorPickerSidebar = ({
     
     if (newColor && newColor.isValid()) {
       const newHex = newColor.toHexString();
-      handlePickerChange(newHex); // Usar el handler unificado
+      handlePickerChange(newHex);
     }
   };
   
@@ -217,8 +204,6 @@ const ColorPickerSidebar = ({
     blue: `linear-gradient(to right, ${tinycolor({...rgb, b: 0}).toHexString()}, ${tinycolor({...rgb, b: 255}).toHexString()})`,
   };
 
-  // --- ¡ELIMINADO! --- const inputModes
-
   const openEyedropper = async () => {
     if (!('EyeDropper' in window)) {
       alert('Tu navegador no soporta la API EyeDropper.');
@@ -227,13 +212,11 @@ const ColorPickerSidebar = ({
     try {
       const eyeDropper = new window.EyeDropper();
       setIsPicking(true);
-      // Ocultar el sidebar temporalmente
       if (sidebarRef.current) sidebarRef.current.style.visibility = 'hidden';
-      await new Promise(resolve => setTimeout(resolve, 100)); // Dar tiempo a que se oculte
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       const { sRGBHex } = await eyeDropper.open();
       
-      // Mostrar el sidebar de nuevo
       if (sidebarRef.current) sidebarRef.current.style.visibility = 'visible';
       setIsPicking(false);
       handlePickerChange(sRGBHex);
@@ -244,69 +227,58 @@ const ColorPickerSidebar = ({
   };
 
   const handleCancel = () => {
-    // Revertir al color original antes de cerrar
     onRealtimeChange(initialColor);
     onClose();
   };
   
   const handleConfirm = () => {
-    // Confirmar el color local
     onConfirm(localColor);
   };
   
-  // --- ¡MODIFICADO! ---
-  // Se añade el hook de clic fuera para cancelar en móvil
   useOnClickOutside(sidebarRef, handleCancel);
 
   return (
     <>
       <style>{sliderStyles}</style>
-      {/* Backdrop para móvil */}
       <div 
-        className="fixed inset-0 bg-black/30 z-40 md:hidden"
+        className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 md:hidden"
         onClick={handleCancel}
         style={{ visibility: isPicking ? 'hidden' : 'visible' }}
       />
       
-      {/* Panel del Sidebar */}
       <aside
         ref={sidebarRef}
-        className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-t-2xl shadow-2xl transition-transform transform
-                   md:transform-none md:relative md:w-64 lg:w-72 md:flex-shrink-0 md:sticky md:top-0 md:rounded-xl md:shadow-lg md:border md:max-h-[calc(100vh-8rem)] md:z-10 border-t md:border
-                   
-                   h-auto max-h-[50vh] md:h-auto" // <-- ¡MODIFICADO! Altura móvil
+        className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-t-3xl md:rounded-t-none shadow-2xl transition-transform transform
+                   md:transform-none md:relative md:w-80 lg:w-96 md:flex-shrink-0 md:sticky md:top-0 md:max-h-full md:z-10 border-t md:border-t-0 md:border-l
+                   bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
         style={{
-          backgroundColor: '#FFFFFF',
-          borderColor: '#E5E7EB',
           visibility: isPicking ? 'hidden' : 'visible'
         }}
       >
-        {/* --- ¡MODIFICADO! --- Layout reestructurado */}
         <div 
-          className="h-full overflow-hidden flex flex-col" // <-- Contenedor flex
+          className="h-full px-5 py-4 overflow-y-auto flex flex-col"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
         >
-          {/* Handle visual (solo móvil) */}
-          <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto my-4 md:hidden flex-shrink-0" />
+          <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
           
-          {/* Header (solo desktop) */}
-          <div className="hidden md:flex justify-between items-center mb-4 px-4 pt-4">
-            <h2 className="text-xl font-bold text-gray-900">
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-base font-extrabold font-heading flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
+              <Palette size={18} className="text-[#0BA5C7]" />
               Editar Color
             </h2>
             <button 
               onClick={handleCancel} 
-              className="text-gray-500 hover:text-gray-800"
+              className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
             >
-              <X size={24} />
+              <X size={20} />
             </button>
           </div>
 
           {/* Tabs de Navegación */}
-          <div className="flex-shrink-0 border-b border-gray-200 overflow-x-auto">
-            <nav className="flex px-4" aria-label="Tabs">
+          <div className="flex-shrink-0 border-b border-zinc-200 dark:border-zinc-800 mb-3 overflow-x-auto">
+            <nav className="flex gap-1" aria-label="Tabs">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
@@ -314,10 +286,10 @@ const ColorPickerSidebar = ({
                   className={`
                     ${
                       inputMode === tab.id
-                        ? 'border-purple-600 text-purple-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        ? 'border-[#0BA5C7] text-[#0BA5C7] font-extrabold'
+                        : 'border-transparent text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white font-semibold'
                     }
-                    whitespace-nowrap py-3 px-3 border-b-2 font-semibold text-sm transition-colors
+                    whitespace-nowrap py-2 px-2.5 border-b-2 text-xs transition-colors
                   `}
                 >
                   {tab.label}
@@ -326,33 +298,28 @@ const ColorPickerSidebar = ({
             </nav>
           </div>
 
-          {/* Contenido del Selector de Color (con scroll) */}
-          <div className="flex-grow overflow-y-auto space-y-3 p-4">
-            
-            {/* --- Contenido de Pestañas --- */}
+          {/* Contenido del Selector de Color */}
+          <div className="flex-grow space-y-3 overflow-y-auto">
             {inputMode === 'picker' && (
               <div className="space-y-3">
-                {/* --- ¡MODIFICACIÓN! --- 
-                    Se envuelve el picker en un div con altura fija para hacerlo más "fino" 
-                */}
-                <div className="w-full relative" style={{ height: '150px' }}>
+                <div className="w-full relative rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-700/60 shadow-sm" style={{ height: '160px' }}>
                   <HexColorPicker 
                     color={localColor} 
                     onChange={handlePickerChange} 
-                    className="!absolute !h-full !w-full" // Usar absolute para llenar el div padre
+                    className="!absolute !h-full !w-full"
                   />
                 </div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
                   <div 
-                    className="w-5 h-5 rounded border flex-shrink-0 border-gray-200" 
+                    className="w-8 h-8 rounded-xl border border-zinc-200 dark:border-zinc-700 shadow-sm flex-shrink-0" 
                     style={{ backgroundColor: localColor }}
                   />
                   <button
                     onClick={openEyedropper}
-                    className="p-1 rounded-md border bg-gray-100 border-gray-200 text-gray-800"
+                    className="p-2 rounded-xl border bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors"
                     title="Seleccionar color (Eyedropper)"
                   >
-                    <Pipette size={14} />
+                    <Pipette size={16} />
                   </button>
                   <input 
                     type="text"
@@ -360,34 +327,34 @@ const ColorPickerSidebar = ({
                     onChange={handleTextChange}
                     onBlur={handleTextBlur}
                     onKeyDown={handleTextKeyDown}
-                    className="flex-1 w-full font-mono text-sm px-2 py-0.5 rounded-md border bg-gray-100 border-gray-200 text-gray-900"
+                    className="flex-1 w-full font-mono text-sm font-bold px-3 py-1.5 rounded-xl border bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#0BA5C7]"
                   />
                 </div>
               </div>
             )}
             
             {inputMode === 'hex' && (
-              <div>
-                <label className="text-xs font-semibold text-gray-500">HEX</label>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">HEX (sin #)</label>
                 <input 
                     type="text"
                     value={getFormattedColor('hex')}
                     onChange={handleTextChange}
                     onBlur={handleTextBlur}
                     onKeyDown={handleTextKeyDown}
-                    className="w-full font-mono text-lg p-2 rounded-md border bg-gray-100 border-gray-200 text-gray-900"
+                    className="w-full font-mono text-lg font-bold p-2.5 rounded-xl border bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#0BA5C7]"
                 />
               </div>
             )}
             
             {inputMode === 'name' && (
-              <div>
-                <label className="text-xs font-semibold text-gray-500">Nombre más cercano</label>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">Nombre aproximado</label>
                 <input 
                     type="text"
                     value={getFormattedColor('name')}
                     readOnly
-                    className="w-full text-lg p-2 rounded-md border bg-gray-100 border-gray-200 text-gray-900 cursor-default"
+                    className="w-full text-base font-semibold p-2.5 rounded-xl border bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 cursor-default"
                 />
               </div>
             )}
@@ -406,7 +373,7 @@ const ColorPickerSidebar = ({
                 <ColorSlider label="L" min={0} max={100} value={Math.round(hsl.l * 100)} onChange={(v) => handleSliderChange('hsl', 'l', v)} gradientStyle={gradients.luminance} />
               </div>
             )}
-            {inputMode === 'hsv' && ( // hsv es hsb
+            {inputMode === 'hsv' && (
               <div className="space-y-2">
                 <ColorSlider label="H" min={0} max={360} value={Math.round(hsv.h)} onChange={(v) => handleSliderChange('hsv', 'h', v)} gradientStyle={gradients.hue} />
                 <ColorSlider label="S" min={0} max={100} value={Math.round(hsv.s * 100)} onChange={(v) => handleSliderChange('hsv', 's', v)} gradientStyle={gradients.saturationHsv} />
@@ -415,21 +382,17 @@ const ColorPickerSidebar = ({
             )}
           </div>
           
-          {/* Botones de Acción (Fijos al fondo del sidebar) */}
-          <div 
-            className="flex-shrink-0 flex gap-3 p-4 border-t" 
-            style={{ borderColor: '#E5E7EB' }}
-          >
+          {/* Botones de Acción */}
+          <div className="flex gap-2.5 pt-4 border-t border-zinc-200 dark:border-zinc-800 mt-4 flex-shrink-0">
             <button
               onClick={handleCancel}
-              className="flex-1 font-bold py-2.5 px-4 rounded-lg transition-colors border bg-gray-100 text-gray-800 border-gray-200 hover:bg-gray-200"
+              className="flex-1 font-extrabold py-2.5 px-4 rounded-xl text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/60 transition-all active:scale-95"
             >
               Cancelar
             </button>
             <button
               onClick={handleConfirm}
-              className="flex-1 font-bold py-2.5 px-4 rounded-lg transition-all text-white flex items-center justify-center gap-2 hover:opacity-90 active:scale-95"
-              style={{ background: 'linear-gradient(to right, #E0405A, #F59A44, #56B470, #4A90E2, #6F42C1)' }}
+              className="flex-1 font-extrabold py-2.5 px-4 rounded-xl text-xs text-white bg-[#0BA5C7] hover:bg-[#0993B3] shadow-md shadow-[#0BA5C7]/20 flex items-center justify-center gap-1.5 active:scale-95 transition-all"
             >
               <Check size={16} strokeWidth={2.5} />
               Aplicar
