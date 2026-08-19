@@ -538,24 +538,42 @@ const Explorer = (props) => {
                                                                          : 'top-1/2 left-4 -translate-y-1/2 flex-row gap-3'
                                                                      }`}
                                                                  >
-                                                                     {/* HEX Code */}
+                                                                     {/* HEX Code — JetBrains Mono, grande, con hover color change */}
                                                                      <button 
-                                                                         className={`font-mono text-lg sm:text-xl font-bold p-1 rounded-lg transition-colors hover:scale-105 active:scale-95 ${hoverBg}`} 
-                                                                         style={{ color: textColor, textShadow: textShadow, pointerEvents: 'auto' }} 
+                                                                         className={`text-lg sm:text-2xl font-bold p-1 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 group/hex`}
+                                                                         style={{ 
+                                                                             fontFamily: "'JetBrains Mono', monospace",
+                                                                             letterSpacing: '0.04em',
+                                                                             color: textColor, 
+                                                                             textShadow: textShadow, 
+                                                                             pointerEvents: 'auto',
+                                                                             transition: 'color 0.2s ease, transform 0.15s ease'
+                                                                         }}
+                                                                         onMouseEnter={(e) => { e.currentTarget.style.color = '#0BA5C7'; e.currentTarget.style.textShadow = '0 0 20px rgba(11,165,199,0.4)'; }}
+                                                                         onMouseLeave={(e) => { e.currentTarget.style.color = textColor; e.currentTarget.style.textShadow = textShadow; }}
                                                                          onClick={(e) => {
                                                                              e.stopPropagation();
                                                                              navigator.clipboard.writeText(hexValue);
-                                                                             showNotification(`¡HEX #${hexValue} copiado al portapapeles!`);
+                                                                             showNotification(`¡HEX #${hexValue} copiado!`);
                                                                          }} 
                                                                          title="Copiar HEX"
                                                                      >
                                                                          #{hexValue}
                                                                      </button>
 
-                                                                     {/* Color Name */}
+                                                                     {/* Color Name — Space Grotesk, semibold */}
                                                                      <button 
-                                                                         className={`text-xs sm:text-sm font-semibold capitalize transition-colors hover:underline px-1 truncate max-w-[120px] sm:max-w-xs`} 
-                                                                         style={{ color: textColor, textShadow: textShadow, pointerEvents: 'auto' }} 
+                                                                         className={`text-xs sm:text-sm font-semibold capitalize transition-all duration-200 hover:underline px-1 truncate max-w-[120px] sm:max-w-xs`}
+                                                                         style={{ 
+                                                                             fontFamily: "'Space Grotesk', sans-serif",
+                                                                             letterSpacing: '0.01em',
+                                                                             color: textColor, 
+                                                                             textShadow: textShadow, 
+                                                                             pointerEvents: 'auto',
+                                                                             opacity: 0.85
+                                                                         }} 
+                                                                         onMouseEnter={(e) => { e.currentTarget.style.color = '#0BA5C7'; e.currentTarget.style.opacity = '1'; }}
+                                                                         onMouseLeave={(e) => { e.currentTarget.style.color = textColor; e.currentTarget.style.opacity = '0.85'; }}
                                                                          onClick={(e) => { e.stopPropagation(); setIsDisplayModeModalVisible(true); }} 
                                                                          title="Cambiar formato de color"
                                                                      >
