@@ -367,10 +367,10 @@ const Explorer = (props) => {
                                                             style={{ pointerEvents: 'none' }} 
                                                         >
                                                             <button 
-                                                                className={`font-mono text-lg sm:text-2xl font-bold p-1 rounded-lg transition-colors`} 
+                                                                className={`font-mono text-xl sm:text-3xl font-extrabold p-1 rounded-lg transition-colors`} 
                                                                 style={{ 
                                                                     fontFamily: "'JetBrains Mono', monospace",
-                                                                    letterSpacing: '0.03em',
+                                                                    letterSpacing: '0.05em',
                                                                     color: tinycolor(shade).isLight() ? '#000' : '#FFF', 
                                                                     textShadow: tinycolor(shade).isLight() ? '0 1px 2px rgba(255,255,255,0.2)' : '0 1px 2px rgba(0,0,0,0.2)', 
                                                                     pointerEvents: 'none' 
@@ -549,12 +549,12 @@ const Explorer = (props) => {
                                                                           : 'top-1/2 left-4 -translate-y-1/2 flex-row gap-3'
                                                                       }`}
                                                                   >
-                                                                      {/* HEX Code — JetBrains Mono, limpio y prominente arriba */}
+                                                                      {/* HEX Code — JetBrains Mono, mas grande, limpio y prominente arriba (sin simbolo #) */}
                                                                       <button 
-                                                                          className={`text-lg sm:text-2xl font-bold p-1 rounded-lg transition-all duration-150 hover:scale-105 active:scale-95`}
+                                                                          className={`text-xl sm:text-3xl lg:text-4xl font-extrabold p-1 rounded-lg transition-all duration-150 hover:scale-105 active:scale-95`}
                                                                           style={{ 
                                                                               fontFamily: "'JetBrains Mono', monospace",
-                                                                              letterSpacing: '0.04em',
+                                                                              letterSpacing: '0.05em',
                                                                               color: textColor, 
                                                                               textShadow: textShadow, 
                                                                               pointerEvents: 'auto'
@@ -562,11 +562,11 @@ const Explorer = (props) => {
                                                                           onClick={(e) => {
                                                                               e.stopPropagation();
                                                                               navigator.clipboard.writeText(hexValue);
-                                                                              showNotification(`¡HEX #${hexValue} copiado!`);
+                                                                              showNotification(`¡HEX ${hexValue} copiado!`);
                                                                           }} 
                                                                           title="Copiar HEX"
                                                                       >
-                                                                          #{hexValue}
+                                                                          {hexValue}
                                                                       </button>
 
                                                                       {/* Color Name — Outfit / Space Grotesk, limpio */}
