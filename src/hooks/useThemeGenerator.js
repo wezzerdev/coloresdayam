@@ -806,7 +806,19 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
         try {
             const params = new URLSearchParams(window.location.search);
             const colorsParam = params.get('colors') || params.get('palette');
+            const timestampParam = params.get('t');
+
             if (colorsParam) {
+                // Verificar si la URL ha expirado (> 24 horas = 86,400,000 ms)
+                const createdTime = timestampParam ? parseInt(timestampParam, 10) : null;
+                const now = Date.now();
+                const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+                if (createdTime && !isNaN(createdTime) && (now - createdTime > TWENTY_FOUR_HOURS)) {
+                    showNotification('El enlace compartido expiro (validez de 24h). Cargando paleta predeterminada.', 'info');
+                    return;
+                }
+
                 const rawColors = colorsParam.split('-').flatMap(c => c.split(','));
                 const validColors = rawColors
                     .map(c => (c.startsWith('#') ? c : `#${c}`).trim())
@@ -816,7 +828,7 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
                     setOriginalExplorerPalette(validColors);
                     setExplorerPalette(validColors);
                     setBrandColor(validColors[0]);
-                    showNotification('¡Paleta cargada desde el enlace compartido!');
+                    showNotification('¡Paleta cargada exitosamente desde el enlace compartido!');
                 }
             }
         } catch (e) {

@@ -1389,77 +1389,51 @@ export const generateAdvancedRandomPalette = (
 
 
     // --- Integración de Colores Bloqueados ---
-    let finalHsbPalette = [...generatedHsbPalette]; 
-    let generatedColorsUsed = 0; 
-
     const cleanHex = (h) => (typeof h === 'string' ? h.replace('#', '').toUpperCase() : '');
     const lockedNormSet = new Set(lockedColors.map(cleanHex));
 
+    let finalPalette;
     if (lockedNormSet.size > 0 && originalPalette.length === effectiveCount) {
-        
-        finalHsbPalette = originalPalette.map((oldHex) => {
+        let generatedColorsUsed = 0;
+        finalPalette = originalPalette.map((oldHex) => {
             const normOld = cleanHex(oldHex);
-            // Si el color estaba bloqueado, lo mantenemos.
+            // Si el color estaba bloqueado, se mantiene EXACTAMENTE con su cadena HEX intacta
             if (lockedNormSet.has(normOld)) {
-                return hexToHsb(oldHex.startsWith('#') ? oldHex : `#${oldHex}`);
+                return oldHex.startsWith('#') ? oldHex.toUpperCase() : `#${oldHex.toUpperCase()}`;
             }
 
-            // Si no está bloqueado, tomamos el siguiente color generado
-            let replacement = generatedHsbPalette[generatedColorsUsed % generatedHsbPalette.length];
+            // Si no está bloqueado, se toma el siguiente color generado por la plantilla
+            const replacementHsb = generatedHsbPalette[generatedColorsUsed % generatedHsbPalette.length];
             generatedColorsUsed++;
-            return replacement;
+            return hsbToHex(replacementHsb.h, replacementHsb.s, replacementHsb.b);
         });
-        
     } else {
-        // --- PASO 4: Ordenar (¡NUEVA LÓGICA!) ---
-        // ¡Tu idea! En lugar de barajar, ordenamos los colores
-        // para que sean atractivos a la vista.
-
+        // --- PASO 4: Ordenar cuando no hay bloqueos ---
+        let finalHsbPalette = [...generatedHsbPalette];
         const noSortTemplates = [
-            'gradiente-mono', 
-            'grayscale', 
-            'rampa-saturacion',
-            // Plantillas con un orden estructural específico
-            'high-key', 
-            'low-key', 
-            'neutral-accent',
-            'acentos-dobles-neutros',
-            'complemento-neutros',
-            'monotone-split',
-            'primary',
-            'secondary',
-            'bauhaus',
-            'artdeco',
-            'theme-artdeco' // Añadido por si acaso
+            'gradiente-mono', 'grayscale', 'rampa-saturacion', 'high-key', 'low-key', 
+            'neutral-accent', 'acentos-dobles-neutros', 'complemento-neutros', 
+            'monotone-split', 'primary', 'secondary', 'bauhaus', 'artdeco', 'theme-artdeco'
         ];
 
-        // Comprobar si es una plantilla de marca/medio
         const isBranded = selectedTemplate.startsWith('brand-') || selectedTemplate.startsWith('game-') || selectedTemplate.startsWith('movie-');
-        // Comprobar si es un gradiente analogo
         const isAnalogGradient = selectedTemplate.includes('gradiente-analogo');
 
         if (noSortTemplates.includes(selectedTemplate) || isBranded) {
-            // No hacer nada. Mantener el orden icónico o estructural
-            // de la plantilla tal como fue definida.
-            // ¡PERO SÍ BARAJAR!
             finalHsbPalette.sort(() => 0.5 - Math.random());
         } else if (isAnalogGradient) {
-            // Los gradientes análogos se ven mejor ordenados por matiz (hue)
             finalHsbPalette.sort((a, b) => a.h - b.h);
         } else {
-            // Para TODAS las demás, ordenar por brillo (b)
-            // Esto crea una rampa de oscuro a claro, que es muy atractiva.
             finalHsbPalette.sort((a, b) => a.b - b.b);
         }
-    }
 
-    // Convertir a HEX
-    const finalPalette = finalHsbPalette.map(c => {
-      if (c && typeof c.h === 'number') {
-        return hsbToHex(c.h, c.s, c.b); // <-- ¡¡¡LA CORRECCIÓN!!! (era c.h)
-      }
-      return tinycolor.random().toHexString(); // Fallback
-    });
+        finalPalette = finalHsbPalette.map(c => {
+          if (c && typeof c.h === 'number') {
+            return hsbToHex(c.h, c.s, c.b);
+          }
+          return tinycolor.random().toHexString();
+        });
+    }
 
     // Determinar el color de marca
     const brandColor = baseColorHex 
