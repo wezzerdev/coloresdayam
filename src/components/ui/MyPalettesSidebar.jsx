@@ -1,7 +1,7 @@
 import React, { memo, useRef, useEffect, useState } from 'react';
 import { 
-    X, Loader2, FolderOpen, AlertTriangle, MoreHorizontal, Download, Play, 
-    Copy, Edit, XCircle, Search, Plus, Trash2, ChevronDown 
+    X, Loader2, FolderOpen, MoreHorizontal, Download, Play, 
+    Copy, Edit, Search, Plus, Trash2, ChevronDown, Filter, RotateCcw
 } from 'lucide-react';
 import { PopoverMenu, MenuButton } from './Explorer.jsx'; 
 
@@ -184,7 +184,7 @@ const SectionHeader = ({
 
     return (
         <div className="space-y-1">
-            <div className="flex items-center justify-between text-xs font-extrabold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 px-2 py-1">
+            <div className="flex items-center justify-between text-xs font-extrabold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 px-1 py-1">
                 <button 
                     onClick={() => setIsOpen(!isOpen)}
                     className="flex items-center gap-1.5 hover:text-zinc-900 dark:hover:text-white"
@@ -192,13 +192,15 @@ const SectionHeader = ({
                     <ChevronDown size={14} className={`transition-transform ${isOpen ? 'rotate-0' : '-rotate-90'}`} />
                     <span>{title}</span>
                 </button>
-                <button 
-                    onClick={() => setIsAdding(true)}
-                    className="p-1 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
-                    title={`Añadir ${title.slice(0, -1)}`}
-                >
-                    <Plus size={14} />
-                </button>
+                {onCreateItem && (
+                    <button 
+                        onClick={() => setIsAdding(true)}
+                        className="p-1 rounded-lg text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                        title={`Añadir ${title.slice(0, -1)}`}
+                    >
+                        <Plus size={14} />
+                    </button>
+                )}
             </div>
             
             {isOpen && (
@@ -206,7 +208,7 @@ const SectionHeader = ({
                     {title === "Proyectos" && (
                          <button
                             onClick={() => onSelectItem(null)}
-                            className={`w-full text-left px-3 py-1.5 text-xs rounded-xl transition-all ${!activeItemId ? 'font-bold bg-[#0BA5C7] text-white shadow-xs' : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
+                            className={`w-full text-left px-2.5 py-1.5 text-xs rounded-xl transition-all ${!activeItemId ? 'font-bold bg-[#0BA5C7] text-white shadow-xs' : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
                         >
                             Todas las paletas
                         </button>
@@ -214,8 +216,8 @@ const SectionHeader = ({
                     
                     {items && items.map(item => (
                         <div
-                            key={item.id}
-                            className={`group flex items-center justify-between w-full text-left px-3 py-1.5 text-xs rounded-xl transition-all ${activeItemId === item.id ? 'font-bold bg-[#0BA5C7] text-white shadow-xs' : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
+                            key={item.id || item.value}
+                            className={`group flex items-center justify-between w-full text-left px-2.5 py-1.5 text-xs rounded-xl transition-all ${(activeItemId === (item.id || item.value)) ? 'font-bold bg-[#0BA5C7] text-white shadow-xs' : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'}`}
                         >
                             {editingId === item.id ? (
                                 <input
@@ -229,32 +231,40 @@ const SectionHeader = ({
                                     className="flex-1 p-0 m-0 bg-transparent border-b border-[#0BA5C7] focus:outline-none"
                                 />
                             ) : (
-                                <span className="flex-1 truncate cursor-pointer" onClick={() => onSelectItem(item.id)}>
-                                    {item.name}
-                                </span>
+                                <button 
+                                    className="flex-1 truncate text-left flex items-center gap-1.5" 
+                                    onClick={() => onSelectItem(item.id || item.value)}
+                                >
+                                    {item.color && (
+                                        <span className="w-2.5 h-2.5 rounded-full inline-block flex-shrink-0" style={{ backgroundColor: item.color }} />
+                                    )}
+                                    <span className="truncate">{item.name || item.label}</span>
+                                </button>
                             )}
                             
-                            <div className="flex opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button 
-                                    onClick={() => { setEditingId(item.id); setEditingName(item.name); }}
-                                    className="p-1 rounded-md hover:text-zinc-900 dark:hover:text-white"
-                                    title="Renombrar"
-                                >
-                                    <Edit size={12} />
-                                </button>
-                                <button 
-                                    onClick={() => onDeleteItem(item.id, item.name)}
-                                    className="p-1 rounded-md text-rose-500 hover:bg-rose-500/10"
-                                    title="Eliminar"
-                                >
-                                    <Trash2 size={12} />
-                                </button>
-                            </div>
+                            {onUpdateItem && onDeleteItem && (
+                                <div className="flex opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button 
+                                        onClick={() => { setEditingId(item.id); setEditingName(item.name); }}
+                                        className="p-1 rounded-md hover:text-zinc-900 dark:hover:text-white"
+                                        title="Renombrar"
+                                    >
+                                        <Edit size={12} />
+                                    </button>
+                                    <button 
+                                        onClick={() => onDeleteItem(item.id, item.name)}
+                                        className="p-1 rounded-md text-rose-500 hover:bg-rose-500/10"
+                                        title="Eliminar"
+                                    >
+                                        <Trash2 size={12} />
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ))}
                     
                     {isAdding && (
-                        <div className="px-3 py-1">
+                        <div className="px-2 py-1">
                             <input
                                 type="text"
                                 value={newItemName}
@@ -298,6 +308,11 @@ const MyPalettesSidebar = ({
     useOnClickOutside(sidebarRef, onClose);
 
     const safeFilters = filters || { projectId: null, collectionId: null, style: null, color: null, search: '' };
+    const hasActiveFilters = safeFilters.projectId || safeFilters.collectionId || safeFilters.style || safeFilters.color || safeFilters.search;
+
+    const clearFilters = () => {
+        setFilters({ projectId: null, collectionId: null, style: null, color: null, search: '' });
+    };
 
     return (
         <>
@@ -309,11 +324,11 @@ const MyPalettesSidebar = ({
             <aside
                 ref={sidebarRef}
                 className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-all
-                           md:sticky md:top-[53px] md:h-[calc(100vh-53px)] md:max-h-[calc(100vh-53px)] md:w-80 lg:w-96 md:flex-shrink-0 md:z-10 border-t md:border-t-0 md:border-l
+                           md:sticky md:top-[53px] md:h-[calc(100vh-53px)] md:max-h-[calc(100vh-53px)] md:w-72 lg:w-80 md:flex-shrink-0 md:z-10 border-t md:border-t-0 md:border-l
                            bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
             >
                 <div 
-                    className="h-full px-5 py-4 flex flex-col justify-between overflow-hidden"
+                    className="h-full px-4 py-4 flex flex-col justify-between overflow-hidden"
                     onClick={(e) => e.stopPropagation()}
                     onMouseDown={(e) => e.stopPropagation()}
                     onTouchStart={(e) => e.stopPropagation()}
@@ -333,18 +348,31 @@ const MyPalettesSidebar = ({
                         </button>
                     </div>
 
-                    <div className="relative mb-3 flex-shrink-0">
-                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
-                        <input
-                            type="text"
-                            value={safeFilters.search}
-                            onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-                            placeholder="Buscar por nombre..."
-                            className="w-full pl-9 pr-3 py-2 rounded-xl text-xs bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#0BA5C7]"
-                        />
+                    {/* Buscador y Limpiar Filtros */}
+                    <div className="space-y-2 mb-3 flex-shrink-0">
+                        <div className="relative">
+                            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+                            <input
+                                type="text"
+                                value={safeFilters.search}
+                                onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                                placeholder="Buscar por nombre..."
+                                className="w-full pl-9 pr-3 py-1.5 rounded-xl text-xs bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-[#0BA5C7]"
+                            />
+                        </div>
+                        {hasActiveFilters && (
+                            <button
+                                onClick={clearFilters}
+                                className="w-full flex items-center justify-center gap-1.5 py-1 text-[11px] font-bold text-[#0BA5C7] hover:underline"
+                            >
+                                <RotateCcw size={12} />
+                                Limpiar filtros
+                            </button>
+                        )}
                     </div>
 
-                    <div className="space-y-3 mb-3 flex-shrink-0 border-b border-zinc-200 dark:border-zinc-800 pb-3">
+                    {/* Contenedor de Filtros (Proyectos, Colecciones, Estilo, Color) */}
+                    <div className="space-y-2 mb-3 flex-shrink-0 max-h-48 overflow-y-auto border-b border-zinc-200 dark:border-zinc-800 pb-3 pr-1">
                         <SectionHeader 
                             title="Proyectos" 
                             items={projects}
@@ -363,12 +391,25 @@ const MyPalettesSidebar = ({
                             onUpdateItem={onUpdateCollection}
                             onDeleteItem={onDeleteCollection}
                         />
+                        <SectionHeader 
+                            title="Estilo" 
+                            items={styleOptions}
+                            activeItemId={safeFilters.style}
+                            onSelectItem={(val) => setFilters(prev => ({ ...prev, style: safeFilters.style === val ? null : val }))}
+                        />
+                        <SectionHeader 
+                            title="Color" 
+                            items={colorOptions}
+                            activeItemId={safeFilters.color}
+                            onSelectItem={(val) => setFilters(prev => ({ ...prev, color: safeFilters.color === val ? null : val }))}
+                        />
                     </div>
 
+                    {/* Lista de Paletas Guardadas */}
                     <div className="space-y-2 flex-grow overflow-y-auto pr-1">
                         {isLoading ? (
-                            <div className="flex items-center justify-center py-12 text-zinc-400 gap-2">
-                                <Loader2 size={18} className="animate-spin text-[#0BA5C7]" />
+                            <div className="flex items-center justify-center py-8 text-zinc-400 gap-2">
+                                <Loader2 size={16} className="animate-spin text-[#0BA5C7]" />
                                 <span className="text-xs font-semibold">Cargando paletas...</span>
                             </div>
                         ) : palettes && palettes.length > 0 ? (
@@ -385,8 +426,8 @@ const MyPalettesSidebar = ({
                                 />
                             ))
                         ) : (
-                            <div className="text-center py-12 px-4 text-zinc-400">
-                                <FolderOpen size={36} className="mx-auto mb-2 opacity-40 text-zinc-400" />
+                            <div className="text-center py-8 px-4 text-zinc-400">
+                                <FolderOpen size={32} className="mx-auto mb-2 opacity-40 text-zinc-400" />
                                 <p className="text-xs font-semibold">No se encontraron paletas guardadas.</p>
                             </div>
                         )}

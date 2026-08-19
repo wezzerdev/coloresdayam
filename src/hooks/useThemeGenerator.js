@@ -930,10 +930,11 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
             const { main_colors, style_tags } = analyzePaletteColors(originalExplorerPalette);
             
             const paletteData = {
-                name: saveData.name,
-                description: saveData.description,
-                project_id: saveData.projectId,
-                collection_id: saveData.collectionId,
+                user_id: user.id,
+                name: saveData.name || "Paleta Sin Título",
+                description: saveData.description || "",
+                project_id: saveData.projectId || null,
+                collection_id: saveData.collectionId || null,
                 colors: originalExplorerPalette, 
                 brand_color: brandColor,
                 gray_color: grayColor,
