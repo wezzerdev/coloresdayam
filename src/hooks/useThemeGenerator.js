@@ -788,7 +788,7 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
             }
             setIsLoadingPalettes(true);
             try {
-                const [paletteRes, projectRes, collectionRes, tagsRes] = await Promise.all([
+                const [paletteRes, projectRes, collectionRes] = await Promise.all([
                     supabase
                         .from('user_palettes')
                         .select('id, name, colors, brand_color, gray_color, is_gray_auto, locked_colors, project_id, collection_id, description, style_tags, main_colors')
@@ -803,17 +803,12 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
                         .from('collections')
                         .select('id, name')
                         .eq('user_id', user.id)
-                        .order('name', { ascending: true }),
-                    supabase
-                        .from('tags')
-                        .select('id, name')
+                        .order('name', { ascending: true })
                 ]);
                 if (paletteRes.error) throw paletteRes.error;
                 if (projectRes.error) throw projectRes.error;
                 if (collectionRes.error) throw collectionRes.error;
                 
-                setTags(tagsRes.error ? [] : (tagsRes.data || []));
-
                 const palettes = (paletteRes.data || []).map(p => ({
                     id: p.id,
                     name: p.name,
@@ -830,9 +825,10 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
                 }));
                 setSavedPalettes(palettes);
 
-                setProjects(projectRes.data);
-                setCollections(collectionRes.data);
-                setTags(tagsRes.data);
+                setProjects(projectRes.data || []);
+                setCollections(collectionRes.data || []);
+                setTags([]);
+
             } catch (error) {
                 showNotification(`Error al cargar datos: ${error.message}`, 'error');
             } finally {
