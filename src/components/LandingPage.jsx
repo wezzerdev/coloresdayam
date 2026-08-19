@@ -44,26 +44,25 @@ const LandingPage = ({ onNavigate }) => {
             <ParallaxShape className="from-green-400 to-cyan-400 w-96 h-96 top-[130rem] right-[-15rem]" speed={0.25} />
             <ParallaxShape className="from-red-400 to-rose-500 w-80 h-80 top-[180rem] left-[-10rem]" speed={0.18} />
             {/* Header */}
-            <header className="sticky top-0 bg-slate-950/80 backdrop-blur-xl z-20 border-b border-slate-800/80">
+            <header className="sticky top-0 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl z-20 border-b border-slate-200 dark:border-zinc-800/90 transition-colors">
                 <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-3.5">
                     <div 
                         className="flex items-center gap-3 cursor-pointer group"
                         onClick={() => onNavigate('landing')}
                     >
-                        <div className="h-10 w-10 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center p-2 group-hover:scale-105 transition-transform">
-                            <Palette size={22} className="text-indigo-400" />
+                        <div className="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center p-2 group-hover:scale-105 transition-transform shadow-md shadow-blue-600/20">
+                            <Palette size={22} strokeWidth={2} />
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <span className="font-heading font-extrabold text-lg tracking-tight text-white block">
+                                <span className="font-heading font-extrabold text-lg tracking-tight text-slate-900 dark:text-white block uppercase">
                                     COLORES DAYAM
                                 </span>
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                                    v2.6
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                                    v3.0
                                 </span>
-
                             </div>
-                            <span className="text-[10px] text-slate-400 tracking-wider uppercase block">Color Studio</span>
+                            <span className="text-[10px] text-slate-500 dark:text-slate-400 tracking-wider uppercase block font-semibold">Color Studio Pro</span>
                         </div>
                     </div>
 
@@ -72,14 +71,14 @@ const LandingPage = ({ onNavigate }) => {
                         <button
                             type="button"
                             onClick={() => onNavigate('auth')}
-                            className="text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors"
+                            className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
                         >
                             Iniciar Sesión
                         </button>
                         <button
                             type="button"
                             onClick={() => onNavigate('auth')}
-                            className="touch-target text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/20 transition-all transform hover:scale-[1.02] focus-ring flex items-center gap-1.5"
+                            className="touch-target text-xs sm:text-sm font-extrabold px-4 py-2 rounded-xl text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all transform hover:scale-[1.02] focus-ring flex items-center gap-1.5"
                         >
                             <User size={16} />
                             <span>Crear Cuenta</span>
@@ -91,23 +90,24 @@ const LandingPage = ({ onNavigate }) => {
             <div className="flex-grow">
                 {/* Hero Section */}
                 <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-28 text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold mb-6 animate-pulse">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold mb-6">
                         <Zap size={14} />
                         <span>Metodología Impeccable Design System</span>
                     </div>
-                    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-100 tracking-tight leading-tight font-heading max-w-4xl mx-auto">
+                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-tight font-heading max-w-4xl mx-auto">
                         Crea Sistemas de Color <br />
                         <span className="text-rainbow-gradient">Impresionantes y Accesibles</span>
                     </h1>
-                    <p className="mt-6 max-w-2xl mx-auto text-sm sm:text-base text-slate-400 leading-relaxed font-normal">
+                    <p className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
                         Genera, audita accesibilidad WCAG y exporta paletas de color armónicas para web, iOS y Android en segundos con inteligencia cromática.
                     </p>
                     <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
                         <button 
                             type="button"
                             onClick={() => onNavigate('generator')}
-                            className="touch-target w-full sm:w-auto text-sm sm:text-base font-semibold text-white bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-3.5 rounded-2xl hover:from-indigo-500 hover:to-purple-500 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 shadow-xl shadow-indigo-600/30 focus-ring"
+                            className="touch-target w-full sm:w-auto text-base font-extrabold text-white bg-blue-600 hover:bg-blue-500 px-8 py-3.5 rounded-2xl transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 shadow-xl shadow-blue-600/30 focus-ring"
                         >
+
                             <span>Explorar Estudio de Color</span>
                             <ArrowRight size={20} />
                         </button>

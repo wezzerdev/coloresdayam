@@ -753,9 +753,16 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
         setHistory([initialState]);
         setHistoryIndex(0);
         showNotification("Tema reiniciado.");
-    };
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [theme]);
 
     const handleThemeToggle = () => setTheme(t => t === 'light' ? 'dark' : 'light');
+
     
     const handleRandomTheme = (baseColorHex = null) => {
         // --- ¡INICIO DE LA CORRECCIÓN! ---
