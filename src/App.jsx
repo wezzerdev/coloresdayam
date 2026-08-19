@@ -709,56 +709,6 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
         </div>
       </header>
 
-
-              {/* Botón de Hamburguesa (Config) solo en móvil */}
-              <div className="relative md:hidden"> {/* Oculto en desktop */}
-                <button 
-                    onClick={() => setIsConfigMenuVisible(p => !p)}
-                    className="text-sm font-medium p-2 rounded-lg flex items-center gap-2 text-gray-800 hover:bg-gray-100" 
-                    title="Ajustes y Ayuda"
-                >
-                    <Settings size={16} strokeWidth={1.75}/>
-                </button>
-                {isConfigMenuVisible && (
-                    // --- ¡MODIFICADO! --- Se elimina direction="up"
-                    <PopoverMenu onClose={() => setIsConfigMenuVisible(false)}>
-                        <div className="relative">
-                            <MenuButton 
-                                icon={<Type size={16} strokeWidth={1.75}/>} 
-                                label="Fuente" 
-                                onClick={(e) => { e.stopPropagation(); setIsFontMenuVisible(p => !p); }} 
-                            />
-                            {isFontMenuVisible && (
-                                // --- ¡MODIFICADO! --- Se elimina direction="up"
-                                <PopoverMenu 
-                                    onClose={() => setIsFontMenuVisible(false)} 
-                                    align="left"
-                                >
-                                    {Object.keys(availableFonts).map(fontName => (
-                                        <button
-                                          key={fontName}
-                                          onClick={() => handleFontSelect(fontName)}
-                                          className={`w-full text-left px-3 py-2 text-sm ${font === fontName ? 'font-bold text-purple-600' : 'text-gray-800'} hover:bg-gray-100 rounded-md`}
-                                          style={{fontFamily: availableFonts[fontName]}}
-                                        >
-                                            {fontName}
-                                        </button>
-                                    ))}
-                                </PopoverMenu>
-                            )}
-                        </div>
-                        <div className="h-px bg-gray-200 my-1"></div>
-                        <MenuButton icon={<Upload size={16} strokeWidth={1.75}/>} label="Importar Tema" onClick={handleImportClick} />
-                        <MenuButton icon={<Download size={16} strokeWidth={1.75}/>} label="Exportar Tema" onClick={handleExportClick} />
-                        <MenuButton icon={<RefreshCcw size={16} strokeWidth={1.75}/>} label="Reiniciar Tema" onClick={handleResetClick} />
-                        <MenuButton icon={<HelpCircle size={16} strokeWidth={1.75}/>} label="Ayuda" onClick={handleHelpClick} />
-                    </PopoverMenu>
-                )}
-              </div>
-            </>
-          )}
-        </div>
-      </header>
       
       {/* --- ¡CONTENIDO PRINCIPAL MODIFICADO! --- */}
       {/* Añadido padding-bottom dinámico:
