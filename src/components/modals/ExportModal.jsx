@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
     X, FileCode, Settings, Clipboard, Check, ArrowLeft,
     Zap, Paintbrush, FileText, Wind, FileJson2,
-    Link, Share2, FileDown, Image, Code, Star, Heart, Download, Clock
+    Link, Share2, FileDown, Image, Code, Star, Heart, Download, Clock, FolderOpen
 } from 'lucide-react';
 import tinycolor from 'tinycolor2';
 import { 
@@ -264,33 +264,36 @@ const ExportModal = ({
                     <div className="flex bg-zinc-100 dark:bg-zinc-800/80 p-1 rounded-xl mb-3 flex-shrink-0 border border-zinc-200 dark:border-zinc-700/60">
                         <button
                             onClick={() => setActiveTab('quick')}
-                            className={`flex-1 py-1.5 text-xs font-extrabold rounded-lg transition-all ${
+                            className={`flex-1 py-1.5 text-xs font-extrabold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                                 activeTab === 'quick' 
                                     ? 'bg-white dark:bg-zinc-900 text-[#0BA5C7] shadow-xs' 
                                     : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
                             }`}
                         >
-                            ⚡ Rápido
+                            <Zap size={14} className="text-amber-500" />
+                            <span>Rápido</span>
                         </button>
                         <button
                             onClick={() => setActiveTab('code')}
-                            className={`flex-1 py-1.5 text-xs font-extrabold rounded-lg transition-all ${
+                            className={`flex-1 py-1.5 text-xs font-extrabold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                                 activeTab === 'code' 
                                     ? 'bg-white dark:bg-zinc-900 text-[#0BA5C7] shadow-xs' 
                                     : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
                             }`}
                         >
-                            💻 Código
+                            <Code size={14} className="text-[#0BA5C7]" />
+                            <span>Código</span>
                         </button>
                         <button
                             onClick={() => setActiveTab('save')}
-                            className={`flex-1 py-1.5 text-xs font-extrabold rounded-lg transition-all ${
+                            className={`flex-1 py-1.5 text-xs font-extrabold rounded-lg transition-all flex items-center justify-center gap-1.5 ${
                                 activeTab === 'save' 
                                     ? 'bg-white dark:bg-zinc-900 text-[#0BA5C7] shadow-xs' 
                                     : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
                             }`}
                         >
-                            📁 Guardar
+                            <FolderOpen size={14} className="text-emerald-500" />
+                            <span>Guardar</span>
                         </button>
                     </div>
 

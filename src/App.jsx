@@ -514,24 +514,26 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
 
           <div className="hidden xl:block h-4 w-px bg-zinc-200 dark:bg-zinc-800"></div>
 
-          {/* CÁPSULA DE NOMBRE DE PALETA E IA ESTÉTICA */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold">
-            <Sparkles size={14} className="text-[#0BA5C7] dark:text-[#0BA5C7] animate-pulse" />
-            <span className="text-zinc-800 dark:text-zinc-200">{generatePoeticPaletteName(explorerPalette)}</span>
-            <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-emerald-500/10 dark:bg-emerald-500/20 text-[#0BA5C7] dark:text-[#0BA5C7] border border-emerald-500/20">
+          {/* CÁPSULA FIJA DE NOMBRE DE PALETA E IA ESTÉTICA */}
+          <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold w-56 shrink-0">
+            <Sparkles size={14} className="text-[#0BA5C7] dark:text-[#0BA5C7] shrink-0" />
+            <span className="text-zinc-800 dark:text-zinc-200 truncate flex-1 font-mono text-[11px]" title={generatePoeticPaletteName(explorerPalette)}>
+              {generatePoeticPaletteName(explorerPalette)}
+            </span>
+            <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-emerald-500/10 dark:bg-emerald-500/20 text-[#0BA5C7] dark:text-[#0BA5C7] border border-emerald-500/20 shrink-0">
               Afinidad IA
             </span>
           </div>
         </div>
 
-        {/* --- SECCIÓN CENTRAL: GENERADOR PRINCIPAL --- */}
-        <div className="hidden md:flex items-center gap-2">
+        {/* --- SECCIÓN CENTRAL: GENERADOR PRINCIPAL FIJO --- */}
+        <div className="hidden md:flex items-center justify-center shrink-0">
           <button
             onClick={handleRandomTheme}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl supabase-gradient supabase-gradient-hover text-white font-extrabold text-xs shadow-md shadow-[#0BA5C7]/20 active:scale-95 transition-all ring-1 ring-white/10"
+            className="flex items-center gap-2 px-4 py-1.5 rounded-xl supabase-gradient supabase-gradient-hover text-white font-extrabold text-xs shadow-md shadow-[#0BA5C7]/20 active:scale-95 transition-all ring-1 ring-white/10 shrink-0"
             title="Generar nueva paleta (Barra Espaciadora)"
           >
-            <RefreshCcw size={14} className="animate-spin-slow" />
+            <RefreshCcw size={14} />
             <span>Generar Paleta</span>
             <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[9px] font-black bg-black/20 border border-white/20 rounded-md text-white uppercase ml-1">
               Espacio
@@ -739,6 +741,15 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
 
         </div>
       </header>
+
+      {/* BANNER DE PUBLICIDAD SUPERIOR PEQUEÑO */}
+      <div className="w-full bg-zinc-100/50 dark:bg-zinc-900/50 border-b border-zinc-200/80 dark:border-zinc-800/80 py-1 px-4 flex justify-center items-center flex-shrink-0">
+        <GoogleAdBanner
+          dataAdSlot="3746326433"
+          style={{ display: 'block', maxHeight: '45px', overflow: 'hidden' }}
+          dataAdFormat="horizontal"
+        />
+      </div>
 
 
       
@@ -1129,7 +1140,9 @@ function App() {
   const hook = useThemeGenerator(user); 
   
   const [isNative, setIsNative] = useState(false);
-  const [route, setRoute] = useState('landing'); 
+  const urlParams = new URLSearchParams(window.location.search);
+  const hasSharedLink = urlParams.has('colors') || urlParams.has('palette');
+  const [route, setRoute] = useState(hasSharedLink ? 'generator' : 'landing'); 
 
   useEffect(() => {
     setLoadingAuth(true);
@@ -1144,7 +1157,11 @@ function App() {
            setRoute('generator');
         }
       } else {
-         if (route !== 'landing' && route !== 'auth' && route !== 'privacy' && route !== 'terms') {
+         const currentParams = new URLSearchParams(window.location.search);
+         const isShared = currentParams.has('colors') || currentParams.has('palette');
+         if (isShared) {
+           setRoute('generator');
+         } else if (route !== 'landing' && route !== 'auth' && route !== 'privacy' && route !== 'terms') {
            setRoute('landing');
          }
       }
@@ -1159,7 +1176,9 @@ function App() {
         if (session) {
             setRoute('generator');
         } else {
-            if (route === 'generator') {
+            const currentParams = new URLSearchParams(window.location.search);
+            const isShared = currentParams.has('colors') || currentParams.has('palette');
+            if (!isShared && route === 'generator') {
                 setRoute('landing');
             }
         }
