@@ -1,4 +1,5 @@
 import React, { useEffect, useState, memo, useCallback, useRef } from 'react';
+import tinycolor from 'tinycolor2';
 import useThemeGenerator from './hooks/useThemeGenerator.js';
 import { availableFonts, generationMethods } from './utils/colorUtils.js';
 import Explorer from './components/ui/Explorer.jsx';
@@ -34,7 +35,8 @@ import { generatePoeticPaletteName } from './utils/userTasteEngine.js';
 import AuthPage from './components/AuthPage.jsx';
 import LandingPage from './components/LandingPage.jsx';
 import GoogleAdBanner from './components/GoogleAdBanner.jsx';
-import PrivacyPolicyPage from './components/PrivacyPolicyPage.jsx'; 
+import PrivacyPolicyPage from './components/PrivacyPolicyPage.jsx';
+import TermsOfServicePage from './components/TermsOfServicePage.jsx';
 import { supabase } from './apiClient.js';
 
 
@@ -123,7 +125,7 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
     confirmColorInPalette, 
     saveCurrentStateToHistory, 
     cancelBrandColorUpdate, 
-    setGrayColor, setIsGrayAuto,
+    setGrayColor, setIsGrayAuto, setFont,
     handleImport, handleReset, showNotification, 
     handleRandomTheme, handleThemeToggle, 
     handleUndo, handleRedo, history, historyIndex, goToHistoryState,
@@ -198,6 +200,8 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
   // Estado para la disposición de la paleta ('vertical' u 'horizontal')
   const [paletteLayout, setPaletteLayout] = useState('vertical');
   const [isSimulationSidebarVisible, setIsSimulationSidebarVisible] = useState(false);
+  // Menú de acciones flotante sobre los colores de la paleta
+  const [activeColorMenu, setActiveColorMenu] = useState(null);
 
 
 
@@ -490,7 +494,7 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
         <div className="flex items-center gap-3 flex-shrink-0">
           <div 
             className="flex items-center gap-2.5 cursor-pointer group"
-            onClick={() => setIsLandingVisible(true)}
+            onClick={() => onNavigate('landing')}
           >
             <div className="h-9 w-9 rounded-xl bg-blue-600 dark:bg-blue-600 p-0.5 shadow-sm group-hover:scale-105 transition-transform flex items-center justify-center text-white">
               <Palette size={18} strokeWidth={2} />
@@ -711,7 +715,7 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
               </div>
             ) : (
               <button 
-                onClick={() => setIsAuthModalVisible(true)}
+                onClick={() => onNavigate('auth')}
                 className="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5 text-xs font-semibold"
                 title="Iniciar Sesión"
               >
@@ -776,9 +780,9 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
                 colorModePreview={colorModePreview}
                 onOpenColorPickerSidebar={onOpenColorPickerSidebar}
                 isSplitViewActive={isSplitViewActive}
-                paletteLayout={paletteLayout} // <-- ¡Prop se sigue pasando!
-                setActiveColorMenu={setActiveColorMenu} // <-- ¡NUEVO! Pasar el setter al Explorer
-                isColorPickerSidebarVisible={isColorPickerSidebarVisible} // <-- ¡NUEVO! Pasar esta prop
+                paletteLayout={paletteLayout}
+                setActiveColorMenu={setActiveColorMenu}
+                isColorPickerSidebarVisible={isColorPickerSidebarVisible}
               />
               
               {/* ... (ColorPreviewer y SemanticPalettes sin cambios) ... */}
