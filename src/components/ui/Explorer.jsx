@@ -499,8 +499,8 @@ const Explorer = (props) => {
                                     <div 
                                         ref={provided.innerRef} 
                                         {...provided.droppableProps} 
-                                        // --- ¡MODIFICADO! ---
-                                        // Se añade 'overflow-y-auto' cuando está en 'flex-col' (móvil)
+                                        className={`flex items-center h-full relative group ${isSplitView ? 'rounded-b-md' : 'rounded-md'} ${paletteLayout === 'horizontal' ? 'flex-col overflow-y-auto' : ''}`}
+                                    >
                                         {/* --- INSIGNIA FLOTANTE DE NOMBRE DE PALETA E IA ESTÉTICA --- */}
                                         <div className="absolute top-3 left-1/2 -translate-x-1/2 z-30 pointer-events-none flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-950/85 backdrop-blur-xl border border-white/15 shadow-xl text-xs font-medium text-white animate-in fade-in zoom-in duration-300">
                                             <span className="text-amber-400 font-bold animate-pulse">✨</span>
@@ -509,6 +509,7 @@ const Explorer = (props) => {
                                                 Afinidad IA
                                             </span>
                                         </div>
+
 
                                         {/* ¡Usa 'explorerPalette' (tiempo real) aquí! */}
 
