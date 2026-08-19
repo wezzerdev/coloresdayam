@@ -66,7 +66,7 @@ const PopoverMenu = ({ children, onClose, align = 'right' }) => {
             ref={menuRef}
             role="menu"
             tabIndex={-1}
-            className={`absolute ${align === 'right' ? 'right-0' : 'left-0'} bottom-full mb-2 md:top-full md:mt-2 md:bottom-auto w-60 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl z-50 p-2 space-y-1 max-h-[60vh] overflow-y-auto backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 text-slate-200`}
+            className={`absolute ${align === 'right' ? 'right-0' : 'left-0'} bottom-full mb-2 md:top-full md:mt-2 md:bottom-auto w-60 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl z-50 p-2 space-y-1 max-h-[60vh] overflow-y-auto backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150 text-zinc-900 dark:text-zinc-100`}
             onClick={(e) => { e.stopPropagation(); }}
         >
             {children}
@@ -79,9 +79,9 @@ const MenuButton = ({ icon, label, onClick, className = "" }) => (
         type="button"
         role="menuitem"
         onClick={onClick}
-        className={`flex items-center w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl font-medium text-slate-200 hover:bg-slate-800/80 hover:text-white transition-colors focus-ring ${className}`}
+        className={`flex items-center w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white transition-colors focus-ring ${className}`}
     >
-        <span className="text-indigo-400">{icon}</span>
+        <span className="text-emerald-600 dark:text-emerald-400">{icon}</span>
         <span className="ml-3 font-semibold">{label}</span>
     </button>
 );
@@ -489,9 +489,9 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
       
       <input type="file" ref={importFileRef} onChange={handleImport} accept=".json" className="hidden"/>
       
-      {/* --- ENCABEZADO STUDIO PRO v3.0 (NEUTRO, LIMPIO, CONMUTABLE CLARO/OSCURO) --- */}
+      {/* --- ENCABEZADO STUDIO PRO v3.9 --- */}
       <header 
-        className="flex justify-between items-center py-2.5 px-4 md:px-6 bg-white dark:bg-zinc-950 border-b border-slate-200 dark:border-zinc-800/90 sticky top-0 z-50 text-slate-900 dark:text-slate-100 shadow-sm transition-colors duration-200"
+        className="flex justify-between items-center py-2.5 px-4 md:px-6 bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800/90 sticky top-0 z-50 text-zinc-900 dark:text-zinc-100 shadow-sm transition-colors duration-200"
       >
         {/* --- SECCIÓN IZQUIERDA: IDENTIDAD & PALETA ACTIVA --- */}
         <div className="flex items-center gap-3 flex-shrink-0">
@@ -499,26 +499,26 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             className="flex items-center gap-2.5 cursor-pointer group"
             onClick={() => onNavigate('landing')}
           >
-            <div className="h-9 w-9 rounded-xl bg-blue-600 dark:bg-blue-600 p-0.5 shadow-sm group-hover:scale-105 transition-transform flex items-center justify-center text-white">
+            <div className="h-9 w-9 rounded-xl supabase-gradient p-0.5 shadow-sm shadow-emerald-500/20 group-hover:scale-105 transition-transform flex items-center justify-center text-white">
               <Palette size={18} strokeWidth={2} />
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-heading font-extrabold text-sm tracking-tight text-slate-900 dark:text-white uppercase">
+              <span className="font-heading font-extrabold text-sm tracking-tight text-zinc-900 dark:text-white uppercase">
                 Colores Dayam
               </span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                v3.0
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                v3.9
               </span>
             </div>
           </div>
 
-          <div className="hidden xl:block h-4 w-px bg-slate-200 dark:bg-zinc-800"></div>
+          <div className="hidden xl:block h-4 w-px bg-zinc-200 dark:bg-zinc-800"></div>
 
           {/* CÁPSULA DE NOMBRE DE PALETA E IA ESTÉTICA */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-xs font-semibold">
-            <Sparkles size={14} className="text-blue-500 dark:text-blue-400 animate-pulse" />
-            <span className="text-slate-800 dark:text-slate-200">{generatePoeticPaletteName(explorerPalette)}</span>
-            <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300 border border-blue-500/20">
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold">
+            <Sparkles size={14} className="text-emerald-500 dark:text-emerald-400 animate-pulse" />
+            <span className="text-zinc-800 dark:text-zinc-200">{generatePoeticPaletteName(explorerPalette)}</span>
+            <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/20">
               Afinidad IA
             </span>
           </div>
@@ -528,12 +528,12 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
         <div className="hidden md:flex items-center gap-2">
           <button
             onClick={handleRandomTheme}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 active:scale-95 transition-all ring-1 ring-white/10"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl supabase-gradient supabase-gradient-hover text-white font-extrabold text-xs shadow-md shadow-emerald-500/20 active:scale-95 transition-all ring-1 ring-white/10"
             title="Generar nueva paleta (Barra Espaciadora)"
           >
             <RefreshCcw size={14} className="animate-spin-slow" />
             <span>Generar Paleta</span>
-            <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[9px] font-black bg-blue-800/50 border border-white/20 rounded-md text-white uppercase ml-1">
+            <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[9px] font-black bg-black/20 border border-white/20 rounded-md text-white uppercase ml-1">
               Espacio
             </kbd>
           </button>
@@ -543,35 +543,35 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
         <div className="flex items-center gap-2">
           
           {/* GRUPO 1: CREACIÓN E IA */}
-          <div className="hidden md:flex items-center bg-slate-100 dark:bg-zinc-900 p-1 rounded-xl border border-slate-200 dark:border-zinc-800 gap-0.5">
+          <div className="hidden md:flex items-center bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800 gap-0.5">
             <button 
               onClick={() => setIsAIModalVisible(true)} 
-              className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+              className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Generar con IA"
             >
-              <Sparkles size={16} className="text-blue-500 dark:text-blue-400" />
+              <Sparkles size={16} className="text-emerald-500 dark:text-emerald-400" />
             </button>
             
             <div className="relative">
               <button 
                 onClick={() => setIsMethodMenuVisible(p => !p)} 
-                className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors flex items-center gap-1"
+                className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors flex items-center gap-1"
                 title="Método de Armonía"
               >
-                <Wand2 size={16} className="text-blue-600 dark:text-blue-400" />
+                <Wand2 size={16} className="text-emerald-600 dark:text-emerald-400" />
               </button>
               {isMethodMenuVisible && (
                 <PopoverMenu onClose={() => setIsMethodMenuVisible(false)}>
                   {generationMethods.map(method => (
                     method.isHeader ? (
-                      <div key={method.name} className="px-3 pt-2 pb-1 text-[10px] font-extrabold uppercase text-slate-400 dark:text-zinc-500 tracking-wider">
+                      <div key={method.name} className="px-3 pt-2 pb-1 text-[10px] font-extrabold uppercase text-zinc-400 dark:text-zinc-500 tracking-wider">
                         {method.name}
                       </div>
                     ) : (
                       <button 
                         key={method.id} 
                         onClick={() => { setExplorerMethod(method.id); setIsMethodMenuVisible(false); }} 
-                        className={`w-full text-left px-3 py-1.5 text-xs ${explorerMethod === method.id ? 'font-bold text-blue-600 dark:text-blue-400 bg-blue-500/10' : 'text-slate-800 dark:text-slate-200'} hover:bg-slate-100 dark:hover:bg-zinc-800 rounded-md`}
+                        className={`w-full text-left px-3 py-1.5 text-xs ${explorerMethod === method.id ? 'font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10' : 'text-zinc-800 dark:text-zinc-200'} hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md`}
                       >
                         {method.name}
                       </button>
@@ -583,7 +583,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
 
             <button 
               onClick={() => setIsImageModalVisible(true)} 
-              className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+              className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Extraer de Imagen"
             >
               <ImageIcon size={16} />
@@ -591,7 +591,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             
             <button 
               onClick={handleOpenBrandColorPicker} 
-              className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+              className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Ajustar Paleta"
             >
               <SlidersHorizontal size={16} />
@@ -599,10 +599,10 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
           </div>
 
           {/* GRUPO 2: HERRAMIENTAS & VISTA */}
-          <div className="hidden md:flex items-center bg-slate-100 dark:bg-zinc-900 p-1 rounded-xl border border-slate-200 dark:border-zinc-800 gap-0.5">
+          <div className="hidden md:flex items-center bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800 gap-0.5">
             <button 
               onClick={() => setPaletteLayout(p => p === 'vertical' ? 'horizontal' : 'vertical')} 
-              className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+              className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title={paletteLayout === 'vertical' ? "Vista Horizontal" : "Vista Vertical"}
             >
               {paletteLayout === 'vertical' ? <Rows3 size={16} /> : <Columns3 size={16} />}
@@ -610,7 +610,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
 
             <button 
               onClick={handleOpenSimulationSidebar} 
-              className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+              className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Simulación Daltonismo"
             >
               <Eye size={16} />
@@ -619,7 +619,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             <div className="relative">
               <button 
                 onClick={() => setIsToolsMenuVisible(p => !p)}
-                className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+                className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
                 title="Más Herramientas"
               >
                 <MoreHorizontal size={16}/>
@@ -630,7 +630,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
                   <MenuButton icon={<TestTube2 size={16}/>} label="Componentes" onClick={() => { setIsComponentPreviewModalVisible(true); setIsToolsMenuVisible(false); }} />
                   <MenuButton icon={<Palette size={16}/>} label="Variaciones" onClick={() => { setIsVariationsVisible(true); setIsToolsMenuVisible(false); }} />
                   <MenuButton icon={<ShieldCheck size={16}/>} label="Matriz de Contraste" onClick={() => { setIsContrastCheckerVisible(true); setIsToolsMenuVisible(false); }} />
-                  <div className="h-px bg-slate-200 dark:bg-zinc-800 my-1"></div>
+                  <div className="h-px bg-zinc-200 dark:bg-zinc-800 my-1"></div>
                   <MenuButton icon={<FileCode size={16}/>} label="Exportar Código" onClick={() => { setExportingPaletteData(themeData); setIsExportModalVisible(true); setIsToolsMenuVisible(false); }} />
                 </PopoverMenu>
               )}
@@ -638,11 +638,11 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
           </div>
 
           {/* GRUPO 3: HISTORIAL */}
-          <div className="hidden lg:flex items-center bg-slate-100 dark:bg-zinc-900 p-1 rounded-xl border border-slate-200 dark:border-zinc-800 gap-0.5">
+          <div className="hidden lg:flex items-center bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800 gap-0.5">
             <button 
               onClick={handleUndo} 
               disabled={!history || historyIndex <= 0}
-              className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white disabled:opacity-40 disabled:hover:bg-transparent hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+              className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white disabled:opacity-40 disabled:hover:bg-transparent hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Deshacer"
             >
               <Undo2 size={16} />
@@ -650,14 +650,14 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             <button 
               onClick={handleRedo} 
               disabled={!history || historyIndex >= history.length - 1}
-              className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white disabled:opacity-40 disabled:hover:bg-transparent hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+              className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white disabled:opacity-40 disabled:hover:bg-transparent hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Rehacer"
             >
               <Redo2 size={16} />
             </button>
             <button 
               onClick={() => setIsHistoryModalVisible(true)} 
-              className="p-2 rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/70 dark:hover:bg-zinc-800 transition-colors"
+              className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Historial de Paletas"
             >
               <Clock size={16} />
@@ -678,7 +678,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
           <div className="flex items-center gap-1.5 ml-1">
             <button 
               onClick={handleOpenMyPalettesSidebar}
-              className="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 transition-colors hidden sm:flex"
+              className="p-2 rounded-xl text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 transition-colors hidden sm:flex"
               title="Mis Paletas Guardadas"
             >
               <FolderOpen size={16} />
@@ -686,7 +686,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
 
             <button 
               onClick={handleOpenSaveSidebar}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-sm transition-all active:scale-95"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl supabase-gradient supabase-gradient-hover text-white font-extrabold text-xs shadow-sm transition-all active:scale-95"
               title="Guardar Paleta Actual"
             >
               <Save size={15} />
@@ -697,20 +697,20 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
               <div className="relative">
                 <button 
                   onClick={() => setIsUserMenuVisible(p => !p)}
-                  className="p-1.5 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5"
+                  className="p-1.5 rounded-xl text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5"
                   title="Mi Cuenta"
                 >
-                  <div className="h-6 w-6 rounded-lg bg-blue-600/20 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs font-extrabold uppercase">
+                  <div className="h-6 w-6 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-extrabold uppercase">
                     {user.name ? user.name.charAt(0) : 'U'}
                   </div>
                 </button>
                 {isUserMenuVisible && (
                   <PopoverMenu onClose={() => setIsUserMenuVisible(false)}>
                     <div className="px-3 py-2">
-                      <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">{user.name || user.email}</p>
-                      <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">Cuenta Activa</p>
+                      <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">{user.name || user.email}</p>
+                      <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">Cuenta Activa</p>
                     </div>
-                    <div className="h-px bg-slate-200 dark:bg-zinc-800 my-1"></div>
+                    <div className="h-px bg-zinc-200 dark:bg-zinc-800 my-1"></div>
                     <MenuButton icon={<User size={16}/>} label="Mi Perfil" onClick={() => { setIsProfileModalVisible(true); setIsUserMenuVisible(false); }} />
                     <MenuButton icon={<LogOut size={16}/>} label="Cerrar Sesión" onClick={handleLogoutClick} />
                   </PopoverMenu>
@@ -719,7 +719,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             ) : (
               <button 
                 onClick={() => onNavigate('auth')}
-                className="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5 text-xs font-semibold"
+                className="p-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5 text-xs font-semibold"
                 title="Iniciar Sesión"
               >
                 <LogIn size={15} />
@@ -1004,7 +1004,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             <button
                 type="button"
                 onClick={handleRandomTheme}
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-md shadow-blue-600/30 active:scale-95 transition-all"
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl supabase-gradient supabase-gradient-hover text-white font-extrabold text-xs shadow-md shadow-emerald-600/30 active:scale-95 transition-all"
             >
                 <RefreshCcw size={15} />
                 <span>Generar</span>
