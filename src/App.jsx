@@ -197,6 +197,8 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
 
   // Estado para la disposición de la paleta ('vertical' u 'horizontal')
   const [paletteLayout, setPaletteLayout] = useState('vertical');
+  const [isSimulationSidebarVisible, setIsSimulationSidebarVisible] = useState(false);
+
 
 
 
@@ -658,11 +660,12 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
           {/* CONMUTADOR DE TEMA CLARO / OSCURO (SOLO UN CLIC) */}
           <button 
             onClick={handleThemeToggle} 
-            className="p-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5 text-xs font-semibold"
-            title={themeData.theme === 'light' ? "Cambiar a Modo Oscuro" : "Cambiar a Modo Claro"}
+            className="p-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5 text-xs font-semibold"
+            title={theme === 'light' ? "Cambiar a Modo Oscuro" : "Cambiar a Modo Claro"}
           >
-            {themeData.theme === 'light' ? <Moon size={16} className="text-zinc-700" /> : <Sun size={16} className="text-amber-400" />}
+            {theme === 'light' ? <Moon size={16} className="text-zinc-700" /> : <Sun size={16} className="text-amber-400" />}
           </button>
+
 
           {/* GRUPO 4: ACCIONES PRINCIPALES (GUARDAR & PERFIL) */}
           <div className="flex items-center gap-1.5 ml-1">
