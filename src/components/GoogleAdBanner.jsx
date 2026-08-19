@@ -18,15 +18,10 @@ const GoogleAdBanner = ({
   const dataAdClient = import.meta.env.VITE_GOOGLE_AD_CLIENT;
 
   useEffect(() => {
-    // No ejecutar si falta información esencial
-    if (!dataAdSlot) {
-      console.error("GoogleAdBanner: Falta la prop 'dataAdSlot'. No se mostrará el anuncio.");
+    if (!dataAdSlot || !dataAdClient) {
       return;
     }
-    if (!dataAdClient) {
-      console.error("GoogleAdBanner: Falta 'VITE_GOOGLE_AD_CLIENT' en el archivo .env.");
-      return;
-    }
+
 
     try {
       // Intenta "empujar" el anuncio.

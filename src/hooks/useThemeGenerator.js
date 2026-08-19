@@ -811,9 +811,9 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
                 if (paletteRes.error) throw paletteRes.error;
                 if (projectRes.error) throw projectRes.error;
                 if (collectionRes.error) throw collectionRes.error;
-                if (tagsRes.error) throw tagsRes.error;
                 
-                const palettes = paletteRes.data.map(p => ({
+                setTags(tagsRes.error ? [] : (tagsRes.data || []));
+
                     id: p.id,
                     name: p.name,
                     description: p.description,
