@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Lock, Mail, User, ShieldCheck, KeyRound, Loader2, AlertTriangle, CheckCircle2, ArrowLeft, Palette, Sparkles } from 'lucide-react';
+import { Lock, Mail, User, ShieldCheck, KeyRound, Loader2, AlertTriangle, CheckCircle2, ArrowLeft, Palette, Sparkles, Sun, Moon } from 'lucide-react';
 import { supabase } from '../apiClient.js';
 
-const AuthPage = ({ onNavigate }) => {
+const AuthPage = ({ onNavigate, onToggleTheme, theme }) => {
+    const isDarkMode = theme === 'dark';
     // Vistas: 'LOGIN' | 'SIGNUP' | 'VERIFY_CODE' | 'FORGOT_PASSWORD' | 'RESET_PASSWORD'
     const [mode, setMode] = useState('LOGIN');
+
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -178,8 +180,20 @@ const AuthPage = ({ onNavigate }) => {
             <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="max-w-md w-full bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800/90 shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-200">
+                {/* Botón flotante para cambiar tema en Auth */}
+                {onToggleTheme && (
+                    <button
+                        type="button"
+                        onClick={onToggleTheme}
+                        className="absolute top-5 right-5 p-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 transition-colors"
+                        title={isDarkMode ? "Cambiar a Modo Claro" : "Cambiar a Modo Oscuro"}
+                    >
+                        {isDarkMode ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} className="text-zinc-700" />}
+                    </button>
+                )}
                 
                 {/* Logo & Marca */}
+
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 text-xs font-bold mb-3">
                         <Sparkles size={13} />

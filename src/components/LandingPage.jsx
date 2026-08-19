@@ -34,34 +34,17 @@ const FeatureCard = ({ icon, title, children }) => (
 );
 
 
-const LandingPage = ({ onNavigate }) => {
-    const [isDarkMode, setIsDarkMode] = useState(() => {
-        if (typeof document !== 'undefined') {
-            return document.documentElement.classList.contains('dark');
-        }
-        return false;
-    });
-
-    const toggleTheme = () => {
-        if (typeof document !== 'undefined') {
-            const next = !isDarkMode;
-            setIsDarkMode(next);
-            if (next) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        }
-    };
+const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
+    const isDarkMode = theme === 'dark';
 
     return (
         <div className="w-full flex flex-col relative bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans overflow-hidden transition-colors duration-200">
             {/* Fondos Neutros con destellos estilo Supabase (Verde Esmeralda + Cian + Azul) */}
-            <ParallaxShape className="from-emerald-500/30 via-teal-500/20 to-blue-600/30 w-96 h-96 top-10 left-[-10rem]" speed={0.2} />
-            <ParallaxShape className="from-blue-600/20 via-cyan-500/20 to-emerald-500/30 w-[30rem] h-[30rem] top-[35rem] right-[-15rem]" speed={0.15} />
+            <ParallaxShape className="from-emerald-500/20 via-teal-500/15 to-blue-600/20 w-96 h-96 top-10 left-[-10rem]" speed={0.2} />
+            <ParallaxShape className="from-blue-600/15 via-cyan-500/15 to-emerald-500/20 w-[30rem] h-[30rem] top-[35rem] right-[-15rem]" speed={0.15} />
 
             {/* Header */}
-            <header className="sticky top-0 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl z-20 border-b border-zinc-200 dark:border-zinc-800/90 transition-colors">
+            <header className="sticky top-0 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl z-20 border-b border-zinc-200 dark:border-zinc-800/90 transition-colors duration-200">
                 <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-3.5">
                     <div 
                         className="flex items-center gap-3 cursor-pointer group"
@@ -88,7 +71,7 @@ const LandingPage = ({ onNavigate }) => {
                         {/* Conmutador de tema claro / oscuro */}
                         <button
                             type="button"
-                            onClick={toggleTheme}
+                            onClick={onToggleTheme}
                             className="p-2.5 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5 text-xs font-semibold"
                             title={isDarkMode ? "Cambiar a Modo Claro" : "Cambiar a Modo Oscuro"}
                         >
@@ -113,6 +96,7 @@ const LandingPage = ({ onNavigate }) => {
                     </div>
                 </nav>
             </header>
+
             
             <div className="flex-grow">
                 {/* Hero Section */}

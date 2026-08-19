@@ -1187,9 +1187,9 @@ function App() {
       {(() => {
         switch (route) {
           case 'landing':
-            return <LandingPage onNavigate={handleNavigate} />;
+            return <LandingPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.themeData?.theme} />;
           case 'auth':
-            return <AuthPage onNavigate={handleNavigate} />;
+            return <AuthPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.themeData?.theme} />;
           case 'generator':
             return <MainApp hook={hook} isNative={isNative} user={user} onLogout={handleLogout} onNavigate={handleNavigate}/>;
           
@@ -1199,9 +1199,10 @@ function App() {
             return <TermsOfServicePage onNavigate={handleNavigate} />;
           
           default:
-            return <LandingPage onNavigate={handleNavigate} />;
+            return <LandingPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.themeData?.theme} />;
         }
       })()}
+
     </div>
   );
 }
