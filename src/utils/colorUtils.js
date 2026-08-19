@@ -1,5 +1,7 @@
 import tinycolor from 'tinycolor2';
 import { colorNameList } from './colorNameList.js';
+import { getTunedBaseHue, recordColorPreference, generatePoeticPaletteName } from './userTasteEngine.js';
+
 
 /*
   NOTA DE IMPLEMENTACIÓN:
@@ -373,15 +375,21 @@ export const generateAdvancedRandomPalette = (
     // --- CASO 2: Método 'auto' o Temático (¡Plan Monstruoso 11.0!) ---
     const effectiveCount = Math.max(3, count);
 
-    // --- PASO 1: Seleccionar Color Base y Matices de Armonía ---
-    
-    // ¡Usamos la lista curada!
+    // --- PASO 1: Seleccionar Color Base Inteligente (Afinidad Gustativa) ---
+    let baseHue;
+    if (baseColorHex) {
+        baseHue = tinycolor(baseColorHex).toHsv().h;
+    } else {
+        // Obtenemos un tono ajustado inteligentemente según los gustos del usuario
+        baseHue = getTunedBaseHue();
+    }
+
     const baseColor = baseColorHex 
         ? tinycolor(baseColorHex) 
-        : tinycolor(CURATED_BASE_COLORS[Math.floor(rand(0, CURATED_BASE_COLORS.length))]);
+        : tinycolor({ h: baseHue, s: rand(50, 95) / 100, v: rand(65, 95) / 100 });
         
-    const baseHsb = baseColor.toHsv(); // { h: 0-360, s: 0-100, v: 0-100 }
-    const baseHue = baseHsb.h;
+    const baseHsb = baseColor.toHsv();
+
 
     // Generamos 5 matices (Hues) únicos para los 5 roles
     const hues = [
@@ -1451,10 +1459,15 @@ export const generateAdvancedRandomPalette = (
         ? baseColorHex 
         : (selectedTemplate === 'equilibrado' ? hsbToHex(generatedHsbPalette[2].h, generatedHsbPalette[2].s, generatedHsbPalette[2].b) : finalPalette[0]);
 
+    // Generar un nombre poético e inmersivo para la paleta
+    const paletteName = generatePoeticPaletteName(finalPalette);
+
     return {
         palette: finalPalette,
-        brandColor: brandColor
+        brandColor: brandColor,
+        paletteName: paletteName
     };
+
 }
 
 

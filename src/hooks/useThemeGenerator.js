@@ -13,6 +13,8 @@ import {
 import { analyzePaletteColors } from '../utils/colorAnalysis.js';
 
 import { supabase } from '../apiClient.js'; 
+import { recordColorPreference } from '../utils/userTasteEngine.js';
+
 
 
 const baseBrandColor = '#009fdb';
@@ -159,8 +161,11 @@ const useThemeGenerator = (user) => {
             newLockedColors = lockedColors.filter(c => c !== colorToToggle);
         } else {
             newLockedColors = [...lockedColors, colorToToggle];
+            // Registrar aprendizaje gustativo del usuario
+            recordColorPreference(colorToToggle);
         }
         setLockedColors(newLockedColors);
+
 
         // Actualiza el estado actual en el historial sin añadir un nuevo paso
         const currentState = history[historyIndex];
