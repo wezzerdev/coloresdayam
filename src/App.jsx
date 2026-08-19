@@ -524,6 +524,15 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
               Afinidad IA
             </span>
           </div>
+
+          {/* BANNER DE PUBLICIDAD PEQUEÑO DENTRO DEL ENCABEZADO */}
+          <div className="hidden 2xl:flex items-center justify-center max-w-[200px] max-h-[32px] overflow-hidden opacity-90">
+            <GoogleAdBanner
+              dataAdSlot="3746326433"
+              style={{ display: 'block', maxHeight: '32px', overflow: 'hidden' }}
+              dataAdFormat="horizontal"
+            />
+          </div>
         </div>
 
         {/* --- SECCIÓN CENTRAL: GENERADOR PRINCIPAL FIJO --- */}
@@ -742,14 +751,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
         </div>
       </header>
 
-      {/* BANNER DE PUBLICIDAD SUPERIOR PEQUEÑO */}
-      <div className="w-full bg-zinc-100/50 dark:bg-zinc-900/50 border-b border-zinc-200/80 dark:border-zinc-800/80 py-1 px-4 flex justify-center items-center flex-shrink-0">
-        <GoogleAdBanner
-          dataAdSlot="3746326433"
-          style={{ display: 'block', maxHeight: '45px', overflow: 'hidden' }}
-          dataAdFormat="horizontal"
-        />
-      </div>
+
 
 
       
