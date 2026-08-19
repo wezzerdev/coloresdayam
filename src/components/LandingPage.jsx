@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Palette, Feather, Zap, LogIn, User, UserPlus, ArrowRight, Mouse, Code, CheckCircle, Image as ImageIcon, TestTube2, ShieldCheck } from 'lucide-react';
+import { Palette, Feather, Zap, LogIn, User, UserPlus, ArrowRight, Mouse, Code, CheckCircle, Image as ImageIcon, TestTube2, ShieldCheck, Sun, Moon } from 'lucide-react';
 
 
 // Componente para las formas abstractas del fondo con efecto parallax
@@ -14,7 +14,7 @@ const ParallaxShape = ({ className, speed = 0.1 }) => {
 
     return (
         <div 
-            className={`absolute -z-10 rounded-full bg-gradient-to-br opacity-10 dark:opacity-20 filter blur-3xl ${className}`} 
+            className={`absolute -z-10 rounded-full bg-gradient-to-br opacity-15 dark:opacity-25 filter blur-3xl ${className}`} 
             style={{ transform: `translateY(${offsetY * speed}px)` }}
         />
     );
@@ -24,7 +24,7 @@ const ParallaxShape = ({ className, speed = 0.1 }) => {
 const FeatureCard = ({ icon, title, children }) => (
     <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full">
         <div className="flex items-center gap-4 mb-3">
-            <div className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-xl text-blue-600 dark:text-blue-400">
+            <div className="bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-xl text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                 {icon}
             </div>
             <h3 className="text-lg font-bold text-zinc-900 dark:text-white font-heading">{title}</h3>
@@ -35,11 +35,30 @@ const FeatureCard = ({ icon, title, children }) => (
 
 
 const LandingPage = ({ onNavigate }) => {
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        if (typeof document !== 'undefined') {
+            return document.documentElement.classList.contains('dark');
+        }
+        return false;
+    });
+
+    const toggleTheme = () => {
+        if (typeof document !== 'undefined') {
+            const next = !isDarkMode;
+            setIsDarkMode(next);
+            if (next) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    };
+
     return (
         <div className="w-full flex flex-col relative bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans overflow-hidden transition-colors duration-200">
-            {/* Fondos Neutros sutiles */}
-            <ParallaxShape className="from-zinc-400 to-zinc-600 dark:from-zinc-700 dark:to-zinc-900 w-96 h-96 top-20 left-[-15rem]" speed={0.2} />
-            <ParallaxShape className="from-blue-400 to-sky-500 dark:from-blue-900 dark:to-zinc-900 w-80 h-80 top-[30rem] right-[-12rem]" speed={0.15} />
+            {/* Fondos Neutros con destellos estilo Supabase (Verde Esmeralda + Cian + Azul) */}
+            <ParallaxShape className="from-emerald-500/30 via-teal-500/20 to-blue-600/30 w-96 h-96 top-10 left-[-10rem]" speed={0.2} />
+            <ParallaxShape className="from-blue-600/20 via-cyan-500/20 to-emerald-500/30 w-[30rem] h-[30rem] top-[35rem] right-[-15rem]" speed={0.15} />
 
             {/* Header */}
             <header className="sticky top-0 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl z-20 border-b border-zinc-200 dark:border-zinc-800/90 transition-colors">
@@ -48,7 +67,7 @@ const LandingPage = ({ onNavigate }) => {
                         className="flex items-center gap-3 cursor-pointer group"
                         onClick={() => onNavigate('landing')}
                     >
-                        <div className="h-10 w-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center p-2 group-hover:scale-105 transition-transform shadow-md shadow-blue-600/20">
+                        <div className="h-10 w-10 rounded-2xl supabase-gradient text-white flex items-center justify-center p-2 group-hover:scale-105 transition-transform shadow-md shadow-emerald-500/20">
                             <Palette size={22} strokeWidth={2} />
                         </div>
                         <div>
@@ -56,8 +75,8 @@ const LandingPage = ({ onNavigate }) => {
                                 <span className="font-heading font-extrabold text-lg tracking-tight text-zinc-900 dark:text-white block uppercase">
                                     COLORES DAYAM
                                 </span>
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                                    v3.0
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                    v3.1
                                 </span>
                             </div>
                             <span className="text-[10px] text-zinc-500 dark:text-zinc-400 tracking-wider uppercase block font-semibold">Color Studio Pro</span>
@@ -66,6 +85,16 @@ const LandingPage = ({ onNavigate }) => {
 
                     
                     <div className="flex items-center gap-2 sm:gap-3">
+                        {/* Conmutador de tema claro / oscuro */}
+                        <button
+                            type="button"
+                            onClick={toggleTheme}
+                            className="p-2.5 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5 text-xs font-semibold"
+                            title={isDarkMode ? "Cambiar a Modo Claro" : "Cambiar a Modo Oscuro"}
+                        >
+                            {isDarkMode ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} className="text-zinc-700" />}
+                        </button>
+
                         <button
                             type="button"
                             onClick={() => onNavigate('auth')}
@@ -76,7 +105,7 @@ const LandingPage = ({ onNavigate }) => {
                         <button
                             type="button"
                             onClick={() => onNavigate('auth')}
-                            className="touch-target text-xs sm:text-sm font-extrabold px-4 py-2 rounded-xl text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all transform hover:scale-[1.02] focus-ring flex items-center gap-1.5"
+                            className="touch-target text-xs sm:text-sm font-extrabold px-4 py-2 rounded-xl text-white supabase-gradient supabase-gradient-hover shadow-md shadow-emerald-500/20 transition-all transform hover:scale-[1.02] focus-ring flex items-center gap-1.5"
                         >
                             <User size={16} />
                             <span>Crear Cuenta</span>
@@ -88,9 +117,9 @@ const LandingPage = ({ onNavigate }) => {
             <div className="flex-grow">
                 {/* Hero Section */}
                 <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-28 text-center">
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 text-blue-600 dark:text-blue-400 text-xs font-bold mb-6">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-extrabold mb-6">
                         <Zap size={14} />
-                        <span>Metodología Impeccable Design System</span>
+                        <span>Supabase-Style Color Studio System</span>
                     </div>
                     <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight font-heading max-w-4xl mx-auto">
                         Crea Sistemas de Color <br />
@@ -103,13 +132,14 @@ const LandingPage = ({ onNavigate }) => {
                         <button 
                             type="button"
                             onClick={() => onNavigate('generator')}
-                            className="touch-target w-full sm:w-auto text-base font-extrabold text-white bg-blue-600 hover:bg-blue-500 px-8 py-3.5 rounded-2xl transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 shadow-xl shadow-blue-600/30 focus-ring"
+                            className="touch-target w-full sm:w-auto text-base font-extrabold text-white supabase-gradient supabase-gradient-hover px-8 py-3.5 rounded-2xl transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 shadow-xl shadow-emerald-500/25 focus-ring"
                         >
                             <span>Explorar Estudio de Color</span>
                             <ArrowRight size={20} />
                         </button>
                     </div>
                 </main>
+
 
                 {/* NUEVA SECCIÓN: Muestra de la Galería de Paletas */}
                 <section className="relative z-10 py-20">

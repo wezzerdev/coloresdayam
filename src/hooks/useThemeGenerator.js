@@ -756,7 +756,6 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
     };
 
     useEffect(() => {
-
         if (theme === 'dark') {
             document.documentElement.classList.add('dark');
         } else {
@@ -764,8 +763,19 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
         }
     }, [theme]);
 
-    const handleThemeToggle = () => setTheme(t => t === 'light' ? 'dark' : 'light');
-
+    const handleThemeToggle = () => {
+        setTheme(t => {
+            const next = t === 'light' ? 'dark' : 'light';
+            if (typeof document !== 'undefined') {
+                if (next === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+            return next;
+        });
+    };
     
     const handleRandomTheme = (baseColorHex = null) => {
         // --- ¡INICIO DE LA CORRECCIÓN! ---

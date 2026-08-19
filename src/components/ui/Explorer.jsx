@@ -324,26 +324,21 @@ const Explorer = (props) => {
                 style={{ borderColor: 'var(--border-default)' }}
             >
                 {/* --- SECCIÓN DE VISTA DIVIDIDA (ORIGINAL) --- */}
-                {/* Esta lógica se mantiene, pero ahora usa 'originalExplorerPalette' */}
                 {isSplitView && (
                     <div 
-                        // --- ¡MODIFICADO! ---
-                        // Se añade el color de fondo aquí
-                        className={`overflow-hidden ${paletteLayout === 'vertical' ? 'h-[calc((100vh-65px)/2)]' : 'w-1/2 h-[calc(100vh-65px)]'}`}
+                        className={`overflow-hidden rounded-none ${paletteLayout === 'vertical' ? 'h-[calc((100vh-53px)/2)]' : 'w-1/2 h-[calc(100vh-53px)]'}`}
                         title="Paleta Original (Antes de ajustar)"
                         style={{ backgroundColor: colorModeBg }}
                     >
                          <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable 
                                 droppableId="palette-original" 
-                                // --- ¡MODIFICADO! ---
                                 direction={paletteLayout === 'vertical' ? 'horizontal' : 'vertical'}
                             >
                                 {(provided) => (
                                     <div
                                         ref={provided.innerRef}
                                         {...provided.droppableProps}
-                                        // --- ¡MODIFICADO! ---
                                         className={`flex items-center h-full relative ${paletteLayout === 'horizontal' ? 'flex-col' : ''}`}
                                     >
                                         {/* ¡Usa 'originalExplorerPalette' aquí! */}
@@ -354,7 +349,6 @@ const Explorer = (props) => {
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
-                                                        // --- ¡MODIFICADO! ---
                                                         className={`relative flex-1 flex items-center justify-center group/item ${paletteLayout === 'vertical' ? 'h-full' : 'w-full'}`}
                                                         style={{ 
                                                             ...provided.draggableProps.style,
@@ -391,7 +385,7 @@ const Explorer = (props) => {
                                                             <div className={`p-1.5 bg-black/30 rounded-full text-white z-10 ${
                                                                 paletteLayout === 'vertical' 
                                                                 ? 'absolute top-32 left-1/2 -translate-x-1/2' 
-                                                                : 'absolute top-1/2 right-4 -translate-y-1/2' // Mover a la derecha en horizontal
+                                                                : 'absolute top-1/2 right-4 -translate-y-1/2'
                                                             }`} title="Color Bloqueado">
                                                                 <Lock size={12} strokeWidth={1.5} />
                                                             </div>
@@ -410,27 +404,24 @@ const Explorer = (props) => {
                 
                 {/* --- SECCIÓN DE PALETA PRINCIPAL (TIEMPO REAL) --- */}
                 <div 
-                    // --- ¡MODIFICADO! ---
-                    // Se aplica la altura dinámica y el color de fondo aquí
-                    className={`overflow-hidden ${
-                        mobilePickerOpen ? 'h-[calc(50vh-65px)]' // Picker móvil abierto
-                        : (isSplitView ? 'h-[calc((100vh-65px)/2)]' // Vista dividida
-                        : 'h-[calc(100vh-65px)]') // Normal
-                    } ${isSplitView ? 'rounded-b-md' : 'rounded-md'} ${
-                        isSplitView && paletteLayout === 'horizontal' ? 'w-1/2 h-[calc(100vh-65px)]' : ''
+                    className={`overflow-hidden rounded-none ${
+                        mobilePickerOpen ? 'h-[calc(50vh-53px)]'
+                        : (isSplitView ? 'h-[calc((100vh-53px)/2)]'
+                        : 'h-[calc(100vh-53px)]')
                     } ${
-                        !isSplitView && paletteLayout === 'horizontal' ? '' : '' // Limpieza de clases redundantes
+                        isSplitView && paletteLayout === 'horizontal' ? 'w-1/2 h-[calc(100vh-53px)]' : ''
                     }`}
                     style={{ backgroundColor: colorModeBg }}
                     title={isSplitViewActive ? "Paleta Ajustada (Tiempo Real)" : (isSimulationSidebarVisible ? "Paleta Simulada" : "Paleta Principal")}
                 >
                     
-                    {/* --- VISTA DE SIMULACIÓN (modificada para layout) --- */}
+                    {/* --- VISTA DE SIMULACIÓN --- */}
                     {isSimulationSidebarVisible && (
                         <div 
-                            className={`flex items-center h-full relative group ${isSplitView ? 'rounded-b-md' : 'rounded-md'} ${paletteLayout === 'horizontal' ? 'flex-col' : ''}`}
+                            className={`flex items-center h-full relative group rounded-none ${paletteLayout === 'horizontal' ? 'flex-col' : ''}`}
                             style={simulationFilterStyle}
                         >
+
                             {/* ¡Usa 'originalExplorerPalette' para simular! */}
                             {originalExplorerPalette.map((shade, index) => {
                                 // ... (código de renderizado modificado para layout) ...
