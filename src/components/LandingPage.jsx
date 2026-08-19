@@ -43,11 +43,6 @@ const LandingPage = ({ onNavigate }) => {
             <ParallaxShape className="from-yellow-300 to-orange-500 w-[30rem] h-[30rem] top-[80rem] left-[-20rem]" speed={0.1} />
             <ParallaxShape className="from-green-400 to-cyan-400 w-96 h-96 top-[130rem] right-[-15rem]" speed={0.25} />
             <ParallaxShape className="from-red-400 to-rose-500 w-80 h-80 top-[180rem] left-[-10rem]" speed={0.18} />
-            {/* Banner de Verificación de Versión */}
-            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-center py-2 px-4 text-xs font-bold tracking-wider z-30">
-                🚀 VERSIÓN v2.5 — CONEXIÓN DIRECTA A SUPABASE (supabasedayam.nocodepy.com)
-            </div>
-
             {/* Header */}
             <header className="sticky top-0 bg-slate-950/80 backdrop-blur-xl z-20 border-b border-slate-800/80">
                 <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-3.5">
@@ -59,12 +54,18 @@ const LandingPage = ({ onNavigate }) => {
                             <Palette size={22} className="text-indigo-400" />
                         </div>
                         <div>
-                            <span className="font-heading font-extrabold text-lg tracking-tight text-white block">
-                                COLORES DAYAM
-                            </span>
+                            <div className="flex items-center gap-2">
+                                <span className="font-heading font-extrabold text-lg tracking-tight text-white block">
+                                    COLORES DAYAM
+                                </span>
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                                    v2.5
+                                </span>
+                            </div>
                             <span className="text-[10px] text-slate-400 tracking-wider uppercase block">Color Studio</span>
                         </div>
                     </div>
+
                     
                     <div className="flex items-center gap-2 sm:gap-3">
                         <button

@@ -483,15 +483,21 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
         {/* --- MODIFICADO --- Oculto en móvil (hidden) y visible en desktop (md:flex) */}
         <div className="hidden md:flex items-center gap-3 sm:gap-4 flex-shrink-0">
           <img src="https://i.imgur.com/kOfAlJT.png" alt="Colores DaYam Logo" className="h-12 w-12 rounded-lg"/>
-          <h1 className="font-pacifico text-rainbow-gradient pb-1">
-            Colores DaYam
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="font-pacifico text-rainbow-gradient pb-1">
+              Colores DaYam
+            </h1>
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 shadow-sm">
+              v2.5
+            </span>
+          </div>
           {!isSplitViewActive && !isSimulationSidebarVisible && !isColorPickerSidebarVisible && (
             <p className="text-sm text-gray-500 hidden lg:block ml-4">
                 ¡ <kbd className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-md">barra espaciadora</kbd> para generar colores!
             </p>
           )}
         </div>
+
         
         {/* --- MODIFICADO --- 
           - En móvil, ocupa todo el ancho (w-full) y justifica botones (justify-around)
