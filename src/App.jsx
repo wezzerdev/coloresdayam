@@ -475,276 +475,240 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
       
       <input type="file" ref={importFileRef} onChange={handleImport} accept=".json" className="hidden"/>
       
-      {/* --- ¡HEADER MODIFICADO! --- */}
-      {/* Movido al fondo en móvil (fixed bottom-0) y vuelve a ser relativo en desktop (md:relative) */}
-      {/* Se añade padding inferior 'pb-[env(safe-area-inset-bottom)]' para respetar la barra de iOS */}
+      {/* --- ENCABEZADO PRO E IMPECABLE (v2.7) --- */}
       <header 
-        className="flex justify-between items-center py-3 px-4 md:px-8 bg-white border-t md:border-t-0 md:border-b border-gray-200 fixed bottom-0 left-0 right-0 z-50 md:relative pb-[env(safe-area-inset-bottom)] md:pb-3"
-        style={{ borderColor: 'var(--border-default)'}}
+        className="flex justify-between items-center py-2.5 px-4 md:px-6 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/80 sticky top-0 z-50 text-white shadow-xl"
       >
-        {/* --- ENCABEZADO DE ESCRITORIO --- */}
-        <div className="hidden md:flex items-center gap-3 sm:gap-4 flex-shrink-0">
-          <img src="https://i.imgur.com/kOfAlJT.png" alt="Colores DaYam Logo" className="h-12 w-12 rounded-lg"/>
-          <div className="flex items-center gap-2">
-            <h1 className="font-pacifico text-rainbow-gradient pb-1">
-              Colores DaYam
-            </h1>
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/10 text-indigo-600 border border-indigo-500/20 shadow-sm">
-              v2.6
-            </span>
+        {/* --- SECCIÓN IZQUIERDA: IDENTIDAD & PALETA ACTIVA --- */}
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <div 
+            className="flex items-center gap-2.5 cursor-pointer group"
+            onClick={() => setIsLandingVisible(true)}
+          >
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 p-0.5 shadow-md group-hover:scale-105 transition-transform flex items-center justify-center">
+              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                <Palette size={18} className="text-indigo-400" />
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-sm tracking-tight text-white font-sans uppercase">
+                Colores Dayam
+              </span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
+                v2.7
+              </span>
+            </div>
           </div>
 
-          {/* Insignia de Nombre de Paleta e IA Estética */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-semibold shadow-sm border border-slate-800 ml-2">
-            <Sparkles size={14} className="text-amber-400" />
-            <span className="text-slate-100">{generatePoeticPaletteName(explorerPalette)}</span>
-            <span className="px-1.5 py-0.2 rounded-full text-[9px] font-bold uppercase bg-purple-500/30 text-purple-300 border border-purple-500/30">
+          <div className="hidden xl:block h-4 w-px bg-slate-800"></div>
+
+          {/* CÁPSULA DE NOMBRE DE PALETA E IA ESTÉTICA */}
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-semibold">
+            <Sparkles size={14} className="text-amber-400 animate-pulse" />
+            <span className="text-slate-200">{generatePoeticPaletteName(explorerPalette)}</span>
+            <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-purple-500/20 text-purple-300 border border-purple-500/30">
               Afinidad IA
             </span>
           </div>
-
-          {!isSplitViewActive && !isSimulationSidebarVisible && !isColorPickerSidebarVisible && (
-            <p className="text-sm text-gray-500 hidden xl:block ml-2">
-                ¡ <kbd className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-md">barra espaciadora</kbd> para generar!
-            </p>
-          )}
         </div>
 
+        {/* --- SECCIÓN CENTRAL: GENERADOR PRINCIPAL --- */}
+        <div className="hidden md:flex items-center gap-2">
+          <button
+            onClick={handleRandomTheme}
+            className="flex items-center gap-2 px-4 py-1.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs shadow-md shadow-indigo-600/20 active:scale-95 transition-all ring-1 ring-white/10"
+            title="Generar nueva paleta (Barra Espaciadora)"
+          >
+            <RefreshCcw size={14} className="animate-spin-slow" />
+            <span>Generar Paleta</span>
+            <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[9px] font-extrabold bg-black/30 border border-white/20 rounded-md text-white/90 uppercase ml-1">
+              Espacio
+            </kbd>
+          </button>
+        </div>
 
-        
-        {/* --- MODIFICADO --- 
-          - En móvil, ocupa todo el ancho (w-full) y justifica botones (justify-around)
-          - En desktop, vuelve a la normalidad (md:w-auto md:justify-end)
-        */}
-        <div className="flex items-center gap-1.5 sm:gap-2 w-full md:w-auto justify-around md:justify-end">
+        {/* --- SECCIÓN DERECHA: GRUPOS DE HERRAMIENTAS ORGANIZADAS --- */}
+        <div className="flex items-center gap-2">
           
-          {/* Botones de IA, Método, Imagen (Ocultos en móvil por simplicidad) */}
-          <button 
+          {/* GRUPO 1: CREACIÓN E IA */}
+          <div className="hidden md:flex items-center bg-slate-900/80 p-1 rounded-xl border border-slate-800/80 gap-0.5">
+            <button 
               onClick={() => setIsAIModalVisible(true)} 
-              className="text-sm font-medium p-2 rounded-lg hidden md:flex items-center gap-2 text-white transition-all hover:opacity-90 active:scale-95" 
-              style={{ background: 'linear-gradient(to right, #E0405A, #F59A44, #56B470, #4A90E2, #6F42C1)' }}
+              className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
               title="Generar con IA"
-          >
-              <Sparkles size={16} strokeWidth={1.75} />
-          </button>
-          
-          <div className="relative hidden md:block"> {/* Oculto en móvil */}
+            >
+              <Sparkles size={16} className="text-amber-400" />
+            </button>
+            
+            <div className="relative">
               <button 
-                  onClick={() => setIsMethodMenuVisible(true)} 
-                  className="text-sm font-medium p-2 rounded-lg flex items-center gap-2 text-gray-800 hover:bg-gray-100" 
-                  title="Método de Generación"
+                onClick={() => setIsMethodMenuVisible(p => !p)} 
+                className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1"
+                title="Método de Armonía"
               >
-                  <Wand2 size={16} strokeWidth={1.75}/>
+                <Wand2 size={16} className="text-indigo-400" />
               </button>
-                {isMethodMenuVisible && (
-                  // --- ¡MODIFICADO! --- Se elimina direction="up"
-                  <PopoverMenu onClose={() => setIsMethodMenuVisible(false)}>
-                      {generationMethods.map(method => (
-                          method.isHeader ? (
-                              <div 
-                                  key={method.name} 
-                                  className="px-3 pt-2 pb-1 text-xs font-bold uppercase text-gray-400 tracking-wider"
-                              >
-                                  {method.name}
-                              </div>
-                          ) : (
-                              <button 
-                                  key={method.id} 
-                                  onClick={() => { setExplorerMethod(method.id); setIsMethodMenuVisible(false); }} 
-                                  className={`w-full text-left px-3 py-1.5 text-sm ${explorerMethod === method.id ? 'font-bold text-purple-600' : 'text-gray-800'} hover:bg-gray-100 rounded-md`}
-                              >
-                                  {method.name}
-                              </button>
-                          )
-                      ))}
-                  </PopoverMenu>
+              {isMethodMenuVisible && (
+                <PopoverMenu onClose={() => setIsMethodMenuVisible(false)}>
+                  {generationMethods.map(method => (
+                    method.isHeader ? (
+                      <div key={method.name} className="px-3 pt-2 pb-1 text-[10px] font-extrabold uppercase text-slate-400 tracking-wider">
+                        {method.name}
+                      </div>
+                    ) : (
+                      <button 
+                        key={method.id} 
+                        onClick={() => { setExplorerMethod(method.id); setIsMethodMenuVisible(false); }} 
+                        className={`w-full text-left px-3 py-1.5 text-xs ${explorerMethod === method.id ? 'font-bold text-indigo-400 bg-indigo-500/10' : 'text-slate-200'} hover:bg-slate-800 rounded-md`}
+                      >
+                        {method.name}
+                      </button>
+                    )
+                  ))}
+                </PopoverMenu>
               )}
-          </div>
-          <button 
+            </div>
+
+            <button 
               onClick={() => setIsImageModalVisible(true)} 
-              className="text-sm font-medium p-2 rounded-lg hidden md:flex items-center gap-2 text-gray-800 hover:bg-gray-100" // Oculto en móvil
+              className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
               title="Extraer de Imagen"
-          >
-              <ImageIcon size={16} strokeWidth={1.75} />
-          </button>
-          
-          <button 
+            >
+              <ImageIcon size={16} className="text-emerald-400" />
+            </button>
+            
+            <button 
               onClick={handleOpenBrandColorPicker} 
-              className="text-sm font-medium p-2 rounded-lg hidden md:flex items-center gap-2 text-gray-800 hover:bg-gray-100" // Oculto en móvil
+              className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
               title="Ajustar Paleta"
-          >
-              <SlidersHorizontal size={16} strokeWidth={1.75} /> 
-          </button>
-          
-          {/* --- BOTÓN DE LAYOUT (SOLO DESKTOP) --- */}
-          <button 
+            >
+              <SlidersHorizontal size={16} />
+            </button>
+          </div>
+
+          {/* GRUPO 2: HERRAMIENTAS & VISTA */}
+          <div className="hidden md:flex items-center bg-slate-900/80 p-1 rounded-xl border border-slate-800/80 gap-0.5">
+            <button 
               onClick={() => setPaletteLayout(p => p === 'vertical' ? 'horizontal' : 'vertical')} 
-              className="text-sm font-medium p-2 rounded-lg hidden md:flex items-center gap-2 text-gray-800 hover:bg-gray-100" // 'hidden md:flex'
+              className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
               title={paletteLayout === 'vertical' ? "Vista Horizontal" : "Vista Vertical"}
-          >
-              {paletteLayout === 'vertical' ? <Rows3 size={16} strokeWidth={1.75} /> : <Columns3 size={16} strokeWidth={1.75} />}
-          </button>
+            >
+              {paletteLayout === 'vertical' ? <Rows3 size={16} /> : <Columns3 size={16} />}
+            </button>
 
-          {/* --- BOTÓN DE GENERAR (SOLO MÓVIL, REEMPLAZA FAB) --- */}
-          {/* --- ¡MODIFICADO! --- Estilo de botón cambiado a uno simple de ícono */}
-          <button 
-              onClick={handleRandomTheme} 
-              className="text-sm font-medium p-2 rounded-lg flex items-center justify-center gap-1 text-gray-800 hover:bg-gray-100 transition-all active:scale-95 md:hidden" // 'md:hidden'
-              title="Generar Aleatorio"
-          >
-              <Sparkles size={16} strokeWidth={1.75} />
-              {/* Se elimina el texto "Generar" para un look de ícono limpio */}
-          </button>
-
-          <button 
+            <button 
               onClick={handleOpenSimulationSidebar} 
-              className="text-sm font-medium p-2 rounded-lg hidden md:flex items-center gap-2 text-gray-800 hover:bg-gray-100" // Oculto en móvil
-              title="Daltonismo"
-          >
-              <Eye size={16} strokeWidth={1.75} /> 
-          </button>
-          <div className="relative hidden md:block"> {/* Oculto en móvil */}
+              className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
+              title="Simulación Daltonismo"
+            >
+              <Eye size={16} />
+            </button>
+
+            <div className="relative">
               <button 
-                  onClick={() => setIsToolsMenuVisible(p => !p)}
-                  className="text-sm font-medium p-2 rounded-lg flex items-center gap-2 text-gray-800 hover:bg-gray-100" 
-                  title="Más herramientas"
+                onClick={() => setIsToolsMenuVisible(p => !p)}
+                className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
+                title="Más Herramientas"
               >
-                  <MoreHorizontal size={16} strokeWidth={1.75}/>
+                <MoreHorizontal size={16}/>
               </button>
               {isToolsMenuVisible && (
-                  // --- ¡MODIFICADO! --- Se elimina direction="up"
-                  <PopoverMenu onClose={() => setIsToolsMenuVisible(false)}>
-                      <MenuButton icon={<Accessibility size={16} strokeWidth={1.75}/>} label="Accesibilidad" onClick={() => { setIsAccessibilityModalVisible(true); setIsToolsMenuVisible(false); }} />
-                      <MenuButton icon={<TestTube2 size={16} strokeWidth={1.75}/>} label="Componentes" onClick={() => { setIsComponentPreviewModalVisible(true); setIsToolsMenuVisible(false); }} />
-                      <MenuButton icon={<Palette size={16} strokeWidth={1.75}/>} label="Variaciones" onClick={() => { setIsVariationsVisible(true); setIsToolsMenuVisible(false); }} />
-                      <MenuButton icon={<ShieldCheck size={16} strokeWidth={1.75}/>} label="Matriz de Contraste" onClick={() => { setIsContrastCheckerVisible(true); setIsToolsMenuVisible(false); }} />
-                  </PopoverMenu>
+                <PopoverMenu onClose={() => setIsToolsMenuVisible(false)}>
+                  <MenuButton icon={<Accessibility size={16}/>} label="Accesibilidad" onClick={() => { setIsAccessibilityModalVisible(true); setIsToolsMenuVisible(false); }} />
+                  <MenuButton icon={<TestTube2 size={16}/>} label="Componentes" onClick={() => { setIsComponentPreviewModalVisible(true); setIsToolsMenuVisible(false); }} />
+                  <MenuButton icon={<Palette size={16}/>} label="Variaciones" onClick={() => { setIsVariationsVisible(true); setIsToolsMenuVisible(false); }} />
+                  <MenuButton icon={<ShieldCheck size={16}/>} label="Matriz de Contraste" onClick={() => { setIsContrastCheckerVisible(true); setIsToolsMenuVisible(false); }} />
+                  <div className="h-px bg-slate-800 my-1"></div>
+                  <MenuButton icon={<FileCode size={16}/>} label="Exportar Código" onClick={() => { setExportingPaletteData(themeData); setIsExportModalVisible(true); setIsToolsMenuVisible(false); }} />
+                </PopoverMenu>
               )}
+            </div>
           </div>
-          {/* Separador oculto en móvil */}
-          <div className="h-6 w-px bg-gray-200 mx-1 hidden md:block"></div> 
 
-          {/* Botones principales de la barra inferior móvil */}
-          <button 
+          {/* GRUPO 3: HISTORIAL */}
+          <div className="hidden lg:flex items-center bg-slate-900/80 p-1 rounded-xl border border-slate-800/80 gap-0.5">
+            <button 
               onClick={handleUndo} 
               disabled={!history || historyIndex <= 0}
-              className="text-sm font-medium p-2 rounded-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-gray-800 hover:bg-gray-100" 
+              className="p-2 rounded-lg text-slate-300 hover:text-white disabled:opacity-40 disabled:hover:bg-transparent hover:bg-slate-800/80 transition-colors"
               title="Deshacer"
-          >
-              <Undo2 size={16} strokeWidth={1.75} />
-          </button>
-          <button 
+            >
+              <Undo2 size={16} />
+            </button>
+            <button 
               onClick={handleRedo} 
               disabled={!history || historyIndex >= history.length - 1}
-              className="text-sm font-medium p-2 rounded-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-gray-800 hover:bg-gray-100" 
+              className="p-2 rounded-lg text-slate-300 hover:text-white disabled:opacity-40 disabled:hover:bg-transparent hover:bg-slate-800/80 transition-colors"
               title="Rehacer"
-          >
-              <Redo2 size={16} strokeWidth={1.75} />
-          </button>
-          <button 
+            >
+              <Redo2 size={16} />
+            </button>
+            <button 
               onClick={() => setIsHistoryModalVisible(true)} 
-              className="text-sm font-medium p-2 rounded-lg hidden md:flex items-center gap-2 text-gray-800 hover:bg-gray-100" // Oculto en móvil
-              title="Historial"
-          >
-              <Clock size={16} strokeWidth={1.75} />
-          </button>
-          <button 
-              onClick={handleThemeToggle} 
-              className="text-sm font-medium p-2 rounded-lg hidden md:flex items-center gap-2 text-gray-800 hover:bg-gray-100" // Oculto en móvil
-              title="Alternar tema"
-          >
-              {themeData.theme === 'light' ? <Moon size={16} strokeWidth={1.75} /> : <Sun size={16} strokeWidth={1.75} />}
-          </button>
-          
-          {/* Botón de exportar (ahora es el '...') */}
-          <div className="relative md:hidden"> {/* Solo visible en móvil */}
-              <button 
-                  onClick={() => setIsToolsMenuVisible(p => !p)}
-                  className="text-sm font-medium p-2 rounded-lg flex items-center gap-2 text-gray-800 hover:bg-gray-100" 
-                  title="Más herramientas"
-              >
-                  <MoreHorizontal size={16} strokeWidth={1.75}/>
-              </button>
-              {isToolsMenuVisible && (
-                  // --- ¡MODIFICADO! --- Se elimina direction="up"
-                  <PopoverMenu onClose={() => setIsToolsMenuVisible(false)}>
-                      <MenuButton icon={<Palette size={16} strokeWidth={1.75}/>} label="Variaciones" onClick={() => { setIsVariationsVisible(true); setIsToolsMenuVisible(false); }} />
-                      <MenuButton icon={<ShieldCheck size={16} strokeWidth={1.75}/>} label="Matriz de Contraste" onClick={() => { setIsContrastCheckerVisible(true); setIsToolsMenuVisible(false); }} />
-                      <MenuButton icon={<Eye size={16} strokeWidth={1.75}/>} label="Daltonismo" onClick={() => { handleOpenSimulationSidebar(); setIsToolsMenuVisible(false); }} />
-                      <MenuButton icon={<Accessibility size={16} strokeWidth={1.75}/>} label="Accesibilidad" onClick={() => { setIsAccessibilityModalVisible(true); setIsToolsMenuVisible(false); }} />
-                      <MenuButton icon={<TestTube2 size={16} strokeWidth={1.75}/>} label="Componentes" onClick={() => { setIsComponentPreviewModalVisible(true); setIsToolsMenuVisible(false); }} />
-                      <div className="h-px bg-gray-200 my-1"></div>
-                      <MenuButton icon={<FileCode size={16} strokeWidth={1.75}/>} label="Exportar" onClick={() => { setExportingPaletteData(themeData); setIsExportModalVisible(true); setIsToolsMenuVisible(false); }} />
-                  </PopoverMenu>
-              )}
+              className="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors"
+              title="Historial de Paletas"
+            >
+              <Clock size={16} />
+            </button>
           </div>
-          
-          <button 
-              onClick={() => {
-                setExportingPaletteData(themeData);
-                setIsExportModalVisible(true);
-              }}
-              className="text-sm font-medium p-2 rounded-lg hidden md:flex items-center gap-2 text-gray-800 hover:bg-gray-100" // Oculto en móvil
-              title="Exportar"
-          >
-              <FileCode size={16} strokeWidth={1.75} />
-          </button>
 
+          {/* GRUPO 4: ACCIONES PRINCIPALES (GUARDAR & PERFIL) */}
+          <div className="flex items-center gap-1.5 ml-1">
+            <button 
+              onClick={handleOpenMyPalettesSidebar}
+              className="p-2 rounded-xl text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-colors hidden sm:flex"
+              title="Mis Paletas Guardadas"
+            >
+              <FolderOpen size={16} />
+            </button>
 
-          <div className="h-6 w-px bg-gray-200 mx-1 hidden md:block"></div>
+            <button 
+              onClick={handleOpenSaveSidebar}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-md transition-all active:scale-95"
+              title="Guardar Paleta Actual"
+            >
+              <Save size={15} />
+              <span className="hidden sm:inline">Guardar</span>
+            </button>
 
-          {/* Lógica de Usuario (visible en ambas vistas) */}
-          {user ? (
-            <>
-              <button 
-                  onClick={handleOpenSaveSidebar}
-                  className="text-sm font-medium p-2 rounded-lg flex items-center gap-2 text-gray-800 hover:bg-gray-100" 
-                  title={currentPaletteId ? "Actualizar Paleta" : "Guardar Paleta"}
-              >
-                  <Save size={16} strokeWidth={1.75} />
-              </button>
-
-              <button 
-                  onClick={handleOpenMyPalettesSidebar}
-                  className="text-sm font-medium p-2 rounded-lg flex items-center gap-2 text-gray-800 hover:bg-gray-100" 
-                  title="Mis Paletas"
-              >
-                  <FolderOpen size={16} strokeWidth={1.75}/>
-              </button>
-              
+            {user ? (
               <div className="relative">
                 <button 
-                    onClick={() => setIsUserMenuVisible(p => !p)}
-                    className="p-2 rounded-lg flex items-center gap-2 text-gray-800 hover:bg-gray-100" 
-                    title="Mi Cuenta"
+                  onClick={() => setIsUserMenuVisible(p => !p)}
+                  className="p-1.5 rounded-xl text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-colors flex items-center gap-1.5"
+                  title="Mi Cuenta"
                 >
-                    <User size={16} strokeWidth={1.75}/>
+                  <div className="h-6 w-6 rounded-lg bg-indigo-600/30 text-indigo-400 flex items-center justify-center text-xs font-extrabold uppercase">
+                    {user.name ? user.name.charAt(0) : 'U'}
+                  </div>
                 </button>
                 {isUserMenuVisible && (
-                    <PopoverMenu onClose={() => setIsUserMenuVisible(false)}>
-                        <div className="px-3 py-2">
-                            <p className="text-sm font-semibold text-slate-100 truncate">{user.name || user.email}</p>
-                            <p className="text-xs text-indigo-400 font-medium">Cuenta Activa</p>
-                        </div>
-                        <div className="h-px bg-slate-800 my-1"></div>
-                        <MenuButton icon={<User size={16} strokeWidth={1.75}/>} label="Mi Perfil" onClick={() => { setIsProfileModalVisible(true); setIsUserMenuVisible(false); }} />
-                        <MenuButton icon={<LogOut size={16} strokeWidth={1.75}/>} label="Cerrar Sesión" onClick={handleLogoutClick} />
-                    </PopoverMenu>
-
+                  <PopoverMenu onClose={() => setIsUserMenuVisible(false)}>
+                    <div className="px-3 py-2">
+                      <p className="text-sm font-semibold text-slate-100 truncate">{user.name || user.email}</p>
+                      <p className="text-xs text-indigo-400 font-medium">Cuenta Activa</p>
+                    </div>
+                    <div className="h-px bg-slate-800 my-1"></div>
+                    <MenuButton icon={<User size={16}/>} label="Mi Perfil" onClick={() => { setIsProfileModalVisible(true); setIsUserMenuVisible(false); }} />
+                    <MenuButton icon={<LogOut size={16}/>} label="Cerrar Sesión" onClick={handleLogoutClick} />
+                  </PopoverMenu>
                 )}
               </div>
-            </>
-          ) : (
-            <>
+            ) : (
               <button 
-                onClick={() => onNavigate('auth')}
-                className="text-sm font-semibold py-2 px-3 rounded-lg flex items-center gap-2 text-white transition-all hover:opacity-90 active:scale-95"
-                style={{ background: 'linear-gradient(to right, #E0405A, #F59A44, #56B470, #4A90E2, #6F42C1)' }}
+                onClick={() => setIsAuthModalVisible(true)}
+                className="p-2 rounded-xl text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 transition-colors flex items-center gap-1.5 text-xs font-semibold"
                 title="Iniciar Sesión"
               >
-                <LogIn size={14} strokeWidth={1.75} />
-                <span className="hidden sm:inline">Iniciar Sesión</span>
+                <LogIn size={15} />
+                <span className="hidden sm:inline">Entrar</span>
               </button>
+            )}
+          </div>
+
+        </div>
+      </header>
+
 
               {/* Botón de Hamburguesa (Config) solo en móvil */}
               <div className="relative md:hidden"> {/* Oculto en desktop */}
