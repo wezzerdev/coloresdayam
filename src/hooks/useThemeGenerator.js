@@ -753,7 +753,10 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
         setHistory([initialState]);
         setHistoryIndex(0);
         showNotification("Tema reiniciado.");
+    };
+
     useEffect(() => {
+
         if (theme === 'dark') {
             document.documentElement.classList.add('dark');
         } else {
