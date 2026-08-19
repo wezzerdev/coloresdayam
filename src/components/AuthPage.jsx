@@ -172,33 +172,34 @@ const AuthPage = ({ onNavigate }) => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-950 p-4 font-sans relative overflow-hidden text-slate-100">
-            {/* Formas sutiles con desenfoque de fondo */}
-            <div className="absolute -top-32 -left-32 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-pink-600/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="min-h-screen flex items-center justify-center bg-white dark:bg-zinc-950 p-4 font-sans relative overflow-hidden text-zinc-900 dark:text-zinc-100 transition-colors duration-200">
+            {/* Formas sutiles neutras con desenfoque de fondo */}
+            <div className="absolute -top-32 -left-32 w-96 h-96 bg-zinc-400/10 dark:bg-zinc-800/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-            <div className="max-w-md w-full glass-panel rounded-3xl p-8 border border-slate-800/80 shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-200">
+            <div className="max-w-md w-full bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800/90 shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-200">
                 
                 {/* Logo & Marca */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold mb-3">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 text-xs font-bold mb-3">
                         <Sparkles size={13} />
                         <span>Conectado a Supabase</span>
                     </div>
-                    <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 p-0.5 shadow-xl shadow-indigo-500/25 mb-4 group cursor-pointer" onClick={() => onNavigate('landing')}>
-                        <div className="h-full w-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-                            <Palette className="h-8 w-8 text-indigo-400" />
-                        </div>
+                    <div 
+                        className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-blue-600 text-white shadow-xl shadow-blue-600/25 mb-4 group cursor-pointer hover:scale-105 transition-transform" 
+                        onClick={() => onNavigate('landing')}
+                    >
+                        <Palette className="h-8 w-8 text-white" strokeWidth={2} />
                     </div>
 
-                    <h1 className="text-2xl font-extrabold font-heading tracking-tight text-slate-100">
+                    <h1 className="text-2xl font-black font-heading tracking-tight text-zinc-900 dark:text-white uppercase">
                         {mode === 'LOGIN' && 'Bienvenido de Nuevo'}
                         {mode === 'SIGNUP' && 'Crea tu Cuenta Profesional'}
                         {mode === 'VERIFY_CODE' && 'Confirmar Cuenta'}
                         {mode === 'FORGOT_PASSWORD' && 'Recuperar Contraseña'}
                         {mode === 'RESET_PASSWORD' && 'Definir Nueva Contraseña'}
                     </h1>
-                    <p className="text-slate-400 text-xs sm:text-sm mt-1">
+                    <p className="text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm mt-1">
                         {mode === 'LOGIN' && 'Accede a tu estudio de color y paletas guardadas.'}
                         {mode === 'SIGNUP' && 'Guarda, audita y sincroniza tus sistemas de diseño.'}
                         {mode === 'VERIFY_CODE' && `Ingresa el código de 6 dígitos enviado a ${email}`}
@@ -209,14 +210,14 @@ const AuthPage = ({ onNavigate }) => {
 
                 {/* Mensajes de Alerta */}
                 {error && (
-                    <div className="mb-5 p-3.5 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs sm:text-sm flex items-center gap-2.5 animate-in fade-in">
+                    <div className="mb-5 p-3.5 rounded-2xl bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-xs sm:text-sm flex items-center gap-2.5 animate-in fade-in font-medium">
                         <AlertTriangle size={18} className="flex-shrink-0" />
                         <span>{error}</span>
                     </div>
                 )}
 
                 {message && (
-                    <div className="mb-5 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs sm:text-sm flex items-center gap-2.5 animate-in fade-in">
+                    <div className="mb-5 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs sm:text-sm flex items-center gap-2.5 animate-in fade-in font-medium">
                         <CheckCircle2 size={18} className="flex-shrink-0" />
                         <span>{message}</span>
                     </div>
@@ -224,12 +225,12 @@ const AuthPage = ({ onNavigate }) => {
 
                 {/* Aviso visual de código para pruebas locales */}
                 {generatedCodeNotice && (
-                    <div className="mb-5 p-3.5 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs text-center flex flex-col items-center gap-1 font-mono">
-                        <div className="flex items-center gap-1.5 font-bold text-indigo-400">
+                    <div className="mb-5 p-3.5 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-300 text-xs text-center flex flex-col items-center gap-1 font-mono">
+                        <div className="flex items-center gap-1.5 font-bold text-blue-600 dark:text-blue-400">
                             <Sparkles size={14} />
                             <span>Código de Verificación Generado:</span>
                         </div>
-                        <span className="text-xl font-bold tracking-widest text-white bg-slate-900 px-4 py-1.5 rounded-xl border border-indigo-500/40 my-1">
+                        <span className="text-xl font-bold tracking-widest text-zinc-900 dark:text-white bg-zinc-100 dark:bg-zinc-950 px-4 py-1.5 rounded-xl border border-blue-500/40 my-1">
                             {generatedCodeNotice}
                         </span>
                     </div>
@@ -239,25 +240,25 @@ const AuthPage = ({ onNavigate }) => {
                 {mode === 'LOGIN' && (
                     <form onSubmit={handleLogin} className="space-y-4">
                         <div className="relative">
-                            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="email"
                                 placeholder="correo@ejemplo.com"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
                         <div className="relative">
-                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="password"
                                 placeholder="Contraseña"
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
 
@@ -265,7 +266,7 @@ const AuthPage = ({ onNavigate }) => {
                             <button
                                 type="button"
                                 onClick={() => { setMode('FORGOT_PASSWORD'); resetMessages(); }}
-                                className="text-xs text-indigo-400 hover:text-indigo-300 hover:underline"
+                                className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-semibold"
                             >
                                 ¿Olvidaste tu contraseña?
                             </button>
@@ -274,7 +275,7 @@ const AuthPage = ({ onNavigate }) => {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="touch-target w-full font-semibold py-3 px-4 rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/25 transition-all transform hover:scale-[1.01] flex items-center justify-center disabled:opacity-50 focus-ring"
+                            className="touch-target w-full font-extrabold py-3 px-4 rounded-xl text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/25 transition-all transform hover:scale-[1.01] flex items-center justify-center disabled:opacity-50 focus-ring"
                         >
                             {loading ? <Loader2 size={20} className="animate-spin" /> : 'Iniciar Sesión'}
                         </button>
@@ -285,57 +286,57 @@ const AuthPage = ({ onNavigate }) => {
                 {mode === 'SIGNUP' && (
                     <form onSubmit={handleSignup} className="space-y-4">
                         <div className="relative">
-                            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="text"
                                 placeholder="Nombre completo"
                                 required
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
 
                         <div className="relative">
-                            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="email"
                                 placeholder="correo@ejemplo.com"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
 
                         <div className="relative">
-                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="password"
                                 placeholder="Contraseña (mínimo 6 caracteres)"
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
 
                         <div className="relative">
-                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="password"
                                 placeholder="Confirmar contraseña"
                                 required
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
                         
                         <button
                             type="submit"
                             disabled={loading}
-                            className="touch-target w-full font-semibold py-3 px-4 rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/25 transition-all transform hover:scale-[1.01] flex items-center justify-center disabled:opacity-50 focus-ring"
+                            className="touch-target w-full font-extrabold py-3 px-4 rounded-xl text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/25 transition-all transform hover:scale-[1.01] flex items-center justify-center disabled:opacity-50 focus-ring"
                         >
                             {loading ? <Loader2 size={20} className="animate-spin" /> : 'Crear Cuenta'}
                         </button>
@@ -346,7 +347,7 @@ const AuthPage = ({ onNavigate }) => {
                 {mode === 'VERIFY_CODE' && (
                     <form onSubmit={handleVerifyCode} className="space-y-4">
                         <div className="relative">
-                            <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="text"
                                 maxLength={6}
@@ -354,14 +355,14 @@ const AuthPage = ({ onNavigate }) => {
                                 required
                                 value={verificationCode}
                                 onChange={(e) => setVerificationCode(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-center font-mono text-lg tracking-widest focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-3 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-center font-mono text-lg tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
 
                         <button
                             type="submit"
                             disabled={loading}
-                            className="touch-target w-full font-semibold py-3 px-4 rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/25 transition-all flex items-center justify-center disabled:opacity-50 focus-ring"
+                            className="touch-target w-full font-extrabold py-3 px-4 rounded-xl text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/25 transition-all flex items-center justify-center disabled:opacity-50 focus-ring"
                         >
                             {loading ? <Loader2 size={20} className="animate-spin" /> : 'Confirmar y Activar Cuenta'}
                         </button>
@@ -372,21 +373,21 @@ const AuthPage = ({ onNavigate }) => {
                 {mode === 'FORGOT_PASSWORD' && (
                     <form onSubmit={handleForgotPassword} className="space-y-4">
                         <div className="relative">
-                            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="email"
                                 placeholder="correo@ejemplo.com"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
 
                         <button
                             type="submit"
                             disabled={loading}
-                            className="touch-target w-full font-semibold py-3 px-4 rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/25 transition-all flex items-center justify-center disabled:opacity-50 focus-ring"
+                            className="touch-target w-full font-extrabold py-3 px-4 rounded-xl text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/25 transition-all flex items-center justify-center disabled:opacity-50 focus-ring"
                         >
                             {loading ? <Loader2 size={20} className="animate-spin" /> : 'Enviar Código de Recuperación'}
                         </button>
@@ -397,7 +398,7 @@ const AuthPage = ({ onNavigate }) => {
                 {mode === 'RESET_PASSWORD' && (
                     <form onSubmit={handleResetPassword} className="space-y-4">
                         <div className="relative">
-                            <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="text"
                                 maxLength={6}
@@ -405,38 +406,38 @@ const AuthPage = ({ onNavigate }) => {
                                 required
                                 value={verificationCode}
                                 onChange={(e) => setVerificationCode(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-center font-mono text-base tracking-widest focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-center font-mono text-base tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
 
                         <div className="relative">
-                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="password"
                                 placeholder="Nueva contraseña (min 6 carac.)"
                                 required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
 
                         <div className="relative">
-                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="password"
                                 placeholder="Confirmar nueva contraseña"
                                 required
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
 
                         <button
                             type="submit"
                             disabled={loading}
-                            className="touch-target w-full font-semibold py-3 px-4 rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/25 transition-all flex items-center justify-center disabled:opacity-50 focus-ring"
+                            className="touch-target w-full font-extrabold py-3 px-4 rounded-xl text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/25 transition-all flex items-center justify-center disabled:opacity-50 focus-ring"
                         >
                             {loading ? <Loader2 size={20} className="animate-spin" /> : 'Restablecer Contraseña'}
                         </button>
@@ -444,12 +445,12 @@ const AuthPage = ({ onNavigate }) => {
                 )}
 
                 {/* Alternador de Vistas / Links */}
-                <div className="text-center mt-6 pt-4 border-t border-slate-800/80 flex flex-col items-center gap-2">
+                <div className="text-center mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col items-center gap-2">
                     {mode === 'LOGIN' && (
                         <button
                             type="button"
                             onClick={() => { setMode('SIGNUP'); resetMessages(); }}
-                            className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold hover:underline"
+                            className="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline"
                         >
                             ¿No tienes cuenta? Regístrate aquí
                         </button>
@@ -459,7 +460,7 @@ const AuthPage = ({ onNavigate }) => {
                         <button
                             type="button"
                             onClick={() => { setMode('LOGIN'); resetMessages(); }}
-                            className="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1.5 hover:underline"
+                            className="text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 flex items-center gap-1.5 hover:underline font-semibold"
                         >
                             <ArrowLeft size={14} />
                             <span>Volver al Inicio de Sesión</span>

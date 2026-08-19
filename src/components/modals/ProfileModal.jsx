@@ -76,37 +76,37 @@ const ProfileModal = ({ user, onClose, onUserUpdated }) => {
 
     return (
         <div 
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200"
+            className="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-200"
             onClick={onClose}
             role="dialog"
             aria-modal="true"
             aria-labelledby="profile-modal-title"
         >
             <div 
-                className="w-full sm:max-w-md bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-3xl shadow-2xl p-6 relative flex flex-col max-h-[90vh] text-slate-100 animate-in slide-in-from-bottom-4 sm:zoom-in-95 duration-200"
+                className="w-full sm:max-w-md bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-t-3xl sm:rounded-3xl shadow-2xl p-6 relative flex flex-col max-h-[90vh] text-zinc-900 dark:text-zinc-100 animate-in slide-in-from-bottom-4 sm:zoom-in-95 duration-200"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Visual drag handle en móvil */}
-                <div className="w-12 h-1.5 bg-slate-700 rounded-full mx-auto mb-4 sm:hidden"></div>
+                <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 sm:hidden"></div>
 
                 {/* Header Modal */}
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
+                <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800 mb-4">
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-bold text-lg">
+                        <div className="h-10 w-10 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center font-bold text-lg uppercase">
                             {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
                         </div>
                         <div>
-                            <h2 id="profile-modal-title" className="text-base sm:text-lg font-bold font-heading text-slate-100">
+                            <h2 id="profile-modal-title" className="text-base sm:text-lg font-extrabold font-heading tracking-tight text-zinc-900 dark:text-white uppercase">
                                 Mi Perfil de Usuario
                             </h2>
-                            <p className="text-xs text-slate-400">{user?.email}</p>
+                            <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">{user?.email}</p>
                         </div>
                     </div>
                     <button 
                         type="button"
                         onClick={onClose} 
                         aria-label="Cerrar modal de perfil"
-                        className="touch-target p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors focus-ring"
+                        className="touch-target p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-ring"
                     >
                         <X size={20}/>
                     </button>
@@ -116,8 +116,8 @@ const ProfileModal = ({ user, onClose, onUserUpdated }) => {
                 {message.text && (
                     <div className={`mb-4 p-3 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-2 ${
                         message.type === 'error' 
-                            ? 'bg-red-500/10 text-red-400 border border-red-500/30' 
-                            : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                            ? 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30' 
+                            : 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
                     }`}>
                         {message.type === 'error' ? <AlertCircle size={16}/> : <CheckCircle2 size={16}/>}
                         <span>{message.text}</span>
@@ -126,87 +126,87 @@ const ProfileModal = ({ user, onClose, onUserUpdated }) => {
 
                 <div className="overflow-y-auto pr-1 space-y-6">
                     {/* Badge de cuenta verificada */}
-                    <div className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-2 text-slate-300 font-medium">
-                            <ShieldCheck size={16} className="text-emerald-400" />
+                    <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs">
+                        <div className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300 font-medium">
+                            <ShieldCheck size={16} className="text-emerald-500 dark:text-emerald-400" />
                             <span>Estado de la cuenta</span>
                         </div>
-                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-bold">
+                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[11px] font-extrabold">
                             Verificada ✓
                         </span>
                     </div>
 
                     {/* Sección 1: Editar Nombre */}
                     <form onSubmit={handleUpdateName} className="space-y-3">
-                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                        <label className="block text-xs font-extrabold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
                             Nombre Completo
                         </label>
                         <div className="relative">
-                            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                            <User className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                             <input
                                 type="text"
                                 required
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="Tu nombre completo"
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                             />
                         </div>
                         <button
                             type="submit"
                             disabled={isSavingProfile}
-                            className="touch-target w-full text-xs font-semibold py-2.5 px-4 rounded-xl text-white bg-indigo-600 hover:bg-indigo-500 transition-all flex items-center justify-center gap-2 focus-ring disabled:opacity-50"
+                            className="touch-target w-full text-xs font-extrabold py-2.5 px-4 rounded-xl text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all flex items-center justify-center gap-2 focus-ring disabled:opacity-50"
                         >
                             {isSavingProfile ? <Loader2 size={16} className="animate-spin" /> : 'Actualizar Nombre'}
                         </button>
                     </form>
 
-                    <div className="h-px bg-slate-800"></div>
+                    <div className="h-px bg-zinc-200 dark:bg-zinc-800"></div>
 
                     {/* Sección 2: Cambiar Contraseña */}
                     <form onSubmit={handleChangePassword} className="space-y-3">
-                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
+                        <label className="block text-xs font-extrabold text-zinc-700 dark:text-zinc-300 uppercase tracking-wider">
                             Seguridad & Contraseña
                         </label>
                         <div className="space-y-2">
                             <div className="relative">
-                                <Key className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                <Key className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                                 <input
                                     type="password"
                                     required
                                     placeholder="Contraseña actual"
                                     value={currentPassword}
                                     onChange={(e) => setCurrentPassword(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                                 />
                             </div>
                             <div className="relative">
-                                <Key className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                <Key className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                                 <input
                                     type="password"
                                     required
                                     placeholder="Nueva contraseña (min 6 carac.)"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                                 />
                             </div>
                             <div className="relative">
-                                <Key className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                                <Key className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                                 <input
                                     type="password"
                                     required
                                     placeholder="Confirmar nueva contraseña"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
                                 />
                             </div>
                         </div>
                         <button
                             type="submit"
                             disabled={isChangingPassword}
-                            className="touch-target w-full text-xs font-semibold py-2.5 px-4 rounded-xl text-slate-200 border border-slate-700 bg-slate-800/80 hover:bg-slate-800 hover:text-white transition-all flex items-center justify-center gap-2 focus-ring disabled:opacity-50"
+                            className="touch-target w-full text-xs font-semibold py-2.5 px-4 rounded-xl text-zinc-700 dark:text-zinc-200 border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/80 hover:bg-zinc-200 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white transition-all flex items-center justify-center gap-2 focus-ring disabled:opacity-50"
                         >
                             {isChangingPassword ? <Loader2 size={16} className="animate-spin" /> : 'Cambiar Contraseña'}
                         </button>
@@ -218,3 +218,4 @@ const ProfileModal = ({ user, onClose, onUserUpdated }) => {
 };
 
 export default ProfileModal;
+

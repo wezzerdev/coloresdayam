@@ -386,14 +386,11 @@ const MyPalettesSidebar = ({
             <aside
                 ref={sidebarRef}
                 className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-2xl shadow-2xl transition-transform transform
-                           md:transform-none md:relative md:w-64 lg:w-72 md:flex-shrink-0 md:sticky md:top-0 md:rounded-l-xl md:shadow-lg md:border-l md:border-t md:border-b md:max-h-full md:z-10 border-t"
-                // --- ¡MODIFICADO! --- Fondo blanco y bordes ajustados
+                           md:transform-none md:relative md:w-64 lg:w-72 md:flex-shrink-0 md:sticky md:top-0 md:rounded-l-xl md:shadow-lg md:border-l md:border-t md:border-b md:max-h-full md:z-10 border-t
+                           bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
                 style={{
-                  backgroundColor: '#FFFFFF',
-                  borderColor: '#E5E7EB', // Borde gris claro
-                  // La altura ahora se estira para coincidir con la paleta
-                  maxHeight: 'calc(100vh - 65px)', // 65px es la altura del header
-                  top: '65px', // Se alinea con la parte inferior del header
+                  maxHeight: 'calc(100vh - 65px)',
+                  top: '65px',
                 }}
             >
                 <div 
@@ -403,22 +400,22 @@ const MyPalettesSidebar = ({
                     onTouchStart={(e) => e.stopPropagation()}
                 >
                     {/* Handle visual (solo móvil) */}
-                    <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
+                    <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
                     
                     {/* Header (Fijo) */}
-                    {/* --- MODIFICACIÓN: px-6 cambiado a px-4 --- */}
                     <div className="flex justify-between items-center mb-4 flex-shrink-0 px-4 pt-4">
-                        <h2 className="text-xl font-bold flex items-center gap-2 text-gray-900">
-                            <FolderOpen size={20} strokeWidth={1.75} className="text-purple-500" /> Mis Paletas
+                        <h2 className="text-lg font-extrabold font-heading flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
+                            <FolderOpen size={20} strokeWidth={2} className="text-blue-600 dark:text-blue-400" /> Mis Paletas
                         </h2>
                         <button 
                             type="button" 
                             onClick={onClose} 
-                            className="text-gray-500 hover:text-gray-800"
+                            className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                         >
-                            <X size={24} />
+                            <X size={20} />
                         </button>
                     </div>
+
 
                     {/* Barra de Filtro/Búsqueda (Fijo) */}
                     <div className="flex justify-between items-center border-b border-gray-200 px-4 flex-shrink-0">

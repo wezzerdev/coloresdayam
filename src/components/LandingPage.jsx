@@ -14,7 +14,7 @@ const ParallaxShape = ({ className, speed = 0.1 }) => {
 
     return (
         <div 
-            className={`absolute -z-10 rounded-full bg-gradient-to-br opacity-20 dark:opacity-30 filter blur-3xl ${className}`} 
+            className={`absolute -z-10 rounded-full bg-gradient-to-br opacity-10 dark:opacity-20 filter blur-3xl ${className}`} 
             style={{ transform: `translateY(${offsetY * speed}px)` }}
         />
     );
@@ -22,29 +22,27 @@ const ParallaxShape = ({ className, speed = 0.1 }) => {
 
 // Componente de tarjeta de característica mejorado
 const FeatureCard = ({ icon, title, children }) => (
-    <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-lg p-6 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full">
+    <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full">
         <div className="flex items-center gap-4 mb-3">
-            <div className="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-xl text-purple-600 dark:text-purple-400">
+            <div className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-xl text-blue-600 dark:text-blue-400">
                 {icon}
             </div>
-            <h3 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h3>
+            <h3 className="text-lg font-bold text-zinc-900 dark:text-white font-heading">{title}</h3>
         </div>
-        <p className="text-gray-600 dark:text-gray-400 text-sm">{children}</p>
+        <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">{children}</p>
     </div>
 );
 
 
 const LandingPage = ({ onNavigate }) => {
     return (
-        <div className="w-full flex flex-col relative bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 font-sans overflow-hidden">
-            {/* Fondos con Parallax más coloridos y prominentes */}
-            <ParallaxShape className="from-purple-500 to-pink-500 w-96 h-96 top-20 left-[-15rem]" speed={0.2} />
-            <ParallaxShape className="from-blue-400 to-teal-400 w-80 h-80 top-[30rem] right-[-12rem]" speed={0.15} />
-            <ParallaxShape className="from-yellow-300 to-orange-500 w-[30rem] h-[30rem] top-[80rem] left-[-20rem]" speed={0.1} />
-            <ParallaxShape className="from-green-400 to-cyan-400 w-96 h-96 top-[130rem] right-[-15rem]" speed={0.25} />
-            <ParallaxShape className="from-red-400 to-rose-500 w-80 h-80 top-[180rem] left-[-10rem]" speed={0.18} />
+        <div className="w-full flex flex-col relative bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans overflow-hidden transition-colors duration-200">
+            {/* Fondos Neutros sutiles */}
+            <ParallaxShape className="from-zinc-400 to-zinc-600 dark:from-zinc-700 dark:to-zinc-900 w-96 h-96 top-20 left-[-15rem]" speed={0.2} />
+            <ParallaxShape className="from-blue-400 to-sky-500 dark:from-blue-900 dark:to-zinc-900 w-80 h-80 top-[30rem] right-[-12rem]" speed={0.15} />
+
             {/* Header */}
-            <header className="sticky top-0 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl z-20 border-b border-slate-200 dark:border-zinc-800/90 transition-colors">
+            <header className="sticky top-0 bg-white/90 dark:bg-zinc-950/90 backdrop-blur-xl z-20 border-b border-zinc-200 dark:border-zinc-800/90 transition-colors">
                 <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-3.5">
                     <div 
                         className="flex items-center gap-3 cursor-pointer group"
@@ -55,14 +53,14 @@ const LandingPage = ({ onNavigate }) => {
                         </div>
                         <div>
                             <div className="flex items-center gap-2">
-                                <span className="font-heading font-extrabold text-lg tracking-tight text-slate-900 dark:text-white block uppercase">
+                                <span className="font-heading font-extrabold text-lg tracking-tight text-zinc-900 dark:text-white block uppercase">
                                     COLORES DAYAM
                                 </span>
                                 <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                                     v3.0
                                 </span>
                             </div>
-                            <span className="text-[10px] text-slate-500 dark:text-slate-400 tracking-wider uppercase block font-semibold">Color Studio Pro</span>
+                            <span className="text-[10px] text-zinc-500 dark:text-zinc-400 tracking-wider uppercase block font-semibold">Color Studio Pro</span>
                         </div>
                     </div>
 
@@ -71,7 +69,7 @@ const LandingPage = ({ onNavigate }) => {
                         <button
                             type="button"
                             onClick={() => onNavigate('auth')}
-                            className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
+                            className="text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                         >
                             Iniciar Sesión
                         </button>
@@ -94,11 +92,11 @@ const LandingPage = ({ onNavigate }) => {
                         <Zap size={14} />
                         <span>Metodología Impeccable Design System</span>
                     </div>
-                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-slate-900 dark:text-white tracking-tight leading-tight font-heading max-w-4xl mx-auto">
+                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight font-heading max-w-4xl mx-auto">
                         Crea Sistemas de Color <br />
                         <span className="text-rainbow-gradient">Impresionantes y Accesibles</span>
                     </h1>
-                    <p className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                    <p className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
                         Genera, audita accesibilidad WCAG y exporta paletas de color armónicas para web, iOS y Android en segundos con inteligencia cromática.
                     </p>
                     <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -107,7 +105,6 @@ const LandingPage = ({ onNavigate }) => {
                             onClick={() => onNavigate('generator')}
                             className="touch-target w-full sm:w-auto text-base font-extrabold text-white bg-blue-600 hover:bg-blue-500 px-8 py-3.5 rounded-2xl transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 shadow-xl shadow-blue-600/30 focus-ring"
                         >
-
                             <span>Explorar Estudio de Color</span>
                             <ArrowRight size={20} />
                         </button>
@@ -117,8 +114,8 @@ const LandingPage = ({ onNavigate }) => {
                 {/* NUEVA SECCIÓN: Muestra de la Galería de Paletas */}
                 <section className="relative z-10 py-20">
                     <div className="text-center mb-12">
-                        <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 dark:text-white">Infinitas Posibilidades de Color</h2>
-                        <p className="mt-4 max-w-2xl mx-auto text-gray-600 dark:text-gray-400">De tonos pastel suaves a neones vibrantes, encuentra la inspiración que necesitas.</p>
+                        <h2 className="text-3xl sm:text-5xl font-extrabold text-zinc-900 dark:text-white font-heading">Infinitas Posibilidades de Color</h2>
+                        <p className="mt-4 max-w-2xl mx-auto text-zinc-600 dark:text-zinc-400 text-sm sm:text-base">De tonos pastel suaves a neones vibrantes, encuentra la inspiración que necesitas.</p>
                     </div>
                     {/* Animación de scroll infinito con paletas de ejemplo */}
                     <div className="relative h-48 [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)] group">
@@ -141,8 +138,8 @@ const LandingPage = ({ onNavigate }) => {
                 {/* Features Section Ampliada */}
                 <section id="features" className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-20">
                      <div className="text-center mb-16">
-                         <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 dark:text-white">Un Conjunto de Herramientas de Diseño Completo</h2>
-                         <p className="mt-4 max-w-3xl mx-auto text-gray-600 dark:text-gray-400">Sistema FX está diseñado para acelerar tu flujo de trabajo, desde la concepción de la idea hasta la implementación final.</p>
+                         <h2 className="text-3xl sm:text-5xl font-extrabold text-zinc-900 dark:text-white font-heading">Un Conjunto de Herramientas de Diseño Completo</h2>
+                         <p className="mt-4 max-w-3xl mx-auto text-zinc-600 dark:text-zinc-400">Colores Dayam está diseñado para acelerar tu flujo de trabajo, desde la concepción de la idea hasta la implementación final.</p>
                     </div>
                      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <FeatureCard icon={<Zap size={24} />} title="Generación con IA">
@@ -170,39 +167,39 @@ const LandingPage = ({ onNavigate }) => {
                 <section className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-20">
                     <div className="grid lg:grid-cols-2 gap-16 items-center">
                         <div>
-                            <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 dark:text-white leading-tight">De la Idea al Código en 3 Simples Pasos</h2>
-                            <p className="mt-4 text-gray-600 dark:text-gray-400">Nuestro flujo de trabajo intuitivo te permite concentrarte en la creatividad mientras nosotros nos encargamos de la parte técnica.</p>
+                            <h2 className="text-3xl sm:text-5xl font-extrabold text-zinc-900 dark:text-white leading-tight font-heading">De la Idea al Código en 3 Simples Pasos</h2>
+                            <p className="mt-4 text-zinc-600 dark:text-zinc-400">Nuestro flujo de trabajo intuitivo te permite concentrarte en la creatividad mientras nosotros nos encargamos de la parte técnica.</p>
                             <ul className="mt-8 space-y-6">
                                 <li className="flex items-start gap-4">
-                                    <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-xl text-blue-600 dark:text-blue-400"><span className="font-bold text-xl">1</span></div>
+                                    <div className="bg-blue-100 dark:bg-blue-900/40 p-3 rounded-xl text-blue-600 dark:text-blue-400"><span className="font-bold text-xl">1</span></div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 dark:text-white">Genera tu Paleta Base</h4>
-                                        <p className="text-gray-600 dark:text-gray-400">Usa nuestras herramientas inteligentes (IA, imagen, aleatorio) para obtener una paleta inicial armónica.</p>
+                                        <h4 className="font-bold text-zinc-900 dark:text-white">Genera tu Paleta Base</h4>
+                                        <p className="text-zinc-600 dark:text-zinc-400 text-sm">Usa nuestras herramientas inteligentes (IA, imagen, aleatorio) para obtener una paleta inicial armónica.</p>
                                     </div>
                                 </li>
                                  <li className="flex items-start gap-4">
-                                    <div className="bg-green-100 dark:bg-green-900/50 p-3 rounded-xl text-green-600 dark:text-green-400"><span className="font-bold text-xl">2</span></div>
+                                    <div className="bg-emerald-100 dark:bg-emerald-900/40 p-3 rounded-xl text-emerald-600 dark:text-emerald-400"><span className="font-bold text-xl">2</span></div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 dark:text-white">Ajusta y Previsualiza</h4>
-                                        <p className="text-gray-600 dark:text-gray-400">Refina tu paleta, comprueba la accesibilidad y mira cómo se ve en componentes de UI reales.</p>
+                                        <h4 className="font-bold text-zinc-900 dark:text-white">Ajusta y Previsualiza</h4>
+                                        <p className="text-zinc-600 dark:text-zinc-400 text-sm">Refina tu paleta, comprueba la accesibilidad y mira cómo se ve en componentes de UI reales.</p>
                                     </div>
                                 </li>
                                 <li className="flex items-start gap-4">
-                                    <div className="bg-red-100 dark:bg-red-900/50 p-3 rounded-xl text-red-600 dark:text-red-400"><span className="font-bold text-xl">3</span></div>
+                                    <div className="bg-sky-100 dark:bg-sky-900/40 p-3 rounded-xl text-sky-600 dark:text-sky-400"><span className="font-bold text-xl">3</span></div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 dark:text-white">Copia y Pega el Código</h4>
-                                        <p className="text-gray-600 dark:text-gray-400">Exporta el sistema de diseño completo en el formato que necesites y acelera tu desarrollo.</p>
+                                        <h4 className="font-bold text-zinc-900 dark:text-white">Copia y Pega el Código</h4>
+                                        <p className="text-zinc-600 dark:text-zinc-400 text-sm">Exporta el sistema de diseño completo en el formato que necesites y acelera tu desarrollo.</p>
                                     </div>
                                 </li>
                             </ul>
                         </div>
-                        <div className="bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl shadow-2xl">
+                        <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-2xl shadow-2xl">
                            <div className="flex items-center gap-2 mb-4">
                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                               <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                               <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                               <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
+                               <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
                            </div>
-                            <pre className="font-mono text-sm text-green-300 bg-transparent overflow-x-auto">
+                            <pre className="font-mono text-sm text-blue-300 bg-transparent overflow-x-auto">
                                 <code>
 {`ClearCollect(
     colDesignSystem,
@@ -228,12 +225,12 @@ const LandingPage = ({ onNavigate }) => {
 
                 {/* Final CTA Section */}
                 <section className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-                     <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 dark:text-white">¿Listo para Crear?</h2>
-                     <p className="mt-4 max-w-xl mx-auto text-gray-600 dark:text-gray-400">Únete a cientos de desarrolladores que ya están creando mejores interfaces, más rápido.</p>
+                     <h2 className="text-3xl sm:text-5xl font-extrabold text-zinc-900 dark:text-white font-heading">¿Listo para Crear?</h2>
+                     <p className="mt-4 max-w-xl mx-auto text-zinc-600 dark:text-zinc-400">Únete a cientos de desarrolladores que ya están creando mejores interfaces, más rápido.</p>
                      <div className="mt-8">
                         <button 
                             onClick={() => onNavigate('generator')}
-                            className="text-lg font-semibold text-white bg-purple-600 px-8 py-4 rounded-xl hover:bg-purple-700 transition-transform transform hover:scale-105 flex items-center gap-3 shadow-lg mx-auto"
+                            className="text-lg font-extrabold text-white bg-blue-600 hover:bg-blue-500 px-8 py-4 rounded-2xl transition-transform transform hover:scale-105 flex items-center gap-3 shadow-xl shadow-blue-600/30 mx-auto"
                         >
                             <span>Empieza Gratis Ahora</span>
                             <ArrowRight size={20} />
@@ -244,27 +241,25 @@ const LandingPage = ({ onNavigate }) => {
 
 
              {/* Footer */}
-            <footer className="border-t border-gray-200 dark:border-gray-800 relative z-10">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-gray-500 dark:text-gray-400">
-                    <p>&copy; {new Date().getFullYear()} Sistema FX. Creado por JD_DM.</p>
+            <footer className="border-t border-zinc-200 dark:border-zinc-800 relative z-10">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                    <p>&copy; {new Date().getFullYear()} Colores Dayam — Color Studio Pro.</p>
                     
-                    {/* === ENLACES LEGALES (ACTUALIZADO) === */}
                     <div className="mt-4 flex justify-center items-center gap-3">
                       <button 
                         onClick={() => onNavigate('privacy')}
-                        className="text-xs text-gray-500 dark:text-gray-400 hover:underline"
+                        className="text-xs text-zinc-500 dark:text-zinc-400 hover:underline"
                       >
                         Política de Privacidad
                       </button>
-                      <span className="text-gray-500 dark:text-gray-400">|</span>
+                      <span className="text-zinc-400">|</span>
                       <button 
                         onClick={() => onNavigate('terms')}
-                        className="text-xs text-gray-500 dark:text-gray-400 hover:underline"
+                        className="text-xs text-zinc-500 dark:text-zinc-400 hover:underline"
                       >
                         Términos y Condiciones
                       </button>
                     </div>
-                    {/* === FIN DEL ENLACE === */}
                 </div>
             </footer>
         </div>

@@ -224,12 +224,8 @@ const SavePaletteSidebar = ({
             <aside
                 ref={sidebarRef}
                 className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-2xl shadow-2xl transition-transform transform
-                           md:transform-none md:relative md:w-64 lg:w-72 md:flex-shrink-0 md:sticky md:top-0 md:rounded-xl md:shadow-lg md:border md:max-h-[calc(100vh-8rem)] md:z-10 border-t md:border"
-                // --- ¡MODIFICADO! --- Fondo blanco
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  borderColor: '#E5E7EB',
-                }}
+                           md:transform-none md:relative md:w-64 lg:w-72 md:flex-shrink-0 md:sticky md:top-0 md:rounded-xl md:shadow-lg md:border md:max-h-[calc(100vh-8rem)] md:z-10 border-t md:border
+                           bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
             >
                 <form 
                     className="h-full overflow-y-auto flex flex-col"
@@ -239,21 +235,22 @@ const SavePaletteSidebar = ({
                     onSubmit={handleSaveClick}
                 >
                     {/* Handle visual (solo móvil) */}
-                    <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
+                    <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
                     
                     {/* Header (Fijo) */}
                     <div className="flex justify-between items-center mb-4 flex-shrink-0 px-6 pt-4">
-                        <h2 className="text-xl font-bold flex items-center gap-2 text-gray-900">
+                        <h2 className="text-lg font-extrabold font-heading tracking-tight text-zinc-900 dark:text-white uppercase">
                             {currentPaletteId ? "Actualizar Paleta" : "Guardar Paleta"}
                         </h2>
                         <button 
                             type="button" 
                             onClick={onClose} 
-                            className="text-gray-500 hover:text-gray-800"
+                            className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
                         >
-                            <X size={24} />
+                            <X size={20} />
                         </button>
                     </div>
+
 
                     {/* Contenido del Formulario (con scroll) */}
                     <div className="px-6 py-4 space-y-4 flex-grow">
