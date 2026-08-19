@@ -195,6 +195,10 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
   const [isToolsMenuVisible, setIsToolsMenuVisible] = useState(false);
   const [isExportModalVisible, setIsExportModalVisible] = useState(false);
 
+  // Estado para la disposición de la paleta ('vertical' u 'horizontal')
+  const [paletteLayout, setPaletteLayout] = useState('vertical');
+
+
 
   const [isAdjusterSidebarVisible, setIsAdjusterSidebarVisible] = useState(false);
   const [isSaveSidebarVisible, setIsSaveSidebarVisible] = useState(false);
