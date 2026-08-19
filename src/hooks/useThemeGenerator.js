@@ -814,6 +814,7 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
                 
                 setTags(tagsRes.error ? [] : (tagsRes.data || []));
 
+                const palettes = (paletteRes.data || []).map(p => ({
                     id: p.id,
                     name: p.name,
                     description: p.description,
@@ -828,6 +829,7 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
                     mainColors: p.main_colors
                 }));
                 setSavedPalettes(palettes);
+
                 setProjects(projectRes.data);
                 setCollections(collectionRes.data);
                 setTags(tagsRes.data);
