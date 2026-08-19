@@ -27,7 +27,9 @@ import MyPalettesSidebar from './components/ui/MyPalettesSidebar.jsx';
 import ColorPickerSidebar from './components/ui/ColorPickerSidebar.jsx';
 import PaletteAdjusterSidebar from './components/ui/PaletteAdjusterSidebar.jsx';
 
-import ColorActionMenu from './components/ui/ColorActionMenu.jsx'; // <-- ¡NUEVO! Importar el menú aquí
+import ColorActionMenu from './components/ui/ColorActionMenu.jsx'; 
+import { generatePoeticPaletteName } from './utils/userTasteEngine.js';
+
 
 import AuthPage from './components/AuthPage.jsx';
 import LandingPage from './components/LandingPage.jsx';
@@ -480,23 +482,34 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
         className="flex justify-between items-center py-3 px-4 md:px-8 bg-white border-t md:border-t-0 md:border-b border-gray-200 fixed bottom-0 left-0 right-0 z-50 md:relative pb-[env(safe-area-inset-bottom)] md:pb-3"
         style={{ borderColor: 'var(--border-default)'}}
       >
-        {/* --- MODIFICADO --- Oculto en móvil (hidden) y visible en desktop (md:flex) */}
+        {/* --- ENCABEZADO DE ESCRITORIO --- */}
         <div className="hidden md:flex items-center gap-3 sm:gap-4 flex-shrink-0">
           <img src="https://i.imgur.com/kOfAlJT.png" alt="Colores DaYam Logo" className="h-12 w-12 rounded-lg"/>
           <div className="flex items-center gap-2">
             <h1 className="font-pacifico text-rainbow-gradient pb-1">
               Colores DaYam
             </h1>
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/10 text-indigo-500 border border-indigo-500/20 shadow-sm">
-              v2.5
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/10 text-indigo-600 border border-indigo-500/20 shadow-sm">
+              v2.6
             </span>
           </div>
+
+          {/* Insignia de Nombre de Paleta e IA Estética */}
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-semibold shadow-sm border border-slate-800 ml-2">
+            <Sparkles size={14} className="text-amber-400" />
+            <span className="text-slate-100">{generatePoeticPaletteName(explorerPalette)}</span>
+            <span className="px-1.5 py-0.2 rounded-full text-[9px] font-bold uppercase bg-purple-500/30 text-purple-300 border border-purple-500/30">
+              Afinidad IA
+            </span>
+          </div>
+
           {!isSplitViewActive && !isSimulationSidebarVisible && !isColorPickerSidebarVisible && (
-            <p className="text-sm text-gray-500 hidden lg:block ml-4">
-                ¡ <kbd className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-md">barra espaciadora</kbd> para generar colores!
+            <p className="text-sm text-gray-500 hidden xl:block ml-2">
+                ¡ <kbd className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-md">barra espaciadora</kbd> para generar!
             </p>
           )}
         </div>
+
 
         
         {/* --- MODIFICADO --- 

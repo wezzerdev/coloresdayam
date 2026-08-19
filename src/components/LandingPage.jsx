@@ -59,8 +59,9 @@ const LandingPage = ({ onNavigate }) => {
                                     COLORES DAYAM
                                 </span>
                                 <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
-                                    v2.5
+                                    v2.6
                                 </span>
+
                             </div>
                             <span className="text-[10px] text-slate-400 tracking-wider uppercase block">Color Studio</span>
                         </div>
