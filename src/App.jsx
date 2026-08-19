@@ -932,6 +932,24 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
               onDeleteCollection={onDeleteCollection}
             />
           )}
+          {isExportModalVisible && (
+            <ExportModal 
+                onClose={() => {
+                  setIsExportModalVisible(false);
+                  setExportingPaletteData(null); 
+                }}
+                themeData={exportingPaletteData || themeData}
+                fxSeparator={fxSeparator} 
+                setFxSeparator={setFxSeparator} 
+                useFxQuotes={useFxQuotes} 
+                setUseFxQuotes={setUseFxQuotes} 
+                onCopy={showNotification}
+                user={user}
+                onOpenSaveModal={handleOpenSaveSidebar}
+                onOpenMyPalettes={handleOpenMyPalettesSidebar}
+                handleSharePalette={handleSharePalette}
+            />
+          )}
         </div>
       </div>
 
@@ -970,25 +988,6 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
         {hook.notification.message && (
           <div className="fixed bottom-5 right-5 text-white text-sm font-bold py-2 px-4 rounded-lg shadow-lg flex items-center gap-2" style={{ backgroundColor: hook.notification.type === 'error' ? '#EF4444' : '#10B981'}}>{hook.notification.message}</div>
         )}
-        
-        {isExportModalVisible && 
-            <ExportModal 
-                onClose={() => {
-                  setIsExportModalVisible(false);
-                  setExportingPaletteData(null); 
-                }}
-                themeData={exportingPaletteData || themeData}
-                fxSeparator={fxSeparator} 
-                setFxSeparator={setFxSeparator} 
-                useFxQuotes={useFxQuotes} 
-                setUseFxQuotes={setUseFxQuotes} 
-                onCopy={showNotification}
-                user={user}
-                onOpenSaveModal={handleOpenSaveSidebar}
-                onOpenMyPalettes={handleOpenMyPalettesSidebar}
-                handleSharePalette={handleSharePalette}
-            />
-        }
         {/* --- DOCK FLOTANTE ERGONÓMICO EN MÓVIL (SOPORTE CLARO/OSCURO NEUTRO) --- */}
         <div className="md:hidden fixed bottom-3 left-3 right-3 z-40 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-2xl border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-2xl p-2 shadow-xl flex items-center justify-around gap-1 animate-in slide-in-from-bottom duration-300">
             <button

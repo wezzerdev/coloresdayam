@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
     X, FileCode, Settings, Clipboard, Check, ArrowLeft,
     Zap, Paintbrush, FileText, Wind, FileJson2,
-    Link, Share2, FileDown, Image, Code, Star, Heart
+    Link, Share2, FileDown, Image, Code, Star, Heart, Download
 } from 'lucide-react';
 import tinycolor from 'tinycolor2';
 import { 
@@ -15,18 +15,35 @@ import {
 import { findClosestColorName } from '../../utils/colorUtils.js';
 import Switch from '../ui/Switch.jsx';
 
+function useOnClickOutside(ref, handler) {
+  useEffect(() => {
+    const listener = (event) => {
+      if (window.innerWidth >= 768) return;
+      if (!ref.current || ref.current.contains(event.target)) return;
+      handler(event);
+    };
+    document.addEventListener("mousedown", listener);
+    document.addEventListener("touchstart", listener);
+    return () => {
+      document.removeEventListener("mousedown", listener);
+      document.removeEventListener("touchstart", listener);
+    };
+  }, [ref, handler]);
+}
+
 const ExportOptionCard = ({ icon, label, onClick, disabled = false }) => (
     <button
+        type="button"
         onClick={onClick}
         disabled={disabled}
-        className="p-4 w-full rounded-2xl border text-center transition-all duration-200 
-                   flex flex-col items-center justify-center gap-2 aspect-square
+        className="p-3 w-full rounded-2xl border text-center transition-all duration-200 
+                   flex flex-col items-center justify-center gap-1.5 aspect-square
                    bg-zinc-50 dark:bg-zinc-800/40 border-zinc-200 dark:border-zinc-800
-                   hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md hover:-translate-y-0.5
+                   hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md hover:-translate-y-0.5 active:scale-95
                    disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:bg-transparent"
     >
         {icon}
-        <span className="font-bold text-xs text-zinc-800 dark:text-zinc-200">{label}</span>
+        <span className="font-extrabold text-[11px] text-zinc-800 dark:text-zinc-200">{label}</span>
     </button>
 );
 
@@ -43,6 +60,9 @@ const ExportModal = ({
     onOpenMyPalettes,
     handleSharePalette
 }) => {
+    const sidebarRef = useRef();
+    useOnClickOutside(sidebarRef, onClose);
+
     const [view, setView] = useState('selection');
     const [selectedFormat, setSelectedFormat] = useState(null);
     const [copySuccess, setCopySuccess] = useState(false);
@@ -124,7 +144,7 @@ const ExportModal = ({
         a.download = `paleta-coloresdayam.svg`;
         a.click();
         URL.revokeObjectURL(url);
-        onCopy('¡Imagen SVG descargada!');
+        onCopy('¡Vector SVG descargado!');
     };
 
     const downloadPngExport = () => {
@@ -197,7 +217,7 @@ const ExportModal = ({
             </html>
         `);
         win.document.close();
-        onCopy('¡Exportación en PDF abierta para guardar!');
+        onCopy('¡Exportación en PDF abierta!');
     };
     
     const formatLabels = {
@@ -218,13 +238,14 @@ const ExportModal = ({
     };
     
     const handleShareClick = () => {
-        if (handleSharePalette) {
-            handleSharePalette();
-        } else {
-            navigator.clipboard.writeText(window.location.href);
-            onCopy('¡Enlace de la paleta copiado!');
-        }
-        onClose();
+        const cleanColors = paletteColors.map(c => c.replace('#', '')).join('-');
+        const shareUrl = `${window.location.origin}${window.location.pathname}?colors=${cleanColors}`;
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            onCopy(`¡Enlace copiado! (${shareUrl})`);
+        }).catch(() => {
+            onCopy(`Enlace: ${shareUrl}`);
+        });
+        if (handleSharePalette) handleSharePalette();
     };
     
     const handleMyPalettesClick = () => {
@@ -237,139 +258,164 @@ const ExportModal = ({
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4" onClick={onClose}>
-            <div
-                className="p-6 rounded-3xl border border-zinc-200 dark:border-zinc-800 max-w-2xl w-full relative flex flex-col max-h-[90vh] bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 shadow-2xl"
-                onClick={(e) => e.stopPropagation()}
+        <>
+            <div 
+                className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 md:hidden"
+                onClick={onClose}
+            />
+            
+            <aside
+                ref={sidebarRef}
+                className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-all
+                           md:sticky md:top-[53px] md:h-[calc(100vh-53px)] md:max-h-[calc(100vh-53px)] md:w-72 lg:w-80 md:flex-shrink-0 md:z-10 border-t md:border-t-0 md:border-l
+                           bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
             >
-                <div className="flex justify-between items-center mb-5 flex-shrink-0">
-                    <div className="flex items-center gap-2">
-                        {view === 'code' && (
-                            <button onClick={handleBack} className="p-1 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-                                <ArrowLeft size={20} strokeWidth={2} />
-                            </button>
-                        )}
-                        <h2 className="text-lg font-extrabold font-heading flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
-                            <FileCode size={20} className="text-[#0BA5C7]" />
-                            {view === 'selection' ? 'Exportar Paleta' : `Exportar ${formatLabels[selectedFormat]}`}
-                        </h2>
-                    </div>
-                    <button onClick={onClose} className="p-1 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"><X size={20} /></button>
-                </div>
-                
-                <div className="flex-grow overflow-y-auto pr-1">
-                    {view === 'selection' && (
-                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                            <ExportOptionCard
-                                icon={<Link size={28} strokeWidth={2} className="text-[#0BA5C7]" />}
-                                label="Enlace URL"
-                                onClick={handleShareClick}
-                            />
-                            <ExportOptionCard
-                                icon={<Share2 size={28} strokeWidth={2} className="text-emerald-500" />}
-                                label="Compartir"
-                                onClick={handleShareClick}
-                            />
-                            <ExportOptionCard
-                                icon={<Image size={28} strokeWidth={2} className="text-purple-500" />}
-                                label="Imagen PNG"
-                                onClick={downloadPngExport}
-                            />
-                            <ExportOptionCard
-                                icon={<Code size={28} strokeWidth={2} className="text-indigo-500" />}
-                                label="Vector SVG"
-                                onClick={downloadSvgExport}
-                            />
-                            <ExportOptionCard
-                                icon={<FileDown size={28} strokeWidth={2} className="text-rose-500" />}
-                                label="PDF"
-                                onClick={downloadPdfExport}
-                            />
-                            <ExportOptionCard
-                                icon={<Paintbrush size={28} strokeWidth={2} className="text-blue-500" />}
-                                label="CSS"
-                                onClick={() => handleSelectFormat('css')}
-                            />
-                            <ExportOptionCard
-                                icon={<FileText size={28} strokeWidth={2} className="text-pink-500" />}
-                                label="SCSS"
-                                onClick={() => handleSelectFormat('scss')}
-                            />
-                            <ExportOptionCard
-                                icon={<Wind size={28} strokeWidth={2} className="text-cyan-500" />}
-                                label="Tailwind"
-                                onClick={() => handleSelectFormat('tailwind')}
-                            />
-                            <ExportOptionCard
-                                icon={<Zap size={28} strokeWidth={2} className="text-purple-500" />}
-                                label="Power Fx"
-                                onClick={() => handleSelectFormat('powerfx')}
-                            />
-                            <ExportOptionCard
-                                icon={<FileJson2 size={28} strokeWidth={2} className="text-amber-500" />}
-                                label="JSON"
-                                onClick={() => handleSelectFormat('json')}
-                            />
-                            <ExportOptionCard
-                                icon={<Heart size={28} strokeWidth={2} className="text-rose-500" />}
-                                label="Mis Paletas"
-                                onClick={handleMyPalettesClick}
-                            />
-                            <ExportOptionCard
-                                icon={<Star size={28} strokeWidth={2} className="text-amber-400" />}
-                                label="Guardar"
-                                onClick={handleSaveClick}
-                            />
-                        </div>
-                    )}
+                <div 
+                    className="h-full px-5 py-4 flex flex-col justify-between overflow-hidden"
+                    onClick={(e) => e.stopPropagation()}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onTouchStart={(e) => e.stopPropagation()}
+                >
+                    <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
                     
-                    {view === 'code' && (
-                        <div>
-                            {selectedFormat === 'powerfx' && (
-                                <div className="p-3.5 border-b border-zinc-200 dark:border-zinc-800 mb-3 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl">
-                                    <h4 className="text-xs font-bold mb-2.5 flex items-center gap-2 text-zinc-900 dark:text-white uppercase"><Settings size={14} /> Configuración de Salida</h4>
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-y-2 gap-x-6">
-                                        <div className="flex items-center gap-2">
-                                            <label className="text-xs font-semibold text-zinc-600 dark:text-zinc-400" htmlFor="fxSeparator">Separador:</label>
-                                            <select id="fxSeparator" value={fxSeparator} onChange={(e) => setFxSeparator(e.target.value)} className="font-semibold text-xs px-2 py-1 rounded-lg border bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100">
-                                                <option value=";">;</option>
-                                                <option value=",">,</option>
-                                                <option value=";;">;;</option>
-                                            </select>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <label className="text-xs font-semibold text-zinc-600 dark:text-zinc-400">Usar comillas:</label>
-                                            <Switch checked={useFxQuotes} onCheckedChange={setUseFxQuotes} />
-                                        </div>
-                                    </div>
-                                </div>
+                    <div className="flex justify-between items-center mb-3 flex-shrink-0">
+                        <div className="flex items-center gap-2">
+                            {view === 'code' && (
+                                <button onClick={handleBack} className="p-1 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                                    <ArrowLeft size={18} strokeWidth={2} />
+                                </button>
                             )}
-                            
-                            <div className="relative mt-2">
-                                <pre className="font-mono text-xs whitespace-pre-wrap break-all p-4 rounded-2xl h-64 md:h-80 overflow-auto bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">
-                                    <code>{codeToDisplay}</code>
-                                </pre>
-                            </div>
+                            <h2 className="text-base font-extrabold font-heading flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
+                                <Download size={18} className="text-[#0BA5C7]" />
+                                {view === 'selection' ? 'Exportar Paleta' : `Exportar ${formatLabels[selectedFormat]}`}
+                            </h2>
                         </div>
-                    )}
-                </div>
-
-                {view === 'code' && (
-                    <div className="mt-4 flex justify-end flex-shrink-0">
-                        <button
-                            onClick={handleCopy}
-                            className={`flex items-center justify-center gap-2 w-full sm:w-auto font-extrabold py-2.5 px-6 rounded-xl transition-all text-white shadow-md active:scale-95 text-xs ${
-                                copySuccess 
-                                    ? 'bg-emerald-600' 
-                                    : 'bg-[#0BA5C7] hover:bg-[#0993B3] shadow-[#0BA5C7]/20'
-                            }`}
-                        >
-                            {copySuccess ? <><Check size={16} /> Copiado</> : <><Clipboard size={16} strokeWidth={2} /> Copiar Código</>}
+                        <button onClick={onClose} className="p-1.5 rounded-xl text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+                            <X size={20} />
                         </button>
                     </div>
-                )}
-            </div>
-        </div>
+
+                    <div className="flex-grow overflow-y-auto pr-1">
+                        {view === 'selection' && (
+                            <div className="grid grid-cols-2 gap-2.5">
+                                <ExportOptionCard
+                                    icon={<Link size={24} strokeWidth={2} className="text-[#0BA5C7]" />}
+                                    label="Enlace URL"
+                                    onClick={handleShareClick}
+                                />
+                                <ExportOptionCard
+                                    icon={<Share2 size={24} strokeWidth={2} className="text-emerald-500" />}
+                                    label="Compartir"
+                                    onClick={handleShareClick}
+                                />
+                                <ExportOptionCard
+                                    icon={<Image size={24} strokeWidth={2} className="text-purple-500" />}
+                                    label="Imagen PNG"
+                                    onClick={downloadPngExport}
+                                />
+                                <ExportOptionCard
+                                    icon={<Code size={24} strokeWidth={2} className="text-indigo-500" />}
+                                    label="Vector SVG"
+                                    onClick={downloadSvgExport}
+                                />
+                                <ExportOptionCard
+                                    icon={<FileDown size={24} strokeWidth={2} className="text-rose-500" />}
+                                    label="PDF"
+                                    onClick={downloadPdfExport}
+                                />
+                                <ExportOptionCard
+                                    icon={<Paintbrush size={24} strokeWidth={2} className="text-blue-500" />}
+                                    label="CSS"
+                                    onClick={() => handleSelectFormat('css')}
+                                />
+                                <ExportOptionCard
+                                    icon={<FileText size={24} strokeWidth={2} className="text-pink-500" />}
+                                    label="SCSS"
+                                    onClick={() => handleSelectFormat('scss')}
+                                />
+                                <ExportOptionCard
+                                    icon={<Wind size={24} strokeWidth={2} className="text-cyan-500" />}
+                                    label="Tailwind"
+                                    onClick={() => handleSelectFormat('tailwind')}
+                                />
+                                <ExportOptionCard
+                                    icon={<Zap size={24} strokeWidth={2} className="text-purple-500" />}
+                                    label="Power Fx"
+                                    onClick={() => handleSelectFormat('powerfx')}
+                                />
+                                <ExportOptionCard
+                                    icon={<FileJson2 size={24} strokeWidth={2} className="text-amber-500" />}
+                                    label="JSON"
+                                    onClick={() => handleSelectFormat('json')}
+                                />
+                                <ExportOptionCard
+                                    icon={<Heart size={24} strokeWidth={2} className="text-rose-500" />}
+                                    label="Mis Paletas"
+                                    onClick={handleMyPalettesClick}
+                                />
+                                <ExportOptionCard
+                                    icon={<Star size={24} strokeWidth={2} className="text-amber-400" />}
+                                    label="Guardar"
+                                    onClick={handleSaveClick}
+                                />
+                            </div>
+                        )}
+                        
+                        {view === 'code' && (
+                            <div className="h-full flex flex-col justify-between">
+                                {selectedFormat === 'powerfx' && (
+                                    <div className="p-3 border-b border-zinc-200 dark:border-zinc-800 mb-2 bg-zinc-50 dark:bg-zinc-800/40 rounded-xl flex-shrink-0">
+                                        <h4 className="text-[11px] font-bold mb-2 flex items-center gap-1.5 text-zinc-900 dark:text-white uppercase"><Settings size={13} /> Configuración</h4>
+                                        <div className="flex items-center gap-4">
+                                            <div className="flex items-center gap-1.5">
+                                                <label className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-400" htmlFor="fxSeparator">Separador:</label>
+                                                <select id="fxSeparator" value={fxSeparator} onChange={(e) => setFxSeparator(e.target.value)} className="font-semibold text-xs px-2 py-0.5 rounded-lg border bg-white dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100">
+                                                    <option value=";">;</option>
+                                                    <option value=",">,</option>
+                                                    <option value=";;">;;</option>
+                                                </select>
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <label className="text-[11px] font-semibold text-zinc-600 dark:text-zinc-400">Comillas:</label>
+                                                <Switch checked={useFxQuotes} onCheckedChange={setUseFxQuotes} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                <div className="relative flex-grow">
+                                    <pre className="font-mono text-xs whitespace-pre-wrap break-all p-3 rounded-xl h-64 overflow-auto bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200">
+                                        <code>{codeToDisplay}</code>
+                                    </pre>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex gap-2.5 pt-4 border-t border-zinc-200 dark:border-zinc-800 mt-4 flex-shrink-0">
+                        {view === 'code' ? (
+                            <button
+                                onClick={handleCopy}
+                                className={`w-full font-extrabold py-2.5 px-4 rounded-xl transition-all text-white shadow-md active:scale-95 text-xs flex items-center justify-center gap-1.5 ${
+                                    copySuccess 
+                                        ? 'bg-emerald-600' 
+                                        : 'bg-[#0BA5C7] hover:bg-[#0993B3] shadow-[#0BA5C7]/20'
+                                }`}
+                            >
+                                {copySuccess ? <><Check size={16} /> Copiado</> : <><Clipboard size={16} strokeWidth={2} /> Copiar Código</>}
+                            </button>
+                        ) : (
+                            <button
+                                onClick={onClose}
+                                className="w-full font-extrabold py-2.5 px-4 rounded-xl text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 border border-zinc-200 dark:border-zinc-700/60 transition-all active:scale-95"
+                            >
+                                Cerrar
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </aside>
+        </>
     );
 };
 

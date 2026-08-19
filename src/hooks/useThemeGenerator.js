@@ -802,8 +802,27 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
         confirmPaletteState(newPalette, newBrandColor);
     };
 
-    
-    // --- (Toda la lógica de Supabase sin cambios) ---
+    useEffect(() => {
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const colorsParam = params.get('colors') || params.get('palette');
+            if (colorsParam) {
+                const rawColors = colorsParam.split('-').flatMap(c => c.split(','));
+                const validColors = rawColors
+                    .map(c => (c.startsWith('#') ? c : `#${c}`).trim())
+                    .filter(c => tinycolor(c).isValid());
+                    
+                if (validColors.length >= 2) {
+                    setOriginalExplorerPalette(validColors);
+                    setExplorerPalette(validColors);
+                    setBrandColor(validColors[0]);
+                    showNotification('¡Paleta cargada desde el enlace compartido!');
+                }
+            }
+        } catch (e) {
+            console.error('Error al cargar paleta desde URL:', e);
+        }
+    }, []);
     useEffect(() => {
         const fetchUserData = async () => {
             if (!user) {
