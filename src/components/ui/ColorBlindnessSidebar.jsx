@@ -1,7 +1,6 @@
 import React, { memo, useRef, useEffect } from 'react';
 import { X, Check, Eye } from 'lucide-react';
 
-// Hook para detectar clics fuera del panel (solo para móvil)
 function useOnClickOutside(ref, handler) {
   useEffect(() => {
     const listener = (event) => {
@@ -55,29 +54,26 @@ const ColorBlindnessSidebar = ({
 
   return (
     <>
-      {/* Backdrop para móvil */}
       <div 
         className="fixed inset-0 bg-black/40 backdrop-blur-xs z-40 md:hidden"
         onClick={onCancel}
       />
       
-      {/* Panel del Sidebar */}
       <aside
         ref={sidebarRef}
-        className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-transform transform
-                   md:transform-none md:relative md:w-80 lg:w-96 md:flex-shrink-0 md:sticky md:top-0 md:max-h-full md:z-10 border-t md:border-t-0 md:border-l
+        className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-all
+                   md:sticky md:top-[53px] md:h-[calc(100vh-53px)] md:max-h-[calc(100vh-53px)] md:w-80 lg:w-96 md:flex-shrink-0 md:z-10 border-t md:border-t-0 md:border-l
                    bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
       >
         <div 
-          className="h-full px-5 py-4 overflow-y-auto flex flex-col"
+          className="h-full px-5 py-4 flex flex-col justify-between overflow-hidden"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
         >
-          {/* Handle visual (solo móvil) */}
           <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
           
-          <div className="flex justify-between items-center mb-3">
+          <div className="flex justify-between items-center mb-3 flex-shrink-0">
             <h2 className="text-base font-extrabold font-heading flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
               <Eye size={18} className="text-[#0BA5C7]" />
               Daltonismo
@@ -90,12 +86,11 @@ const ColorBlindnessSidebar = ({
             </button>
           </div>
 
-          <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4 font-medium">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 flex-shrink-0 font-medium">
             Selecciona un tipo de simulación para previsualizar cómo se vería tu paleta.
           </p>
           
-          {/* Lista de Opciones */}
-          <div className="space-y-1.5 flex-grow overflow-y-auto">
+          <div className="space-y-1.5 flex-grow overflow-y-auto pr-1">
             {simulationOptions.map(opt => (
                 <SimulationOption 
                     key={opt.value}
@@ -107,7 +102,6 @@ const ColorBlindnessSidebar = ({
             ))}
           </div>
 
-          {/* Botones de Acción */}
           <div className="flex gap-2.5 pt-4 border-t border-zinc-200 dark:border-zinc-800 mt-4 flex-shrink-0">
             <button
               onClick={onCancel}

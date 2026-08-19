@@ -248,22 +248,22 @@ const ColorPickerSidebar = ({
       
       <aside
         ref={sidebarRef}
-        className="fixed bottom-0 left-0 right-0 z-50 w-full rounded-t-3xl md:rounded-t-none shadow-2xl transition-transform transform
-                   md:transform-none md:relative md:w-80 lg:w-96 md:flex-shrink-0 md:sticky md:top-0 md:max-h-full md:z-10 border-t md:border-t-0 md:border-l
+        className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-all
+                   md:sticky md:top-[53px] md:h-[calc(100vh-53px)] md:max-h-[calc(100vh-53px)] md:w-80 lg:w-96 md:flex-shrink-0 md:z-10 border-t md:border-t-0 md:border-l
                    bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
         style={{
           visibility: isPicking ? 'hidden' : 'visible'
         }}
       >
         <div 
-          className="h-full px-5 py-4 overflow-y-auto flex flex-col"
+          className="h-full px-5 py-4 flex flex-col justify-between overflow-hidden"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
         >
           <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
           
-          <div className="flex justify-between items-center mb-3">
+          <div className="flex justify-between items-center mb-3 flex-shrink-0">
             <h2 className="text-base font-extrabold font-heading flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
               <Palette size={18} className="text-[#0BA5C7]" />
               Editar Color
@@ -276,7 +276,6 @@ const ColorPickerSidebar = ({
             </button>
           </div>
 
-          {/* Tabs de Navegación */}
           <div className="flex-shrink-0 border-b border-zinc-200 dark:border-zinc-800 mb-3 overflow-x-auto">
             <nav className="flex gap-1" aria-label="Tabs">
               {tabs.map((tab) => (
@@ -298,11 +297,10 @@ const ColorPickerSidebar = ({
             </nav>
           </div>
 
-          {/* Contenido del Selector de Color */}
-          <div className="flex-grow space-y-3 overflow-y-auto">
+          <div className="flex-grow space-y-3 overflow-y-auto pr-1">
             {inputMode === 'picker' && (
               <div className="space-y-3">
-                <div className="w-full relative rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-700/60 shadow-sm" style={{ height: '160px' }}>
+                <div className="w-full relative rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-700/60 shadow-sm" style={{ height: '150px' }}>
                   <HexColorPicker 
                     color={localColor} 
                     onChange={handlePickerChange} 
@@ -382,7 +380,6 @@ const ColorPickerSidebar = ({
             )}
           </div>
           
-          {/* Botones de Acción */}
           <div className="flex gap-2.5 pt-4 border-t border-zinc-200 dark:border-zinc-800 mt-4 flex-shrink-0">
             <button
               onClick={handleCancel}

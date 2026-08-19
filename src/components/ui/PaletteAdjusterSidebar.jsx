@@ -155,7 +155,7 @@ const CustomSlider = ({ min, max, value, onChange, gradient }) => {
 
 const SliderControl = ({ label, value, min, max, onChange, gradient, onInputChange }) => (
     <div 
-      className="space-y-2" 
+      className="space-y-1.5" 
       onMouseDown={(e) => { e.stopPropagation(); }}
       onTouchStart={(e) => { e.stopPropagation(); }}
     >
@@ -174,7 +174,7 @@ const SliderControl = ({ label, value, min, max, onChange, gradient, onInputChan
                 }}
                 onMouseDown={(e) => { e.stopPropagation(); }}
                 onTouchStart={(e) => { e.stopPropagation(); }}
-                className="w-16 px-2 py-0.5 rounded-lg border text-xs text-center font-mono font-bold bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[#0BA5C7]"
+                className="w-14 px-1.5 py-0.5 rounded-lg border text-xs text-center font-mono font-bold bg-zinc-100 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-1 focus:ring-[#0BA5C7]"
             />
         </div>
         <div>
@@ -248,19 +248,19 @@ const PaletteAdjusterSidebar = ({
       
       <aside
         ref={sidebarRef}
-        className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-transform transform
-                   md:transform-none md:relative md:w-80 lg:w-96 md:flex-shrink-0 md:sticky md:top-0 md:max-h-full md:z-10 border-t md:border-t-0 md:border-l
+        className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-all
+                   md:sticky md:top-[53px] md:h-[calc(100vh-53px)] md:max-h-[calc(100vh-53px)] md:w-80 lg:w-96 md:flex-shrink-0 md:z-10 border-t md:border-t-0 md:border-l
                    bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
       >
         <div 
-          className="h-full px-5 py-4 overflow-y-auto flex flex-col"
+          className="h-full px-5 py-4 flex flex-col justify-between overflow-hidden"
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
         >
           <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
           
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-3 flex-shrink-0">
             <h2 className="text-base font-extrabold font-heading flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
               <SlidersHorizontal size={18} className="text-[#0BA5C7]" />
               Ajustar Paleta
@@ -273,13 +273,12 @@ const PaletteAdjusterSidebar = ({
             </button>
           </div>
 
-          {/* Vista previa de UN SOLO color */}
           <div 
-            className="flex items-center justify-center h-20 rounded-2xl mb-5 border border-zinc-200 dark:border-zinc-700/60 shadow-inner"
+            className="flex items-center justify-center h-16 rounded-2xl mb-4 border border-zinc-200 dark:border-zinc-700/60 shadow-inner flex-shrink-0"
             style={{ backgroundColor: previewColor }}
           >
             <span 
-              className="font-mono font-bold text-sm px-2.5 py-1 rounded-lg bg-black/30 text-white backdrop-blur-sm shadow-sm"
+              className="font-mono font-bold text-xs px-2.5 py-1 rounded-lg bg-black/30 text-white backdrop-blur-sm shadow-sm"
               style={{ 
                 color: tinycolor(previewColor).isLight() ? '#000' : '#FFF',
               }}
@@ -288,8 +287,7 @@ const PaletteAdjusterSidebar = ({
             </span>
           </div>
 
-          {/* Sliders */}
-          <div className="space-y-4 flex-grow">
+          <div className="space-y-3.5 flex-grow overflow-y-auto pr-1">
             <SliderControl
               label="Matiz"
               value={paletteAdjustments.hue}
@@ -328,7 +326,6 @@ const PaletteAdjusterSidebar = ({
             />
           </div>
 
-          {/* Botones de Acción */}
           <div className="flex gap-2.5 pt-4 border-t border-zinc-200 dark:border-zinc-800 mt-4 flex-shrink-0">
             <button
               onClick={closeHandler}

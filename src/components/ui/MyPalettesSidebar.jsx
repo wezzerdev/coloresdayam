@@ -296,7 +296,6 @@ const MyPalettesSidebar = ({
 }) => {
     const sidebarRef = useRef();
     useOnClickOutside(sidebarRef, onClose);
-    const [showFilters, setShowFilters] = useState(true);
 
     const safeFilters = filters || { projectId: null, collectionId: null, style: null, color: null, search: '' };
 
@@ -309,19 +308,19 @@ const MyPalettesSidebar = ({
             
             <aside
                 ref={sidebarRef}
-                className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-transform transform
-                           md:transform-none md:relative md:w-80 lg:w-96 md:flex-shrink-0 md:sticky md:top-0 md:max-h-full md:z-10 border-t md:border-t-0 md:border-l
+                className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[85vh] rounded-t-3xl md:rounded-t-none shadow-2xl transition-all
+                           md:sticky md:top-[53px] md:h-[calc(100vh-53px)] md:max-h-[calc(100vh-53px)] md:w-80 lg:w-96 md:flex-shrink-0 md:z-10 border-t md:border-t-0 md:border-l
                            bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100"
             >
                 <div 
-                    className="h-full px-5 py-4 overflow-y-auto flex flex-col"
+                    className="h-full px-5 py-4 flex flex-col justify-between overflow-hidden"
                     onClick={(e) => e.stopPropagation()}
                     onMouseDown={(e) => e.stopPropagation()}
                     onTouchStart={(e) => e.stopPropagation()}
                 >
                     <div className="w-12 h-1.5 bg-zinc-300 dark:bg-zinc-700 rounded-full mx-auto mb-4 md:hidden flex-shrink-0" />
                     
-                    <div className="flex justify-between items-center mb-3">
+                    <div className="flex justify-between items-center mb-3 flex-shrink-0">
                         <h2 className="text-base font-extrabold font-heading flex items-center gap-2 text-zinc-900 dark:text-white uppercase tracking-tight">
                             <FolderOpen size={18} className="text-[#0BA5C7]" />
                             Mis Paletas
@@ -334,7 +333,6 @@ const MyPalettesSidebar = ({
                         </button>
                     </div>
 
-                    {/* Buscador */}
                     <div className="relative mb-3 flex-shrink-0">
                         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                         <input
@@ -346,7 +344,6 @@ const MyPalettesSidebar = ({
                         />
                     </div>
 
-                    {/* Secciones de Proyectos y Colecciones */}
                     <div className="space-y-3 mb-3 flex-shrink-0 border-b border-zinc-200 dark:border-zinc-800 pb-3">
                         <SectionHeader 
                             title="Proyectos" 
@@ -368,7 +365,6 @@ const MyPalettesSidebar = ({
                         />
                     </div>
 
-                    {/* Lista de Paletas Guardadas */}
                     <div className="space-y-2 flex-grow overflow-y-auto pr-1">
                         {isLoading ? (
                             <div className="flex items-center justify-center py-12 text-zinc-400 gap-2">
