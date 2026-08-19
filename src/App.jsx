@@ -81,7 +81,7 @@ const MenuButton = ({ icon, label, onClick, className = "" }) => (
         onClick={onClick}
         className={`flex items-center w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-white transition-colors focus-ring ${className}`}
     >
-        <span className="text-emerald-600 dark:text-emerald-400">{icon}</span>
+        <span className="text-[#0BA5C7] dark:text-[#0BA5C7]">{icon}</span>
         <span className="ml-3 font-semibold">{label}</span>
     </button>
 );
@@ -499,14 +499,14 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             className="flex items-center gap-2.5 cursor-pointer group"
             onClick={() => onNavigate('landing')}
           >
-            <div className="h-9 w-9 rounded-xl supabase-gradient p-0.5 shadow-sm shadow-emerald-500/20 group-hover:scale-105 transition-transform flex items-center justify-center text-white">
+            <div className="h-9 w-9 rounded-xl supabase-gradient p-0.5 shadow-sm shadow-[#0BA5C7]/20 group-hover:scale-105 transition-transform flex items-center justify-center text-white">
               <Palette size={18} strokeWidth={2} />
             </div>
             <div className="flex items-center gap-2">
               <span className="font-heading font-extrabold text-sm tracking-tight text-zinc-900 dark:text-white uppercase">
                 Colores Dayam
               </span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/10 dark:bg-emerald-500/20 text-[#0BA5C7] dark:text-[#0BA5C7] border border-emerald-500/20">
                 v3.9
               </span>
             </div>
@@ -516,9 +516,9 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
 
           {/* CÁPSULA DE NOMBRE DE PALETA E IA ESTÉTICA */}
           <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-semibold">
-            <Sparkles size={14} className="text-emerald-500 dark:text-emerald-400 animate-pulse" />
+            <Sparkles size={14} className="text-[#0BA5C7] dark:text-[#0BA5C7] animate-pulse" />
             <span className="text-zinc-800 dark:text-zinc-200">{generatePoeticPaletteName(explorerPalette)}</span>
-            <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/20">
+            <span className="px-1.5 py-0.5 rounded-md text-[9px] font-bold tracking-wider uppercase bg-emerald-500/10 dark:bg-emerald-500/20 text-[#0BA5C7] dark:text-[#0BA5C7] border border-emerald-500/20">
               Afinidad IA
             </span>
           </div>
@@ -528,7 +528,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
         <div className="hidden md:flex items-center gap-2">
           <button
             onClick={handleRandomTheme}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl supabase-gradient supabase-gradient-hover text-white font-extrabold text-xs shadow-md shadow-emerald-500/20 active:scale-95 transition-all ring-1 ring-white/10"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl supabase-gradient supabase-gradient-hover text-white font-extrabold text-xs shadow-md shadow-[#0BA5C7]/20 active:scale-95 transition-all ring-1 ring-white/10"
             title="Generar nueva paleta (Barra Espaciadora)"
           >
             <RefreshCcw size={14} className="animate-spin-slow" />
@@ -549,7 +549,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
               className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Generar con IA"
             >
-              <Sparkles size={16} className="text-emerald-500 dark:text-emerald-400" />
+              <Sparkles size={16} className="text-[#0BA5C7] dark:text-[#0BA5C7]" />
             </button>
             
             <div className="relative">
@@ -558,7 +558,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
                 className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors flex items-center gap-1"
                 title="Método de Armonía"
               >
-                <Wand2 size={16} className="text-emerald-600 dark:text-emerald-400" />
+                <Wand2 size={16} className="text-[#0BA5C7] dark:text-[#0BA5C7]" />
               </button>
               {isMethodMenuVisible && (
                 <PopoverMenu onClose={() => setIsMethodMenuVisible(false)}>
@@ -571,7 +571,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
                       <button 
                         key={method.id} 
                         onClick={() => { setExplorerMethod(method.id); setIsMethodMenuVisible(false); }} 
-                        className={`w-full text-left px-3 py-1.5 text-xs ${explorerMethod === method.id ? 'font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10' : 'text-zinc-800 dark:text-zinc-200'} hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md`}
+                        className={`w-full text-left px-3 py-1.5 text-xs ${explorerMethod === method.id ? 'font-bold text-[#0BA5C7] dark:text-[#0BA5C7] bg-emerald-500/10' : 'text-zinc-800 dark:text-zinc-200'} hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md`}
                       >
                         {method.name}
                       </button>
@@ -700,7 +700,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
                   className="p-1.5 rounded-xl text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5"
                   title="Mi Cuenta"
                 >
-                  <div className="h-6 w-6 rounded-lg bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-extrabold uppercase">
+                  <div className="h-6 w-6 rounded-lg bg-emerald-500/20 text-[#0BA5C7] dark:text-[#0BA5C7] flex items-center justify-center text-xs font-extrabold uppercase">
                     {user.name ? user.name.charAt(0) : 'U'}
                   </div>
                 </button>
@@ -708,7 +708,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
                   <PopoverMenu onClose={() => setIsUserMenuVisible(false)}>
                     <div className="px-3 py-2">
                       <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">{user.name || user.email}</p>
-                      <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">Cuenta Activa</p>
+                      <p className="text-xs text-[#0BA5C7] dark:text-[#0BA5C7] font-medium">Cuenta Activa</p>
                     </div>
                     <div className="h-px bg-zinc-200 dark:bg-zinc-800 my-1"></div>
                     <MenuButton icon={<User size={16}/>} label="Mi Perfil" onClick={() => { setIsProfileModalVisible(true); setIsUserMenuVisible(false); }} />
@@ -1004,7 +1004,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             <button
                 type="button"
                 onClick={handleRandomTheme}
-                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl supabase-gradient supabase-gradient-hover text-white font-extrabold text-xs shadow-md shadow-emerald-600/30 active:scale-95 transition-all"
+                className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl supabase-gradient supabase-gradient-hover text-white font-extrabold text-xs shadow-md shadow-[#0BA5C7]/30 active:scale-95 transition-all"
             >
                 <RefreshCcw size={15} />
                 <span>Generar</span>
@@ -1015,7 +1015,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
                 onClick={() => setIsImageModalVisible(true)}
                 className="flex flex-col items-center justify-center p-2 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white rounded-xl active:scale-95 transition-all text-[10px] font-bold gap-0.5"
             >
-                <ImageIcon size={18} className="text-emerald-500 dark:text-emerald-400" />
+                <ImageIcon size={18} className="text-[#0BA5C7] dark:text-[#0BA5C7]" />
                 <span>Imagen</span>
             </button>
 

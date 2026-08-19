@@ -24,7 +24,7 @@ const ParallaxShape = ({ className, speed = 0.1 }) => {
 const FeatureCard = ({ icon, title, children }) => (
     <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full">
         <div className="flex items-center gap-4 mb-3">
-            <div className="bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-xl text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <div className="bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-xl text-[#0BA5C7] dark:text-[#0BA5C7] border border-emerald-500/20">
                 {icon}
             </div>
             <h3 className="text-lg font-bold text-zinc-900 dark:text-white font-heading">{title}</h3>
@@ -54,7 +54,7 @@ const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
                         className="flex items-center gap-3 cursor-pointer group"
                         onClick={() => onNavigate('landing')}
                     >
-                        <div className="h-10 w-10 rounded-2xl supabase-gradient text-white flex items-center justify-center p-2 group-hover:scale-105 transition-transform shadow-md shadow-emerald-500/20">
+                        <div className="h-10 w-10 rounded-2xl supabase-gradient text-white flex items-center justify-center p-2 group-hover:scale-105 transition-transform shadow-md shadow-[#0BA5C7]/20">
                             <Palette size={22} strokeWidth={2} />
                         </div>
                         <div>
@@ -62,7 +62,7 @@ const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
                                 <span className="font-heading font-extrabold text-lg tracking-tight text-zinc-900 dark:text-white block uppercase">
                                     COLORES DAYAM
                                 </span>
-                                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/10 dark:bg-emerald-500/20 text-[#0BA5C7] dark:text-[#0BA5C7] border border-emerald-500/20">
                                     v3.1
                                 </span>
                             </div>
@@ -92,7 +92,7 @@ const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
                         <button
                             type="button"
                             onClick={() => onNavigate('auth')}
-                            className="touch-target text-xs sm:text-sm font-extrabold px-4 py-2 rounded-xl text-white supabase-gradient supabase-gradient-hover shadow-md shadow-emerald-500/20 transition-all transform hover:scale-[1.02] focus-ring flex items-center gap-1.5"
+                            className="touch-target text-xs sm:text-sm font-extrabold px-4 py-2 rounded-xl text-white supabase-gradient supabase-gradient-hover shadow-md shadow-[#0BA5C7]/20 transition-all transform hover:scale-[1.02] focus-ring flex items-center gap-1.5"
                         >
                             <User size={16} />
                             <span>Crear Cuenta</span>
@@ -105,7 +105,7 @@ const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
             <div className="flex-grow">
                 {/* Hero Section */}
                 <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-28 text-center">
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-extrabold mb-6">
+                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/20 text-[#0BA5C7] dark:text-[#0BA5C7] text-xs font-extrabold mb-6">
                         <Zap size={14} />
                         <span>Supabase-Style Color Studio System</span>
                     </div>
@@ -196,7 +196,7 @@ const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
                                     </div>
                                 </li>
                                  <li className="flex items-start gap-4">
-                                    <div className="bg-emerald-100 dark:bg-emerald-900/40 p-3 rounded-xl text-emerald-600 dark:text-emerald-400"><span className="font-bold text-xl">2</span></div>
+                                    <div className="bg-emerald-100 dark:bg-emerald-900/40 p-3 rounded-xl text-[#0BA5C7] dark:text-[#0BA5C7]"><span className="font-bold text-xl">2</span></div>
                                     <div>
                                         <h4 className="font-bold text-zinc-900 dark:text-white">Ajusta y Previsualiza</h4>
                                         <p className="text-zinc-600 dark:text-zinc-400 text-sm">Refina tu paleta, comprueba la accesibilidad y mira cómo se ve en componentes de UI reales.</p>

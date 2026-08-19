@@ -40,12 +40,14 @@
   }
 
   .supabase-gradient {
-    background: linear-gradient(135deg, #10b981, #06b6d4, #3b82f6);
+    background-color: #0BA5C7;
   }
 
   .supabase-gradient-hover:hover {
-    background: linear-gradient(135deg, #059669, #0891b2, #2563eb);
+    background-color: #0993B3;
+    filter: brightness(1.05);
   }
+
 
 
   .glass-panel {
