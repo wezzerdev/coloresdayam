@@ -1305,7 +1305,9 @@ newColor, ...originalExplorerPalette.slice(index + 1)];
 
 
     return {
+        theme,
         themeData, font, brandColor, grayColor, isGrayAuto, explorerMethod, simulationMode,
+
         
         explorerPalette, 
         originalExplorerPalette, 

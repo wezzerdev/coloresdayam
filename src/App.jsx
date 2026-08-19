@@ -110,7 +110,13 @@ const backgroundModeLabels = {
 
 const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
   const { 
-    themeData, font, setFont, brandColor, grayColor, isGrayAuto,
+    theme,
+    themeData, 
+    font, 
+    brandColor, 
+    grayColor, 
+    isGrayAuto, 
+    explorerMethod, 
     updateBrandColor, 
     confirmBrandColor, 
     replaceColorInPalette, 
@@ -137,7 +143,6 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
     cancelPaletteAdjustments,
     insertColorInPalette, 
     removeColorFromPalette, 
-    explorerMethod,
     insertMultipleColors, 
     setExplorerMethod, 
     setSimulationMode, 
@@ -178,25 +183,100 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [isAIModalVisible, setIsAIModalVisible] = useState(false);
-  const [isMethodMenuVisible, setIsMethodMenuVisible] = useState(false);
-  const [isToolsMenuVisible, setIsToolsMenuVisible] = useState(false);
-  const [isExportModalVisible, setIsExportModalVisible] = useState(false);
   const [isAccessibilityModalVisible, setIsAccessibilityModalVisible] = useState(false);
   const [isComponentPreviewModalVisible, setIsComponentPreviewModalVisible] = useState(false);
   const [isHistoryModalVisible, setIsHistoryModalVisible] = useState(false);
   const [isHelpModalVisible, setIsHelpModalVisible] = useState(false);
   const [isProfileModalVisible, setIsProfileModalVisible] = useState(false);
 
+  // Estados para Menús desplegables en Header
+  const [isMethodMenuVisible, setIsMethodMenuVisible] = useState(false);
+  const [isViewMenuVisible, setIsViewMenuVisible] = useState(false);
+  const [isToolsMenuVisible, setIsToolsMenuVisible] = useState(false);
+  const [isUserMenuVisible, setIsUserMenuVisible] = useState(false);
 
+  // Estado para la barra lateral flotante del Color Picker
+  const [isColorPickerSidebarVisible, setIsColorPickerSidebarVisible] = useState(false);
+  const [colorPickerTarget, setColorPickerTarget] = useState(null);
+
+  // Estado para la vista dividida
+  const [isSplitViewActive, setIsSplitViewActive] = useState(false);
   
-  const [activeColorMenu, setActiveColorMenu] = useState(null); // <-- ¡NUEVO! Mover el estado aquí
+  // Estado para el layout de la paleta ('vertical' u 'horizontal')
+  const [paletteLayout, setPaletteLayout] = useState('vertical');
 
-  // --- ¡MODIFICADO! ---
-  // El layout por defecto es 'horizontal' (stack) en móvil, 'vertical' (slices) en desktop.
-  const [paletteLayout, setPaletteLayout] = useState(window.innerWidth < 768 ? 'horizontal' : 'vertical');
+  const onOpenColorPickerSidebar = (type, index = null) => {
+    setColorPickerTarget({ type, index });
+    setIsColorPickerSidebarVisible(true);
+  };
+
+  const handleCloseColorPickerSidebar = () => {
+      setIsColorPickerSidebarVisible(false);
+      setColorPickerTarget(null);
+  };
+
+  // Función para conmutar el layout de la paleta
+  const togglePaletteLayout = () => {
+    setPaletteLayout(prev => prev === 'vertical' ? 'horizontal' : 'vertical');
+    showNotification(`Disposición cambiada a ${paletteLayout === 'vertical' ? 'Horizontal' : 'Vertical'}`);
+  };
+
+  // Estado y funciones para la barra lateral de Simulación de Daltonismo
+  const [isSimulationSidebarVisible, setIsSimulationSidebarVisible] = useState(false);
+
+  const handleOpenSimulationSidebar = () => {
+      setIsSimulationSidebarVisible(true);
+  };
+
+  const handleCloseSimulationSidebar = () => {
+      setIsSimulationSidebarVisible(false);
+      setSimulationMode('none');
+  };
+
+  // Estado y funciones para la barra lateral de "Mis Paletas"
+  const [isMyPalettesSidebarOpen, setIsMyPalettesSidebarOpen] = useState(false);
+
+  const handleOpenMyPalettesSidebar = () => {
+      setIsMyPalettesSidebarOpen(true);
+  };
+
+  const handleCloseMyPalettesSidebar = () => {
+      setIsMyPalettesSidebarOpen(false);
+  };
+
+  // Estado y funciones para la barra lateral de "Guardar Paleta"
+  const [isSaveSidebarOpen, setIsSaveSidebarOpen] = useState(false);
+
+  const handleOpenSaveSidebar = () => {
+      setIsSaveSidebarOpen(true);
+  };
+
+  const handleCloseSaveSidebar = () => {
+      setIsSaveSidebarOpen(false);
+  };
+  
+  const handleLogoutClick = () => {
+    setIsUserMenuVisible(false);
+    onLogout();
+  };
+
+  if (!themeData) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center text-white">
+        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-emerald-500"></div>
+        <p className="mt-4 text-lg">Generando sistema de diseño...</p>
+      </div>
+    );
+  }
+
+  const pageThemeStyle = {
+    backgroundColor: theme === 'light' ? '#FFFFFF' : '#09090b', 
+    color: theme === 'light' ? '#09090b' : '#f4f4f5', 
+    transition: 'background-color 0.2s ease, color 0.2s ease',
+    fontFamily: availableFonts[font],
+  };
 
   const [isAdjusterSidebarVisible, setIsAdjusterSidebarVisible] = useState(false);
-  const [isSimulationSidebarVisible, setIsSimulationSidebarVisible] = useState(false);
   const [isSaveSidebarVisible, setIsSaveSidebarVisible] = useState(false);
   const [isMyPalettesSidebarVisible, setIsMyPalettesSidebarVisible] = useState(false);
   
@@ -1150,12 +1230,12 @@ function App() {
 
   useEffect(() => {
     setIsNative(Capacitor.isNativePlatform());
-    if (hook.themeData?.theme === 'dark') {
+    if (hook.theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [hook.themeData?.theme]);
+  }, [hook.theme]);
   
   const handleNavigate = useCallback((newRoute) => {
       setRoute(newRoute);
@@ -1175,8 +1255,8 @@ function App() {
   
   if (loadingAuth) {
     return (
-      <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center text-white">
-        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-purple-500"></div>
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center text-white">
+        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-emerald-500"></div>
         <p className="mt-4 text-lg">Cargando sesión...</p>
       </div>
     );
@@ -1187,9 +1267,9 @@ function App() {
       {(() => {
         switch (route) {
           case 'landing':
-            return <LandingPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.themeData?.theme} />;
+            return <LandingPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.theme} />;
           case 'auth':
-            return <AuthPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.themeData?.theme} />;
+            return <AuthPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.theme} />;
           case 'generator':
             return <MainApp hook={hook} isNative={isNative} user={user} onLogout={handleLogout} onNavigate={handleNavigate}/>;
           
@@ -1199,9 +1279,10 @@ function App() {
             return <TermsOfServicePage onNavigate={handleNavigate} />;
           
           default:
-            return <LandingPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.themeData?.theme} />;
+            return <LandingPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.theme} />;
         }
       })()}
+
 
     </div>
   );
