@@ -509,11 +509,10 @@ const Explorer = (props) => {
 
                                         {explorerPalette.map((shade, index) => {
                                             const originalColor = (originalExplorerPalette && originalExplorerPalette[index]) ? originalExplorerPalette[index] : shade;
+                                            const displayShade = shade; 
                                             const normOriginal = typeof originalColor === 'string' ? originalColor.replace('#', '').toUpperCase() : '';
                                             const isLocked = lockedColors.some(lc => typeof lc === 'string' && lc.replace('#', '').toUpperCase() === normOriginal);
                                             const isBrandColor = typeof brandColor === 'string' && typeof displayShade === 'string' && brandColor.replace('#', '').toUpperCase() === displayShade.replace('#', '').toUpperCase();
-                                            
-                                            const displayShade = shade; 
                                             
                                             const isLight = tinycolor(displayShade).isLight();
                                             const iconColor = isLight ? 'text-gray-900' : 'text-white';
