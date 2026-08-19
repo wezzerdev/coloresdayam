@@ -193,88 +193,8 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
   const [isMethodMenuVisible, setIsMethodMenuVisible] = useState(false);
   const [isViewMenuVisible, setIsViewMenuVisible] = useState(false);
   const [isToolsMenuVisible, setIsToolsMenuVisible] = useState(false);
-  const [isUserMenuVisible, setIsUserMenuVisible] = useState(false);
+  const [isExportModalVisible, setIsExportModalVisible] = useState(false);
 
-  // Estado para la barra lateral flotante del Color Picker
-  const [isColorPickerSidebarVisible, setIsColorPickerSidebarVisible] = useState(false);
-  const [colorPickerTarget, setColorPickerTarget] = useState(null);
-
-  // Estado para la vista dividida
-  const [isSplitViewActive, setIsSplitViewActive] = useState(false);
-  
-  // Estado para el layout de la paleta ('vertical' u 'horizontal')
-  const [paletteLayout, setPaletteLayout] = useState('vertical');
-
-  const onOpenColorPickerSidebar = (type, index = null) => {
-    setColorPickerTarget({ type, index });
-    setIsColorPickerSidebarVisible(true);
-  };
-
-  const handleCloseColorPickerSidebar = () => {
-      setIsColorPickerSidebarVisible(false);
-      setColorPickerTarget(null);
-  };
-
-  // Función para conmutar el layout de la paleta
-  const togglePaletteLayout = () => {
-    setPaletteLayout(prev => prev === 'vertical' ? 'horizontal' : 'vertical');
-    showNotification(`Disposición cambiada a ${paletteLayout === 'vertical' ? 'Horizontal' : 'Vertical'}`);
-  };
-
-  // Estado y funciones para la barra lateral de Simulación de Daltonismo
-  const [isSimulationSidebarVisible, setIsSimulationSidebarVisible] = useState(false);
-
-  const handleOpenSimulationSidebar = () => {
-      setIsSimulationSidebarVisible(true);
-  };
-
-  const handleCloseSimulationSidebar = () => {
-      setIsSimulationSidebarVisible(false);
-      setSimulationMode('none');
-  };
-
-  // Estado y funciones para la barra lateral de "Mis Paletas"
-  const [isMyPalettesSidebarOpen, setIsMyPalettesSidebarOpen] = useState(false);
-
-  const handleOpenMyPalettesSidebar = () => {
-      setIsMyPalettesSidebarOpen(true);
-  };
-
-  const handleCloseMyPalettesSidebar = () => {
-      setIsMyPalettesSidebarOpen(false);
-  };
-
-  // Estado y funciones para la barra lateral de "Guardar Paleta"
-  const [isSaveSidebarOpen, setIsSaveSidebarOpen] = useState(false);
-
-  const handleOpenSaveSidebar = () => {
-      setIsSaveSidebarOpen(true);
-  };
-
-  const handleCloseSaveSidebar = () => {
-      setIsSaveSidebarOpen(false);
-  };
-  
-  const handleLogoutClick = () => {
-    setIsUserMenuVisible(false);
-    onLogout();
-  };
-
-  if (!themeData) {
-    return (
-      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center text-white">
-        <div className="w-16 h-16 border-4 border-dashed rounded-full animate-spin border-emerald-500"></div>
-        <p className="mt-4 text-lg">Generando sistema de diseño...</p>
-      </div>
-    );
-  }
-
-  const pageThemeStyle = {
-    backgroundColor: theme === 'light' ? '#FFFFFF' : '#09090b', 
-    color: theme === 'light' ? '#09090b' : '#f4f4f5', 
-    transition: 'background-color 0.2s ease, color 0.2s ease',
-    fontFamily: availableFonts[font],
-  };
 
   const [isAdjusterSidebarVisible, setIsAdjusterSidebarVisible] = useState(false);
   const [isSaveSidebarVisible, setIsSaveSidebarVisible] = useState(false);
@@ -530,11 +450,12 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
   }
 
   const pageThemeStyle = {
-    backgroundColor: themeData.theme === 'light' ? '#FFFFFF' : '#09090b', 
-    color: themeData.theme === 'light' ? '#09090b' : '#f4f4f5', 
+    backgroundColor: theme === 'light' ? '#FFFFFF' : '#09090b', 
+    color: theme === 'light' ? '#09090b' : '#f4f4f5', 
     transition: 'background-color 0.2s ease, color 0.2s ease',
     fontFamily: availableFonts[font],
   };
+
 
   return (
     <div className="flex flex-col min-h-screen w-full bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-200" style={pageThemeStyle}>
