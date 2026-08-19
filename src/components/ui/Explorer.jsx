@@ -361,16 +361,16 @@ const Explorer = (props) => {
                                                         <div 
                                                             className={`absolute z-10 flex items-center transition-all duration-200 ${
                                                                 paletteLayout === 'vertical' 
-                                                                ? 'bottom-14 md:bottom-20 left-1/2 -translate-x-1/2 w-full px-2 flex-col gap-1 text-center' 
-                                                                : 'top-1/2 left-6 -translate-y-1/2 flex-row gap-4'
+                                                                ? 'top-6 left-1/2 -translate-x-1/2 w-full px-2 flex-col gap-1 text-center' 
+                                                                : 'top-1/2 left-4 -translate-y-1/2 flex-row gap-4'
                                                             }`}
                                                             style={{ pointerEvents: 'none' }} 
                                                         >
                                                             <button 
-                                                                className={`font-mono text-xl sm:text-2xl font-black p-1 rounded-lg transition-colors`} 
+                                                                className={`font-mono text-lg sm:text-2xl font-bold p-1 rounded-lg transition-colors`} 
                                                                 style={{ 
                                                                     fontFamily: "'JetBrains Mono', monospace",
-                                                                    letterSpacing: '0.04em',
+                                                                    letterSpacing: '0.03em',
                                                                     color: tinycolor(shade).isLight() ? '#000' : '#FFF', 
                                                                     textShadow: tinycolor(shade).isLight() ? '0 1px 2px rgba(255,255,255,0.2)' : '0 1px 2px rgba(0,0,0,0.2)', 
                                                                     pointerEvents: 'none' 
@@ -387,7 +387,7 @@ const Explorer = (props) => {
                                                                     color: tinycolor(shade).isLight() ? '#000' : '#FFF', 
                                                                     textShadow: tinycolor(shade).isLight() ? '0 1px 2px rgba(255,255,255,0.2)' : '0 1px 2px rgba(0,0,0,0.2)', 
                                                                     pointerEvents: 'none',
-                                                                    opacity: 0.85
+                                                                    opacity: 0.9
                                                                 }}
                                                             >
                                                                 {getDisplayValue(shade, displayMode)}
@@ -541,56 +541,50 @@ const Explorer = (props) => {
                                                             >
                                                                 
                                                                  {/* --- ¡INICIO DE MODIFICACIÓN DE LAYOUT & MOBILE UX! --- */}
-                                                                 
-                                                                 {/* Contenedor de Información Estática (Texto, Lock, Star, Contrast Badge) */}
-                                                                 <div 
-                                                                     className={`absolute z-10 flex items-center transition-all duration-200 ${
-                                                                         paletteLayout === 'vertical' 
-                                                                         ? 'bottom-14 md:bottom-20 left-1/2 -translate-x-1/2 w-full px-2 flex-col gap-1 text-center items-center justify-center' 
-                                                                         : 'top-1/2 left-6 -translate-y-1/2 flex-row gap-4'
-                                                                     }`}
-                                                                 >
-                                                                     {/* HEX Code — JetBrains Mono, ultra bold, abajo como Coolors.co con hover color */}
-                                                                     <button 
-                                                                         className={`text-xl sm:text-3xl font-extrabold p-1 rounded-lg transition-all duration-200 hover:scale-110 active:scale-95 group/hex`}
-                                                                         style={{ 
-                                                                             fontFamily: "'JetBrains Mono', monospace",
-                                                                             letterSpacing: '0.05em',
-                                                                             color: textColor, 
-                                                                             textShadow: textShadow, 
-                                                                             pointerEvents: 'auto',
-                                                                             transition: 'color 0.2s ease, transform 0.15s ease'
-                                                                         }}
-                                                                         onMouseEnter={(e) => { e.currentTarget.style.color = '#0BA5C7'; e.currentTarget.style.textShadow = '0 0 20px rgba(11,165,199,0.5)'; }}
-                                                                         onMouseLeave={(e) => { e.currentTarget.style.color = textColor; e.currentTarget.style.textShadow = textShadow; }}
-                                                                         onClick={(e) => {
-                                                                             e.stopPropagation();
-                                                                             navigator.clipboard.writeText(hexValue);
-                                                                             showNotification(`¡HEX #${hexValue} copiado!`);
-                                                                         }} 
-                                                                         title="Copiar HEX (Click)"
-                                                                     >
-                                                                         #{hexValue}
-                                                                     </button>
+                                                                  {/* Contenedor de Información Estática (Texto, Lock, Star, Contrast Badge) */}
+                                                                  <div 
+                                                                      className={`absolute z-10 flex items-center transition-all duration-200 ${
+                                                                          paletteLayout === 'vertical' 
+                                                                          ? 'top-6 left-1/2 -translate-x-1/2 w-full px-2 flex-col gap-1 items-center justify-center' 
+                                                                          : 'top-1/2 left-4 -translate-y-1/2 flex-row gap-3'
+                                                                      }`}
+                                                                  >
+                                                                      {/* HEX Code — JetBrains Mono, limpio y prominente arriba */}
+                                                                      <button 
+                                                                          className={`text-lg sm:text-2xl font-bold p-1 rounded-lg transition-all duration-150 hover:scale-105 active:scale-95`}
+                                                                          style={{ 
+                                                                              fontFamily: "'JetBrains Mono', monospace",
+                                                                              letterSpacing: '0.04em',
+                                                                              color: textColor, 
+                                                                              textShadow: textShadow, 
+                                                                              pointerEvents: 'auto'
+                                                                          }}
+                                                                          onClick={(e) => {
+                                                                              e.stopPropagation();
+                                                                              navigator.clipboard.writeText(hexValue);
+                                                                              showNotification(`¡HEX #${hexValue} copiado!`);
+                                                                          }} 
+                                                                          title="Copiar HEX"
+                                                                      >
+                                                                          #{hexValue}
+                                                                      </button>
 
-                                                                     {/* Color Name — Outfit, bold, limpio */}
-                                                                     <button 
-                                                                         className={`text-xs sm:text-base font-bold capitalize transition-all duration-200 hover:underline px-1 truncate max-w-[120px] sm:max-w-xs`}
-                                                                         style={{ 
-                                                                             fontFamily: "'Outfit', 'Space Grotesk', sans-serif",
-                                                                             letterSpacing: '0.01em',
-                                                                             color: textColor, 
-                                                                             textShadow: textShadow, 
-                                                                             pointerEvents: 'auto',
-                                                                             opacity: 0.88
-                                                                         }} 
-                                                                         onMouseEnter={(e) => { e.currentTarget.style.color = '#0BA5C7'; e.currentTarget.style.opacity = '1'; }}
-                                                                         onMouseLeave={(e) => { e.currentTarget.style.color = textColor; e.currentTarget.style.opacity = '0.88'; }}
-                                                                         onClick={(e) => { e.stopPropagation(); setIsDisplayModeModalVisible(true); }} 
-                                                                         title="Cambiar formato de color"
-                                                                     >
-                                                                         {displayValue}
-                                                                     </button>
+                                                                      {/* Color Name — Outfit / Space Grotesk, limpio */}
+                                                                      <button 
+                                                                          className={`text-xs sm:text-sm font-semibold capitalize transition-opacity hover:opacity-100 px-1 truncate max-w-[120px] sm:max-w-xs`}
+                                                                          style={{ 
+                                                                              fontFamily: "'Outfit', 'Space Grotesk', sans-serif",
+                                                                              letterSpacing: '0.01em',
+                                                                              color: textColor, 
+                                                                              textShadow: textShadow, 
+                                                                              pointerEvents: 'auto',
+                                                                              opacity: 0.85
+                                                                          }} 
+                                                                          onClick={(e) => { e.stopPropagation(); setIsDisplayModeModalVisible(true); }} 
+                                                                          title="Cambiar formato de color"
+                                                                      >
+                                                                          {displayValue}
+                                                                      </button>
 
                                                                      {/* WCAG Contrast Score Badge */}
                                                                      <div 
