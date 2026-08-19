@@ -373,12 +373,31 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
     setIsSimulationSidebarVisible(true);
   };
   const handleOpenSaveSidebar = () => {
+    if (!user) {
+      hook.showNotification('Debes iniciar sesión para guardar paletas', 'error');
+      onNavigate('auth');
+      return;
+    }
     closeAllSidebars();
     setIsSaveSidebarVisible(true);
   };
   const handleOpenMyPalettesSidebar = () => {
+    if (!user) {
+      hook.showNotification('Debes iniciar sesión para ver tus paletas guardadas', 'error');
+      onNavigate('auth');
+      return;
+    }
     closeAllSidebars();
     setIsMyPalettesSidebarVisible(true);
+  };
+  const handleOpenExportSidebar = () => {
+    if (!user) {
+      hook.showNotification('Debes iniciar sesión para exportar paletas', 'error');
+      onNavigate('auth');
+      return;
+    }
+    setExportingPaletteData(themeData);
+    setIsExportModalVisible(true);
   };
   const handleCancelSimulation = () => {
     setSimulationMode('none');
@@ -556,7 +575,14 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
           {/* GRUPO 1: CREACIÓN E IA */}
           <div className="hidden md:flex items-center bg-zinc-100 dark:bg-zinc-900 p-1 rounded-xl border border-zinc-200 dark:border-zinc-800 gap-0.5">
             <button 
-              onClick={() => setIsAIModalVisible(true)} 
+              onClick={() => {
+                if (!user) {
+                  hook.showNotification('Debes iniciar sesión para generar paletas con IA', 'error');
+                  onNavigate('auth');
+                  return;
+                }
+                setIsAIModalVisible(true);
+              }} 
               className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Generar con IA"
             >
@@ -593,7 +619,14 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             </div>
 
             <button 
-              onClick={() => setIsImageModalVisible(true)} 
+              onClick={() => {
+                if (!user) {
+                  hook.showNotification('Debes iniciar sesión para extraer paletas de imágenes', 'error');
+                  onNavigate('auth');
+                  return;
+                }
+                setIsImageModalVisible(true);
+              }} 
               className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Extraer de Imagen"
             >
@@ -642,7 +675,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
                   <MenuButton icon={<Palette size={16}/>} label="Variaciones" onClick={() => { setIsVariationsVisible(true); setIsToolsMenuVisible(false); }} />
                   <MenuButton icon={<ShieldCheck size={16}/>} label="Matriz de Contraste" onClick={() => { setIsContrastCheckerVisible(true); setIsToolsMenuVisible(false); }} />
                   <div className="h-px bg-zinc-200 dark:bg-zinc-800 my-1"></div>
-                  <MenuButton icon={<FileCode size={16}/>} label="Exportar Código" onClick={() => { setExportingPaletteData(themeData); setIsExportModalVisible(true); setIsToolsMenuVisible(false); }} />
+                  <MenuButton icon={<FileCode size={16}/>} label="Exportar Código" onClick={() => { handleOpenExportSidebar(); setIsToolsMenuVisible(false); }} />
                 </PopoverMenu>
               )}
             </div>
@@ -667,7 +700,14 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
               <Redo2 size={16} />
             </button>
             <button 
-              onClick={() => setIsHistoryModalVisible(true)} 
+              onClick={() => {
+                if (!user) {
+                  hook.showNotification('Debes iniciar sesión para ver el historial', 'error');
+                  onNavigate('auth');
+                  return;
+                }
+                setIsHistoryModalVisible(true);
+              }} 
               className="p-2 rounded-lg text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200/70 dark:hover:bg-zinc-800 transition-colors"
               title="Historial de Paletas"
             >
@@ -696,7 +736,7 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
             </button>
 
             <button 
-              onClick={() => { setExportingPaletteData(themeData); setIsExportModalVisible(true); }}
+              onClick={handleOpenExportSidebar}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-extrabold text-xs border border-zinc-200 dark:border-zinc-800 shadow-xs transition-all active:scale-95"
               title="Exportar Paleta Rápidamente (CSS, PNG, SVG, PDF, Tailwind, Power Fx, JSON)"
             >
