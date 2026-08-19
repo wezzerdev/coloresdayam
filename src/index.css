@@ -6,8 +6,8 @@
 
 @layer base {
   :root {
-    --font-heading: 'Space Grotesk', -apple-system, sans-serif;
-    --font-body:    'Space Grotesk', -apple-system, sans-serif;
+    --font-heading: 'Outfit', 'Plus Jakarta Sans', 'Space Grotesk', sans-serif;
+    --font-body:    'Plus Jakarta Sans', 'Space Grotesk', sans-serif;
     --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
   }
 
@@ -16,15 +16,15 @@
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
     @apply bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 transition-colors duration-200;
   }
 
   h1, h2, h3, h4, h5, h6, .font-heading {
     font-family: var(--font-heading);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
   }
 
   code, pre, kbd, .font-mono {

@@ -34,6 +34,62 @@ const FeatureCard = ({ icon, title, children }) => (
 );
 
 
+// Lista de colores vibrantes para el efecto interactivo de letras tipo Coolors.co
+const PALETTE_ACCENTS = [
+    '#F43F5E', '#EC4899', '#D946EF', '#A855F7', 
+    '#8B5CF6', '#6366F1', '#3B82F6', '#0EA5E9', 
+    '#06B6D4', '#10B981', '#F59E0B', '#EF4444'
+];
+
+const InteractiveColorText = ({ text, className = "" }) => {
+    const [charColors, setCharColors] = useState({});
+
+    // Inicializar algunas letras con color vivo al cargar (igual que Coolors.co)
+    useEffect(() => {
+        const initial = {};
+        for (let i = 0; i < text.length; i++) {
+            if (Math.random() < 0.25 && text[i] !== ' ') {
+                initial[i] = PALETTE_ACCENTS[Math.floor(Math.random() * PALETTE_ACCENTS.length)];
+            }
+        }
+        setCharColors(initial);
+    }, [text]);
+
+    const handleCharHover = (index) => {
+        if (text[index] === ' ') return;
+        const randomColor = PALETTE_ACCENTS[Math.floor(Math.random() * PALETTE_ACCENTS.length)];
+        setCharColors(prev => ({
+            ...prev,
+            [index]: randomColor
+        }));
+    };
+
+    return (
+        <span className={`inline-block ${className}`}>
+            {text.split('').map((char, index) => {
+                if (char === ' ') {
+                    return <span key={index}> </span>;
+                }
+                const color = charColors[index];
+                return (
+                    <span
+                        key={index}
+                        onMouseEnter={() => handleCharHover(index)}
+                        style={{
+                            color: color || 'inherit',
+                            transition: 'color 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s ease',
+                            display: 'inline-block'
+                        }}
+                        className="hover:scale-125 hover:-translate-y-1 cursor-pointer select-none"
+                    >
+                        {char}
+                    </span>
+                );
+            })}
+        </span>
+    );
+};
+
 const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
     const isDarkMode = theme === 'dark';
 
@@ -109,9 +165,9 @@ const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
                         <Zap size={14} />
                         <span>Supabase-Style Color Studio System</span>
                     </div>
-                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight font-heading max-w-4xl mx-auto">
-                        Crea Sistemas de Color <br />
-                        <span className="text-rainbow-gradient">Impresionantes y Accesibles</span>
+                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-zinc-900 dark:text-white tracking-tight leading-tight font-heading max-w-5xl mx-auto">
+                        <InteractiveColorText text="El generador de paletas de color" /> <br />
+                        <InteractiveColorText text="súper rápido y accesible!" />
                     </h1>
                     <p className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal">
                         Genera, audita accesibilidad WCAG y exporta paletas de color armónicas para web, iOS y Android en segundos con inteligencia cromática.
