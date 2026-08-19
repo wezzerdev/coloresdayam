@@ -110,10 +110,10 @@ const backgroundModeLabels = {
 };
 // --- FIN LÓGICA MOVIDA ---
 
-const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
+const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => {
   const { 
-    theme,
     themeData, 
+
     font, 
     brandColor, 
     grayColor, 
@@ -468,7 +468,10 @@ const MainApp = memo(({ hook, isNative, user, onLogout, onNavigate }) => {
 
 
   return (
-    <div className="flex flex-col min-h-screen w-full bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors duration-200" style={pageThemeStyle}>
+    <div 
+      className="flex flex-col min-h-screen w-full text-zinc-900 dark:text-zinc-100 transition-colors duration-200" 
+      style={{ backgroundColor: theme === 'light' ? '#FFFFFF' : '#09090b', color: theme === 'light' ? '#09090b' : '#f4f4f5', transition: 'background-color 0.2s ease, color 0.2s ease', fontFamily: availableFonts[font] }}
+    >
 
       {/* --- (Filtros SVG sin cambios) --- */}
       <svg width="0" height="0" style={{ position: 'absolute' }}>
@@ -1195,7 +1198,10 @@ function App() {
   }
   
   return (
-    <div className="w-full min-h-screen flex flex-col">
+    <div 
+      className="w-full min-h-screen flex flex-col"
+      style={{ backgroundColor: hook.theme === 'light' ? '#FFFFFF' : '#09090b', transition: 'background-color 0.2s ease' }}
+    >
       {(() => {
         switch (route) {
           case 'landing':
@@ -1203,7 +1209,7 @@ function App() {
           case 'auth':
             return <AuthPage onNavigate={handleNavigate} onToggleTheme={hook.handleThemeToggle} theme={hook.theme} />;
           case 'generator':
-            return <MainApp hook={hook} isNative={isNative} user={user} onLogout={handleLogout} onNavigate={handleNavigate}/>;
+            return <MainApp hook={hook} theme={hook.theme} isNative={isNative} user={user} onLogout={handleLogout} onNavigate={handleNavigate}/>;
           
           case 'privacy':
             return <PrivacyPolicyPage onNavigate={handleNavigate} />;
@@ -1217,6 +1223,7 @@ function App() {
 
 
     </div>
+
   );
 }
 

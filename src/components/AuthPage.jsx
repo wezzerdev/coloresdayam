@@ -174,7 +174,11 @@ const AuthPage = ({ onNavigate, onToggleTheme, theme }) => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white dark:bg-zinc-950 p-4 font-sans relative overflow-hidden text-zinc-900 dark:text-zinc-100 transition-colors duration-200">
+        <div 
+            className="min-h-screen flex items-center justify-center p-4 font-sans relative overflow-hidden text-zinc-900 dark:text-zinc-100 transition-colors duration-200"
+            style={{ backgroundColor: isDarkMode ? '#09090b' : '#ffffff', color: isDarkMode ? '#f4f4f5' : '#09090b' }}
+        >
+
             {/* Formas sutiles neutras con desenfoque de fondo */}
             <div className="absolute -top-32 -left-32 w-96 h-96 bg-zinc-400/10 dark:bg-zinc-800/20 rounded-full blur-3xl pointer-events-none"></div>
             <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>

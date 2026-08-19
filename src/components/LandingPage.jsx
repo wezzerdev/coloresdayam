@@ -38,7 +38,11 @@ const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
     const isDarkMode = theme === 'dark';
 
     return (
-        <div className="w-full flex flex-col relative bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans overflow-hidden transition-colors duration-200">
+        <div 
+            className="w-full flex flex-col relative text-zinc-900 dark:text-zinc-100 font-sans overflow-hidden transition-colors duration-200"
+            style={{ backgroundColor: isDarkMode ? '#09090b' : '#ffffff', color: isDarkMode ? '#f4f4f5' : '#09090b' }}
+        >
+
             {/* Fondos Neutros con destellos estilo Supabase (Verde Esmeralda + Cian + Azul) */}
             <ParallaxShape className="from-emerald-500/20 via-teal-500/15 to-blue-600/20 w-96 h-96 top-10 left-[-10rem]" speed={0.2} />
             <ParallaxShape className="from-blue-600/15 via-cyan-500/15 to-emerald-500/20 w-[30rem] h-[30rem] top-[35rem] right-[-15rem]" speed={0.15} />
