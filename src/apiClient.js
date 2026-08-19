@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 const SUPABASE_URL = 'https://supabasedayam.nocodepy.com';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODcwODUzNTksImV4cCI6MTg5MzQ1NjAwMCwicm9sZSI6ImFub24iLCJpc3MiOiJzdXBhYmFzZSJ9.yCjM7gqjQnZRv577dAW8vvMDK9e8H2-eWvSHisg2lfM';
 
-console.log('[API Client] Conectado nativamente a Supabase:', SUPABASE_URL);
+console.log('[API Client] Sistema Dayam Colors cargado.');
 
 // Cliente oficial de Supabase
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {

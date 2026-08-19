@@ -92,7 +92,7 @@ const ProfileModal = ({ user, onClose, onUserUpdated }) => {
                 {/* Header Modal */}
                 <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800 mb-4">
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center font-bold text-lg uppercase">
+                        <div className="h-10 w-10 rounded-2xl bg-[#0BA5C7]/10 text-[#0BA5C7] border border-[#0BA5C7]/20 flex items-center justify-center font-bold text-lg uppercase">
                             {user?.name ? user.name.charAt(0).toUpperCase() : 'U'}
                         </div>
                         <div>
@@ -128,10 +128,10 @@ const ProfileModal = ({ user, onClose, onUserUpdated }) => {
                     {/* Badge de cuenta verificada */}
                     <div className="p-3 rounded-2xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs">
                         <div className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300 font-medium">
-                            <ShieldCheck size={16} className="text-emerald-500 dark:text-emerald-400" />
+                            <ShieldCheck size={16} className="text-[#0BA5C7]" />
                             <span>Estado de la cuenta</span>
                         </div>
-                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[11px] font-extrabold">
+                        <span className="px-2.5 py-0.5 rounded-full bg-[#0BA5C7]/10 text-[#0BA5C7] border border-[#0BA5C7]/20 text-[11px] font-extrabold">
                             Verificada ✓
                         </span>
                     </div>
@@ -149,13 +149,13 @@ const ProfileModal = ({ user, onClose, onUserUpdated }) => {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="Tu nombre completo"
-                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
+                                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#0BA5C7] transition-colors"
                             />
                         </div>
                         <button
                             type="submit"
                             disabled={isSavingProfile}
-                            className="touch-target w-full text-xs font-extrabold py-2.5 px-4 rounded-xl text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-600/20 transition-all flex items-center justify-center gap-2 focus-ring disabled:opacity-50"
+                            className="touch-target w-full text-xs font-extrabold py-2.5 px-4 rounded-xl text-white bg-[#0BA5C7] hover:bg-[#0993B3] shadow-md shadow-[#0BA5C7]/20 transition-all flex items-center justify-center gap-2 focus-ring disabled:opacity-50"
                         >
                             {isSavingProfile ? <Loader2 size={16} className="animate-spin" /> : 'Actualizar Nombre'}
                         </button>
@@ -177,7 +177,7 @@ const ProfileModal = ({ user, onClose, onUserUpdated }) => {
                                     placeholder="Contraseña actual"
                                     value={currentPassword}
                                     onChange={(e) => setCurrentPassword(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
+                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#0BA5C7] transition-colors"
                                 />
                             </div>
                             <div className="relative">
@@ -188,7 +188,7 @@ const ProfileModal = ({ user, onClose, onUserUpdated }) => {
                                     placeholder="Nueva contraseña (min 6 carac.)"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
+                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#0BA5C7] transition-colors"
                                 />
                             </div>
                             <div className="relative">
@@ -199,7 +199,7 @@ const ProfileModal = ({ user, onClose, onUserUpdated }) => {
                                     placeholder="Confirmar nueva contraseña"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 transition-colors"
+                                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-[#0BA5C7] transition-colors"
                                 />
                             </div>
                         </div>

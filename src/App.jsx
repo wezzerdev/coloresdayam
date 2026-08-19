@@ -19,7 +19,7 @@ import {
     Wand2, Image as ImageIcon, 
     SlidersHorizontal, Eye, 
     MoreHorizontal, Palette, ShieldCheck, Accessibility, TestTube2,
-    Columns3, Rows3
+    Columns3, Rows3, Home
 } from 'lucide-react';
 
 import ColorBlindnessSidebar from './components/ui/ColorBlindnessSidebar.jsx';
@@ -714,6 +714,16 @@ const MainApp = memo(({ hook, theme, isNative, user, onLogout, onNavigate }) => 
               <Clock size={16} />
             </button>
           </div>
+
+          {/* BOTÓN IR A LANDING / INICIO */}
+          <button 
+            onClick={() => onNavigate('landing')} 
+            className="p-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 transition-colors flex items-center gap-1.5 text-xs font-semibold"
+            title="Ir a la Página de Inicio (Landing Page)"
+          >
+            <Home size={16} className="text-[#0BA5C7]" />
+            <span className="hidden sm:inline">Inicio</span>
+          </button>
 
           {/* CONMUTADOR DE TEMA CLARO / OSCURO (SOLO UN CLIC) */}
           <button 

@@ -175,36 +175,38 @@ const AuthPage = ({ onNavigate, onToggleTheme, theme }) => {
 
     return (
         <div 
-            className="min-h-screen flex items-center justify-center p-4 font-sans relative overflow-hidden text-zinc-900 dark:text-zinc-100 transition-colors duration-200"
-            style={{ backgroundColor: isDarkMode ? '#09090b' : '#ffffff', color: isDarkMode ? '#f4f4f5' : '#09090b' }}
+            className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-zinc-50 dark:bg-zinc-950 transition-colors duration-200"
         >
-
-            {/* Formas sutiles neutras con desenfoque de fondo */}
             <div className="absolute -top-32 -left-32 w-96 h-96 bg-zinc-400/10 dark:bg-zinc-800/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#0BA5C7]/10 rounded-full blur-3xl pointer-events-none"></div>
 
             <div className="max-w-md w-full bg-white dark:bg-zinc-900 rounded-3xl p-8 border border-zinc-200 dark:border-zinc-800/90 shadow-2xl relative z-10 animate-in fade-in zoom-in-95 duration-200">
-                {/* Botón flotante para cambiar tema en Auth */}
+                <button
+                    type="button"
+                    onClick={() => onNavigate('landing')}
+                    className="absolute top-5 left-5 px-3 py-1.5 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 transition-colors flex items-center gap-1.5 text-xs font-bold"
+                >
+                    <Home size={14} className="text-[#0BA5C7]" />
+                    <span>Inicio</span>
+                </button>
+
                 {onToggleTheme && (
                     <button
                         type="button"
                         onClick={onToggleTheme}
                         className="absolute top-5 right-5 p-2 rounded-xl text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 transition-colors"
-                        title={isDarkMode ? "Cambiar a Modo Claro" : "Cambiar a Modo Oscuro"}
                     >
                         {isDarkMode ? <Sun size={16} className="text-amber-400" /> : <Moon size={16} className="text-zinc-700" />}
                     </button>
                 )}
                 
-                {/* Logo & Marca */}
-
-                <div className="text-center mb-8">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 text-xs font-bold mb-3">
+                <div className="text-center mb-8 mt-4">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0BA5C7]/10 text-[#0BA5C7] border border-[#0BA5C7]/20 text-xs font-bold mb-3">
                         <Sparkles size={13} />
-                        <span>Conectado a Supabase</span>
+                        <span>Sistema Colores Dayam</span>
                     </div>
                     <div 
-                        className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-blue-600 text-white shadow-xl shadow-blue-600/25 mb-4 group cursor-pointer hover:scale-105 transition-transform" 
+                        className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-[#0BA5C7] text-white shadow-xl shadow-[#0BA5C7]/25 mb-4 group cursor-pointer hover:scale-105 transition-transform" 
                         onClick={() => onNavigate('landing')}
                     >
                         <Palette className="h-8 w-8 text-white" strokeWidth={2} />

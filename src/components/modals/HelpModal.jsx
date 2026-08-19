@@ -27,7 +27,7 @@ const HelpModal = ({ onClose }) => {
 
                 <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800 mb-4">
                     <div className="flex items-center gap-3">
-                        <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                        <div className="p-2.5 rounded-xl bg-[#0BA5C7]/10 text-[#0BA5C7] border border-[#0BA5C7]/20">
                             <BookOpen size={20} />
                         </div>
                         <div>
@@ -49,14 +49,14 @@ const HelpModal = ({ onClose }) => {
                 
                 <div className="overflow-y-auto pr-1 space-y-5 text-xs sm:text-sm text-zinc-600 dark:text-zinc-300">
                     <div className="p-3.5 rounded-2xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 flex items-start gap-3">
-                        <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                        <Sparkles className="h-5 w-5 text-[#0BA5C7] flex-shrink-0 mt-0.5" />
                         <p>¡Bienvenido! Con Colores Dayam crearás paletas cromáticas profesionales y accesibles para tus aplicaciones en segundos.</p>
                     </div>
 
                     <div className="space-y-4">
                         <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800 space-y-1.5">
                             <div className="flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-white">
-                                <span className="h-5 w-5 rounded-full bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs">1</span>
+                                <span className="h-5 w-5 rounded-full bg-[#0BA5C7]/20 text-[#0BA5C7] flex items-center justify-center text-xs">1</span>
                                 <h3>Elige tu Color Base o Genera con IA</h3>
                             </div>
                             <p className="text-zinc-500 dark:text-zinc-400 pl-7">
@@ -66,7 +66,7 @@ const HelpModal = ({ onClose }) => {
 
                         <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800 space-y-1.5">
                             <div className="flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-white">
-                                <span className="h-5 w-5 rounded-full bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs">2</span>
+                                <span className="h-5 w-5 rounded-full bg-[#0BA5C7]/20 text-[#0BA5C7] flex items-center justify-center text-xs">2</span>
                                 <h3>Personaliza la Tipografía y Escala de Grises</h3>
                             </div>
                             <p className="text-zinc-500 dark:text-zinc-400 pl-7">
@@ -76,7 +76,7 @@ const HelpModal = ({ onClose }) => {
 
                         <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800 space-y-1.5">
                             <div className="flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-white">
-                                <span className="h-5 w-5 rounded-full bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs">3</span>
+                                <span className="h-5 w-5 rounded-full bg-[#0BA5C7]/20 text-[#0BA5C7] flex items-center justify-center text-xs">3</span>
                                 <h3>Auditoría de Accesibilidad & Daltonismo</h3>
                             </div>
                             <p className="text-zinc-500 dark:text-zinc-400 pl-7">
@@ -86,7 +86,7 @@ const HelpModal = ({ onClose }) => {
 
                         <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950/60 border border-zinc-200 dark:border-zinc-800 space-y-1.5">
                             <div className="flex items-center gap-2 text-sm font-bold text-zinc-900 dark:text-white">
-                                <span className="h-5 w-5 rounded-full bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs">4</span>
+                                <span className="h-5 w-5 rounded-full bg-[#0BA5C7]/20 text-[#0BA5C7] flex items-center justify-center text-xs">4</span>
                                 <h3>Exporta Código para Web, iOS o Android</h3>
                             </div>
                             <p className="text-zinc-500 dark:text-zinc-400 pl-7">
@@ -100,7 +100,7 @@ const HelpModal = ({ onClose }) => {
                     <button
                         type="button"
                         onClick={onClose}
-                        className="touch-target w-full sm:w-auto px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition-all focus-ring"
+                        className="touch-target w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[#0BA5C7] hover:bg-[#0993B3] text-white font-extrabold text-xs sm:text-sm shadow-md shadow-[#0BA5C7]/20 transition-all focus-ring"
                     >
                         Entendido, continuar
                     </button>

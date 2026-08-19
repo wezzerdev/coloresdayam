@@ -109,7 +109,7 @@ const LandingPage = ({ onNavigate, onToggleTheme, theme }) => {
                 <main className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-28 text-center">
                     <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 border border-emerald-500/20 text-[#0BA5C7] dark:text-[#0BA5C7] text-xs font-extrabold mb-6">
                         <Zap size={14} />
-                        <span>Supabase-Style Color Studio System</span>
+                        <span>Estudio Profesional de Diseño de Colores</span>
                     </div>
                     <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-zinc-900 dark:text-white tracking-tight leading-tight font-heading max-w-4xl mx-auto">
                         Genera Sistemas de Color <br />
